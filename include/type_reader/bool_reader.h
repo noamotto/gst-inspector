@@ -1,6 +1,6 @@
 #pragma once
 
-#include "include/type_reader/type_reader.h"
+#include "type_reader/type_reader.h"
 
 class BoolTypeReader : public ITypeReader
 {

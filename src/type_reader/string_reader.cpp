@@ -1,4 +1,4 @@
-#include "include/type_reader/string_reader.h"
+#include "type_reader/string_reader.h"
 
 void StringTypeReader::fill_type(
     GParamSpec *const pspec,

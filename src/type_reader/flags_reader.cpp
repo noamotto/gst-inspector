@@ -1,4 +1,4 @@
-#include "include/type_reader/flags_reader.h"
+#include "type_reader/flags_reader.h"
 
 gchar *FlagsTypeReader::find_default(
     const GFlagsClass *flags_class,

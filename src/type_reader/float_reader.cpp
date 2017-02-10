@@ -1,4 +1,4 @@
-#include "include/type_reader/float_reader.h"
+#include "type_reader/float_reader.h"
 
 void FloatTypeReader::fill_type(
     GParamSpec *const pspec,

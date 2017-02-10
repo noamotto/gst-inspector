@@ -1,4 +1,4 @@
-#include "include/type_reader/bool_reader.h"
+#include "type_reader/bool_reader.h"
 
 void BoolTypeReader::fill_type(
     GParamSpec *const pspec,

@@ -11,13 +11,13 @@ if(MSVC)
     if(NOT <STREQUAL:${GSTREAMER_ROOT_PATH},"">)
         message(STATUS "Found root at " ${GSTREAMER_ROOT_PATH})
         
-        find_path(GSTREAMER_LIBRARY_PATH gstreamer-1.0-0
+        find_library(GSTREAMER_LIBRARY gstreamer-1.0
                   HINTS ${GSTREAMER_ROOT_PATH}
-                  PATH_SUFFIX "lib/")
+                  PATH_SUFFIXES "lib/")
         
-        find_path(GSTREAMER_INCLUDE_PATH gst.h
+        find_path(GSTREAMER_INCLUDE_PATH gst/gst.h
                   HINTS ${GSTREAMER_ROOT_PATH}
-                  PATH_SUFFIX "include/gstreamer-1.0/gst/")
+                  PATH_SUFFIXES "include/gstreamer-1.0/")
 
     else(NOT <STREQUAL:${GSTREAMER_ROOT_PATH},"">)
         message(SEND_ERROR "Could not find GStreamer's root path")

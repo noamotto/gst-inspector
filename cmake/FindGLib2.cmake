@@ -31,10 +31,15 @@ else (GLIB2_LIBRARIES AND GLIB2_INCLUDE_DIRS )
     NAMES glib-2.0 glib
     PATHS ${GLIB2_ROOT}/lib
     )
+  
+  find_library(_glib2_gobject_link_DIR
+    NAMES gobject-2.0 gobject
+    PATHS ${GLIB2_ROOT}/lib
+    )
 
 	if ( _glib2_include_DIR AND _glib2_link_DIR )
         set ( GLIB2_INCLUDE_DIRS ${_glib2_include_DIR} ${_glibconfig_include_DIR} )
-        set ( GLIB2_LIBRARIES ${_glib2_link_DIR} )
+        set ( GLIB2_LIBRARIES ${_glib2_link_DIR} ${_glib2_gobject_link_DIR})
         set ( GLIB2_CORE_FOUND TRUE )
     else ( _glib2_include_DIR AND _glib2_link_DIR )
         set ( GLIB2_CORE_FOUND FALSE )

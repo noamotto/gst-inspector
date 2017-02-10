@@ -1,15 +1,15 @@
-#include "include/type_reader/type_resolver/type_resolver.h"
+#include "type_reader/type_resolver/type_resolver.h"
 
-#include "include/type_reader/bool_reader.h"
-#include "include/type_reader/string_reader.h"
-#include "include/type_reader/long_reader.h"
-#include "include/type_reader/ulong_reader.h"
-#include "include/type_reader/int_reader.h"
-#include "include/type_reader/int64_reader.h"
-#include "include/type_reader/uint_reader.h"
-#include "include/type_reader/uint64_reader.h"
-#include "include/type_reader/float_reader.h"
-#include "include/type_reader/double_reader.h"
+#include "type_reader/bool_reader.h"
+#include "type_reader/string_reader.h"
+#include "type_reader/long_reader.h"
+#include "type_reader/ulong_reader.h"
+#include "type_reader/int_reader.h"
+#include "type_reader/int64_reader.h"
+#include "type_reader/uint_reader.h"
+#include "type_reader/uint64_reader.h"
+#include "type_reader/float_reader.h"
+#include "type_reader/double_reader.h"
 
 TypeResolver::TypeResolver()
 {

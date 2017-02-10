@@ -1,4 +1,4 @@
-#include "include/common.h"
+#include "common.h"
 
 gchar *concat_on_the_fly(
     gchar *str1,

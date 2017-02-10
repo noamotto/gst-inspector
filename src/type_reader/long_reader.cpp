@@ -1,4 +1,4 @@
-#include "include/type_reader/long_reader.h"
+#include "type_reader/long_reader.h"
 
 void LongTypeReader::fill_type(
     GParamSpec *const pspec,

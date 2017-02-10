@@ -1,4 +1,4 @@
-#include "include/param_info.h"
+#include "param_info.h"
 
 #define KNOWN_PARAM_FLAGS                                           \
     (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY |                   \

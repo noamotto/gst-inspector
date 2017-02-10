@@ -1,4 +1,4 @@
-#include "include/type_reader/pointer_reader.h"
+#include "type_reader/pointer_reader.h"
 
 void PointerTypeReader::fill_type(
     GParamSpec *const pspec,

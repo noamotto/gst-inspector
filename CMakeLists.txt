@@ -7,4 +7,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 find_package(GStreamer REQUIRED)
 
-include_directories(${GLIB2_INCLUDE_DIRS})
+file(GLOB_RECURSE src_files "src/**/*.cpp")
+file(GLOB_RECURSE include_files "include/**/*.h")
+add_library(gst-inspector SHARED ${src_files} ${include_files})
+
+target_include_directories(gst-inspector PRIVATE ${GLIB2_INCLUDE_DIRS} ${GSTREAMER_INCLUDE_PATH} "include/")
+target_link_libraries(gst-inspector PRIVATE ${GLIB2_LIBRARIES} ${GSTREAMER_LIBRARY})

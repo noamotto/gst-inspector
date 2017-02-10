@@ -1,4 +1,4 @@
-#include "include/type_reader/double_reader.h"
+#include "type_reader/double_reader.h"
 
 void DoubleTypeReader::fill_type(
     GParamSpec *const pspec,

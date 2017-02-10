@@ -1,4 +1,4 @@
-#include "include/type_reader/int64_reader.h"
+#include "type_reader/int64_reader.h"
 
 void Int64TypeReader::fill_type(
     GParamSpec *const pspec,

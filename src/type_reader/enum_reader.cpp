@@ -1,4 +1,4 @@
-#include "include/type_reader/enum_reader.h"
+#include "type_reader/enum_reader.h"
 
 void EnumTypeReader::find_default(
     const GEnumValue *values,
@@ -25,23 +25,20 @@ void EnumTypeReader::populate_options(
     const GEnumValue *values,
     param_keys &keys)
 {
-    gchar *options = g_strdup_printf("(%d): %-16s - %s\n",
-                                     values[0].value,
-                                     values[0].value_nick,
-                                     values[0].value_name);
+    GString *options_string = g_string_new(NULL);
 
-    for (guint j = 1; NULL != values[j].value_name; j++)
+    for (guint j = 0; NULL != values[j].value_name; j++)
     {
         gchar *option = g_strdup_printf("(%d): %-16s - %s\n",
                                         values[j].value,
                                         values[j].value_nick,
                                         values[j].value_name);
 
-        options = concat_on_the_fly(options, option);
+        g_string_append(options_string, option);
         g_free(option);
     }
 
-    keys[KEY_OPTIONS] = options;
+    keys[KEY_OPTIONS] = g_string_free(options_string, FALSE);
 }
 
 void EnumTypeReader::fill_type(
