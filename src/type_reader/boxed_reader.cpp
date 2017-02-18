@@ -21,7 +21,7 @@ print_field(
 
 void BoxedTypeReader::print_caps(
     const GstCaps *caps,
-    param_keys &keys)
+    param_keys &keys) const
 {
     GString *caps_string = g_string_new(NULL);
     if (gst_caps_is_any(caps))
@@ -65,7 +65,7 @@ void BoxedTypeReader::print_caps(
 void BoxedTypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
     keys[KEY_TYPE] = g_strdup_printf("%-23.23s Boxed pointer of type \"%s\"", "",
                                      g_type_name(pspec->value_type));

@@ -3,7 +3,7 @@
 void FloatTypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
         GParamSpecFloat *pfloat = G_PARAM_SPEC_FLOAT(pspec);
 

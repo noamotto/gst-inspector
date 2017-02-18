@@ -17,5 +17,5 @@ class ParamInfo
     GParamSpec * const m_pspec;
     param_keys m_param_keys;
 
-    void ParamInfo::read_param_flags();
+    void read_param_flags();
 };

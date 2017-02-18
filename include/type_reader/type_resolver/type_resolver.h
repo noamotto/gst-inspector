@@ -7,7 +7,7 @@ class TypeResolver
   public:
     TypeResolver();
 
-    ITypeReader *
+    const ITypeReader *
     resolve_type(
         const GParamSpec *pspec);
 

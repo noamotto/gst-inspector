@@ -3,7 +3,7 @@
 void PointerTypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const,
-    param_keys &keys)
+    param_keys &keys) const
 {
     if (pspec->value_type != G_TYPE_POINTER)
     {

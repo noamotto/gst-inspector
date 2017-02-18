@@ -1,11 +1,22 @@
 #include "param_info.h"
 
+#include "type_reader/type_resolver/type_resolver.cpp"
+
 #define KNOWN_PARAM_FLAGS                                           \
     (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY |                   \
      G_PARAM_LAX_VALIDATION | G_PARAM_STATIC_STRINGS |              \
      G_PARAM_READABLE | G_PARAM_WRITABLE | GST_PARAM_CONTROLLABLE | \
      GST_PARAM_MUTABLE_PLAYING | GST_PARAM_MUTABLE_PAUSED |         \
      GST_PARAM_MUTABLE_READY)
+
+gchar *concat_on_the_fly(
+    gchar *str1,
+    const gchar *str2)
+{
+    gchar *result = g_strconcat(str1, str2);
+    g_free(str1);
+    return result;
+}
 
 void ParamInfo::read_param_flags()
 {
@@ -65,6 +76,7 @@ ParamInfo::ParamInfo(
     GParamSpec *const pspec,
     GstElement *element) : m_pspec(pspec)
 {
+    TypeResolver resolver;
     GValue value = G_VALUE_INIT;
     g_value_init(&value, m_pspec->value_type);
 
@@ -82,100 +94,16 @@ ParamInfo::ParamInfo(
         g_param_value_set_default(m_pspec, &value);
     }
 
-    switch (G_VALUE_TYPE(&value))
-    {
-    case G_TYPE_STRING:
-    {
-        break;
-    }
-    case G_TYPE_BOOLEAN:
-    {
-        break;
-    }
-    case G_TYPE_ULONG:
-    {
-        break;
-    }
-    case G_TYPE_LONG:
-    {
-        break;
-    }
-    case G_TYPE_UINT:
-    {
-        break;
-    }
-    case G_TYPE_INT:
-    {
-        break;
-    }
-    case G_TYPE_UINT64:
-    {
-        break;
-    }
-    case G_TYPE_INT64:
-    {
-        break;
-    }
-    case G_TYPE_FLOAT:
-    {
-        break;
-    }
-    case G_TYPE_DOUBLE:
-    {
-        break;
-    }
-    /* fall through */
-    default:
-        if (G_IS_PARAM_SPEC_ENUM(m_pspec))
-        {
-        }
-        else if (G_IS_PARAM_SPEC_FLAGS(m_pspec))
-        {
-        }
-        else if (G_IS_PARAM_SPEC_OBJECT(m_pspec))
-        {
+    const ITypeReader *reader = resolver.resolve_type(m_pspec);
 
-        }
-        else if (G_IS_PARAM_SPEC_BOXED(m_pspec))
-        {
-
-        }
-        else if (G_IS_PARAM_SPEC_POINTER(m_pspec))
-        {
-
-        }
-        else if (m_pspec->value_type == G_TYPE_VALUE_ARRAY)
-        {
-            GParamSpecValueArray *pvarray = G_PARAM_SPEC_VALUE_ARRAY(m_pspec);
-
-            if (pvarray->element_spec)
-            {
-                n_print("%-23.23s Array of GValues of type \"%s\"", "",
-                        g_type_name(pvarray->element_spec->value_type));
-            }
-            else
-            {
-                n_print("%-23.23s Array of GValues", "");
-            }
-        }
-        else if (GST_IS_PARAM_SPEC_FRACTION(m_pspec))
-        {
-            GstParamSpecFraction *pfraction = GST_PARAM_SPEC_FRACTION(m_pspec);
-
-            n_print("%-23.23s Fraction. ", "");
-
-            g_print("Range: %d/%d - %d/%d Default: %d/%d ",
-                    pfraction->min_num, pfraction->min_den,
-                    pfraction->max_num, pfraction->max_den,
-                    gst_value_get_fraction_numerator(&value),
-                    gst_value_get_fraction_denominator(&value));
-        }
-        else
-        {
-            n_print("%-23.23s Unknown type %ld \"%s\"", "",
-                    (glong)m_pspec->value_type, g_type_name(m_pspec->value_type));
-        }
-        break;
+    if (NULL != reader)
+    {
+        reader->fill_type(m_pspec, &value, m_param_keys);
+    }
+    else
+    {
+        m_param_keys[KEY_TYPE] = g_strdup_printf("Unknown type %ld \"%s\"", "",
+                                                 (glong)m_pspec->value_type, g_type_name(m_pspec->value_type));
     }
 
     g_value_reset(&value);
@@ -184,4 +112,5 @@ ParamInfo::ParamInfo(
 void ParamInfo::get_param_keys(
     param_keys &keys) const
 {
+    keys = m_param_keys;
 }

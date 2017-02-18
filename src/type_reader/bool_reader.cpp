@@ -3,7 +3,7 @@
 void BoolTypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
         gboolean bool_val = g_value_get_boolean(value);
 

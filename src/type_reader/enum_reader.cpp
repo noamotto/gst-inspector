@@ -3,7 +3,7 @@
 void EnumTypeReader::find_default(
     const GEnumValue *values,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
     gint enum_value;
     enum_value = g_value_get_enum(value);
@@ -23,7 +23,7 @@ void EnumTypeReader::find_default(
 
 void EnumTypeReader::populate_options(
     const GEnumValue *values,
-    param_keys &keys)
+    param_keys &keys) const
 {
     GString *options_string = g_string_new(NULL);
 
@@ -44,7 +44,7 @@ void EnumTypeReader::populate_options(
 void EnumTypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
     const GEnumValue *values;
 

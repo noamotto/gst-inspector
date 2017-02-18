@@ -9,15 +9,15 @@ class EnumTypeReader : public ITypeReader
     fill_type(
         GParamSpec *const pspec,
         GValue *const value,
-        param_keys &keys);
+        param_keys &keys) const;
 
   private:
     void find_default(
         const GEnumValue *values,
         GValue *const value,
-        param_keys &keys);
+        param_keys &keys) const;
 
     void populate_options(
         const GEnumValue *values,
-        param_keys &keys);
+        param_keys &keys) const;
 };

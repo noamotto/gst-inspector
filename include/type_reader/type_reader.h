@@ -10,5 +10,7 @@ class ITypeReader
     fill_type(
         GParamSpec * const pspec,
         GValue * const value,
-        param_keys& keys) = 0;
+        param_keys& keys) const = 0;
+
+    virtual ~ITypeReader() {};
 };

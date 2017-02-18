@@ -3,7 +3,7 @@
 void DoubleTypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
     GParamSpecDouble *pdouble = G_PARAM_SPEC_DOUBLE(pspec);
 

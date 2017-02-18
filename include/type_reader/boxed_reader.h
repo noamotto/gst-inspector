@@ -9,10 +9,10 @@ public:
   fill_type(
       GParamSpec *const pspec,
       GValue *const value,
-      param_keys &keys);
+      param_keys &keys) const;
 
 private:
   void print_caps(
       const GstCaps *caps,
-      param_keys &keys);
+      param_keys &keys) const;
 };

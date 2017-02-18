@@ -4,6 +4,7 @@ project(gst-inspect-server)
 
 # We'll set the module path use our modules, to find GStreamer and GLib
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(GStreamer REQUIRED)
 

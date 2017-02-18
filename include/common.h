@@ -6,10 +6,6 @@
 //Common types and utility functions
 typedef std::map<const char*, char*> param_keys;
 
-gchar *concat_on_the_fly(
-    gchar *str1,
-    const gchar *str2);
-
 //Param keys
 #define KEY_NAME        ("Name")
 #define KEY_FLAGS       ("Flags")

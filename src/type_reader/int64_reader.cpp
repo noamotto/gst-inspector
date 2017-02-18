@@ -3,7 +3,7 @@
 void Int64TypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
     GParamSpecInt64 *pint64 = G_PARAM_SPEC_INT64(pspec);
 

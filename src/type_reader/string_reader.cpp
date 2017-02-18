@@ -3,7 +3,7 @@
 void StringTypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
     const char *string_val = g_value_get_string(value);
 

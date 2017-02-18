@@ -3,7 +3,7 @@
 void UIntTypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
         GParamSpecUInt *puint = G_PARAM_SPEC_UINT(pspec);
 

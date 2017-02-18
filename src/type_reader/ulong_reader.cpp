@@ -3,7 +3,7 @@
 void ULongTypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
         GParamSpecULong *pulong = G_PARAM_SPEC_ULONG(pspec);
 

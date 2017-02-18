@@ -3,7 +3,7 @@
 void UInt64TypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
     GParamSpecUInt64 *puint64 = G_PARAM_SPEC_UINT64(pspec);
 

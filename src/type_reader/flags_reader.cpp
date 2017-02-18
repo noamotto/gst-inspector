@@ -2,7 +2,7 @@
 
 gchar *FlagsTypeReader::find_default(
     const GFlagsClass *flags_class,
-    GValue *const value)
+    GValue *const value) const
 {
     GFlagsValue *values = flags_class->values;
     GString *flags_string = NULL;
@@ -41,7 +41,7 @@ gchar *FlagsTypeReader::find_default(
 
 void FlagsTypeReader::populate_options(
     const GFlagsClass *flags_class,
-    param_keys &keys)
+    param_keys &keys) const
 {
     GFlagsValue *values = flags_class->values;
     GString *options_string = g_string_new(NULL);
@@ -63,7 +63,7 @@ void FlagsTypeReader::populate_options(
 void FlagsTypeReader::fill_type(
     GParamSpec *const pspec,
     GValue *const value,
-    param_keys &keys)
+    param_keys &keys) const
 {
     GParamSpecFlags *pflags = G_PARAM_SPEC_FLAGS(pspec);
     const GFlagsValue *values;

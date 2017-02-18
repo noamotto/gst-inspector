@@ -10,5 +10,5 @@ class IntTypeReader : public ITypeReader
     fill_type(
         GParamSpec * const pspec,
         GValue * const value,
-        param_keys& keys);
+        param_keys& keys) const;
 };
