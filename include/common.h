@@ -1,10 +1,17 @@
-#pragma once
+#ifndef COMMON_H
+#define COMMON_H
 
 #include <gst/gst.h>
-#include <map>
 
-//Common types and utility functions
-typedef std::map<const char*, char*> param_keys;
+#ifdef _WIN32
+    #ifdef GST_INSPECTOR_EXPORT
+        #define GST_INSPECTOR_API __declspec(dllexport)
+    #else
+        #define GST_INSPECTOR_API __declspec(dllimport)
+    #endif
+#else
+    #define GST_INSPECTOR_API 
+#endif //_WIN32
 
 //Param keys
 #define KEY_NAME        ("Name")
@@ -14,3 +21,5 @@ typedef std::map<const char*, char*> param_keys;
 #define KEY_RANGE       ("Range")
 #define KEY_OPTIONS     ("Options")
 #define KEY_CONTENT     ("Content")
+
+#endif //COMMON_H
