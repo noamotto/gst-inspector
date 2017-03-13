@@ -1,0 +1,28 @@
+======================================================================
+=                           Type readers                             =
+======================================================================
+
+Type readers are supposed to be dynamic, light-weight objects that converts the information
+in a GParamSpec and its respective GValue into a dictionary of strings, used to describe the
+parameter and it value.
+
+The objects are based on GBoxed. They are supposed to be constant, but can hold custom
+fields, for complex implementations.
+
+In order to so, a fundamental structure called GstTypeReader is defined, holding its type for
+information retrieval, and the GstFillTypeFunc used to actually map the type parameters
+into a dictionary.
+
+The function gst_type_reader_new accepts a GstTypeReader type, and returns a GstTypeReader
+implementation of this type, if available. If not, a default handler is given as a
+fallback. The function gst_type_reader_register is used to register a new type reader, but
+should not be used externally.
+
+A convenience macro GST_DEFINE_TYPE_READER is defined, to wrap together all needed initialization
+for a type reader.
+
+All type readers should be registered as soon as possible, and encapsulated so the user will only
+need to know the GParamSpec type he has. For that reason, a type resolver is defined. It will be
+a static object, and will be initialized on the first call, registering any known types. New types
+should be registered through it, as it will also take care of mapping between GParamSpec types
+and GstTypeReader types.
