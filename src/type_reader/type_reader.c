@@ -1,36 +1,6 @@
-#include "type_reader/type_reader.h"
-
-//General GTypeReader declarations
+#include "type_reader/type_reader_priv.h"
 
 static GHashTable *reader_map = NULL;
-
-/**
-    @brief A sttructure holding all information about a type reader.
-    Serves as type inforamtion
-*/
-struct _GstTypeReaderInfo
-{
-    gsize reader_size;
-    GstTypeReaderInit init_func;
-    GstTypeReaderCopy copy_func;
-    GstFillTypeFunc fill_func;
-    GstTypeReaderFree free_func;
-};
-
-/**
-    @brief A default reader. This class is the fallback for 
-*/
-typedef struct _GstDefaultReader
-{
-    GstTypeReader type_reader;
-} GstDefaultReader;
-
-G_DEFINE_BOXED_TYPE(GstDefaultReader,
-                    gst_default_reader,
-                    gst_type_reader_copy,
-                    gst_type_reader_free);
-
-GType gst_default_reader_type = 0;
 
 void gst_default_reader_fill_type(const GParamSpec *pspec,
                                   const GValue *value,
@@ -50,136 +20,97 @@ void gst_default_reader_fill_type(const GParamSpec *pspec,
     @brief Initializer for type readers. Should be called once for a program run, 
     to provide the type handling and registering the default handler
 */
-void _gst_type_reader_init()
+void _gst_init_type_readers()
 {
     g_hash_table_new(g_direct_hash, g_direct_equal);
 
-    gst_default_reader_type = gst_default_reader_get_type();
+    gst_type_reader_register(G_TYPE_PARAM_BOOLEAN, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_BOXED, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_DOUBLE, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_ENUM, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_FLAGS, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_FLOAT, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(GST_TYPE_PARAM_FRACTION, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_INT, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_INT64, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_LONG, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_OBJECT, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_POINTER, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_STRING, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_UINT, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_UINT64, gst_bool_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_ULONG, gst_bool_type_reader_fill_type);
 }
 
-GstTypeReader *gst_type_reader_new(GType reader_type)
-{
-    GstTypeReader *type_reader = NULL;
-    GstTypeReaderInfo *reader_info = NULL;
+/**
+    @brief Registers a type reader function for a GParamSpec type
 
-    if (G_UNLIKELY(NULL == reader_map))
-    {
-        _gst_type_reader_init();
-    }
+    Note that a reader can be registered only once. Registering a reader for existing
+    type will issue a warning and do nothing.
 
-    reader_info = (GstTypeReaderInfo *)g_hash_table_lookup(reader_map,
-                                                           GINT_TO_POINTER(reader_type));
+    @param[in] pspec_type A GType of GParamSpec to register a reader function for.
+    @param[in] read_func A reader function for this type_reader.
 
-    if (NULL == reader_info)
-    {
-        type_reader = (GstTypeReader *)g_slice_alloc(sizeof(GstDefaultReader));
-        type_reader->reader_type = gst_default_reader_type;
-        type_reader->fill_type = gst_default_reader_fill_type;
-    }
-    else
-    {
-        type_reader = (GstTypeReader *)g_slice_alloc(reader_info->reader_size);
-        type_reader->reader_type = reader_type;
-        type_reader->fill_type = reader_info->fill_func;
-
-        if (reader_info->init_func)
-        {
-            reader_info->init_func(type_reader);
-        }
-    }
-
-    return NULL;
-}
-
-GstTypeReader *gst_type_reader_copy(const GstTypeReader *type_reader)
-{
-    GstTypeReaderInfo *reader_info = NULL;
-    GstTypeReader *other_reader = NULL;
-
-    g_return_val_if_fail(NULL != type_reader, NULL);
-    if (G_UNLIKELY(NULL == reader_map))
-    {
-        _gst_type_reader_init();
-    }
-
-    reader_info = (GstTypeReaderInfo *)g_hash_table_lookup(reader_map,
-                                                           GINT_TO_POINTER(type_reader->reader_type));
-
-    g_return_val_if_fail(NULL != reader_info, NULL);
-
-    other_reader = (GstTypeReader *)g_slice_alloc(reader_info->reader_size);
-    other_reader->reader_type = type_reader->reader_type;
-    other_reader->fill_type = reader_info->fill_func;
-
-    if (NULL != reader_info->copy_func)
-    {
-        reader_info->copy_func(type_reader, other_reader);
-    }
-
-    return other_reader;
-}
-
-void gst_type_reader_free(GstTypeReader *type_reader)
-{
-    GstTypeReaderInfo *reader_info = NULL;
-
-    g_return_if_fail(NULL != type_reader);
-    if (G_UNLIKELY(NULL == reader_map))
-    {
-        _gst_type_reader_init();
-    }
-
-    reader_info = (GstTypeReaderInfo *)g_hash_table_lookup(reader_map,
-                                                           GINT_TO_POINTER(type_reader->reader_type));
-
-    g_return_if_fail(NULL != reader_info);
-
-    if (NULL != reader_info->free_func)
-    {
-        reader_info->free_func(type_reader);
-    }
-
-    g_slice_free1(reader_info->reader_size, type_reader);
-}
-
-void gst_type_reader_register(GType reader_type,
-                              gsize reader_size,
-                              GstTypeReaderInit init_func,
-                              GstTypeReaderCopy copy_func,
-                              GstFillTypeFunc fill_func,
-                              GstTypeReaderFree free_func)
+    @return TRUE if register succeeded, otherwise FALSE
+*/
+gboolean gst_type_reader_register(GType pspec_type,
+                                  GstReadTypeFunc read_func)
 {
     if (G_UNLIKELY(NULL == reader_map))
     {
-        _gst_type_reader_init();
+        _gst_init_type_readers();
     }
 
-    if (!g_hash_table_contains(reader_map, GINT_TO_POINTER(reader_type)))
-    {
-        GstTypeReaderInfo *info = (GstTypeReaderInfo *)g_malloc(sizeof(GstTypeReader));
+    g_return_val_if_fail(G_IS_PARAM_SPEC(pspec_type), FALSE);
 
-        info->reader_size = reader_size;
-        info->fill_func = fill_func;
-        info->init_func = init_func;
-        info->copy_func = copy_func;
-        info->free_func = free_func;
-        g_hash_table_insert(reader_map, GINT_TO_POINTER(reader_type), info);
+    if (!g_hash_table_contains(reader_map, GINT_TO_POINTER(pspec_type)))
+    {
+        g_hash_table_insert(reader_map, GINT_TO_POINTER(pspec_type), read_func);
+        return TRUE;
     }
     else
     {
         g_warning("Trying to register a reader for existing type %s. Not registering",
-                  g_type_name(reader_type));
+                  g_type_name(pspec_type));
+        return FALSE;
     }
 }
 
+/**
+    @brief Parses a parameter, using a GParamSpec and GValue, and fills the GstStructure
+    with string describing it.
+
+    The function looks for registered redaer functions, and if a suitable function is available
+    it is invoked. If not, a default function is invoked.
+
+    @param pspec A GParamSpec describing the parameter
+    @param value A GValue holding a default value for the parameter
+    @param dictionary A dictionary to fill
+*/
 void gst_type_reader_fill_type(
-    GstTypeReader *type_reader,
     const GParamSpec *pspec,
     const GValue *value,
     GstStructure *const dictionary)
 {
-    g_return_if_fail(NULL != type_reader);
-    g_return_if_fail(NULL != type_reader->fill_type);
+    GstReadTypeFunc read_func = NULL;
 
-    type_reader->fill_type(pspec, value, dictionary);
+    g_return_if_fail(NULL != pspec);
+    g_return_if_fail(NULL != value);
+    g_return_if_fail(NULL != dictionary);
+
+    if (G_UNLIKELY(NULL == reader_map))
+    {
+        _gst_init_type_readers();
+    }
+
+    read_func = g_hash_table_lookup(
+        reader_map, GINT_TO_POINTER(G_PARAM_SPEC_VALUE_TYPE(pspec)));
+    if (read_func)
+    {
+        read_func(pspec, value, dictionary);
+    }
+    else
+    {
+        gst_default_reader_fill_type(pspec, value, dictionary);
+    }
 }

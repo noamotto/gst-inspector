@@ -1,4 +1,4 @@
-#include "type_reader/enum_reader.h"
+#include "type_reader/type_reader_priv.h"
 
 static gchar *gst_enum_type_reader_find_default(
     const GEnumValue *values,
@@ -66,6 +66,3 @@ void gst_enum_type_reader_fill_type(
     g_value_take_string(&key_value, gst_enum_type_reader_parse_options(values));
     gst_structure_take_value(dictionary, KEY_OPTIONS, &key_value);
 }
-
-GST_DEFINE_TYPE_READER_TYPE(GstEnumTypeReader, gst_enum_type_reader,
-                            gst_enum_type_reader_fill_type, NULL, NULL, NULL);

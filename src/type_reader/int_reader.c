@@ -1,4 +1,4 @@
-#include "type_reader/int_reader.h"
+#include "type_reader/type_reader_priv.h"
 
 void gst_int_type_reader_fill_type(
     const GParamSpec *pspec,
@@ -27,6 +27,3 @@ void gst_int_type_reader_fill_type(
     g_value_take_string(&key_value, g_strdup_printf("%d", g_value_get_int(value)));
     gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
 }
-
-GST_DEFINE_TYPE_READER_TYPE(GstIntTypeReader, gst_int_type_reader,
-                            gst_int_type_reader_fill_type, NULL, NULL, NULL);

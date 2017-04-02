@@ -1,4 +1,4 @@
-#include "type_reader/boxed_reader.h"
+#include "type_reader/type_reader_priv.h"
 
 static gboolean
 print_field(
@@ -122,5 +122,3 @@ void gst_boxed_type_reader_fill_type(
     }
 }
 
-GST_DEFINE_TYPE_READER_TYPE(GstBoxedTypeReader, gst_boxed_type_reader,
-                            gst_boxed_type_reader_fill_type, NULL, NULL, NULL);

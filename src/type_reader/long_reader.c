@@ -1,4 +1,4 @@
-#include "type_reader/long_reader.h"
+#include "type_reader/type_reader_priv.h"
 
 void gst_long_type_reader_fill_type(
     const GParamSpec *pspec,
@@ -28,6 +28,3 @@ void gst_long_type_reader_fill_type(
                                                     g_value_get_long(value)));
     gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
 }
-
-GST_DEFINE_TYPE_READER_TYPE(GstLongTypeReader, gst_long_type_reader,
-                            gst_long_type_reader_fill_type, NULL, NULL, NULL);

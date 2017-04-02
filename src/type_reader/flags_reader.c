@@ -1,4 +1,4 @@
-#include "type_reader/flags_reader.h"
+#include "type_reader/type_reader_priv.h"
 
 static gchar *gst_flags_type_reader_find_default(
     const GFlagsClass *flags_class,
@@ -95,6 +95,3 @@ static void gst_flags_type_reader_fill_type(
 
     g_free(value_string);
 }
-
-GST_DEFINE_TYPE_READER_TYPE(GstFlagsTypeReader, gst_flags_type_reader,
-                            gst_flags_type_reader_fill_type, NULL, NULL, NULL);

@@ -1,4 +1,4 @@
-#include "type_reader/bool_reader.h"
+#include "type_reader/type_reader_priv.h"
 
 void gst_bool_type_reader_fill_type(
     const GParamSpec *pspec,
@@ -19,6 +19,3 @@ void gst_bool_type_reader_fill_type(
     g_value_take_string(&key_value, g_strdup(bool_val ? "true" : "false"));
     gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
 }
-
-GST_DEFINE_TYPE_READER_TYPE(GstBoolTypeReader, gst_bool_type_reader,
-   gst_bool_type_reader_fill_type, NULL, NULL, NULL);

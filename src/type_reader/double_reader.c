@@ -1,4 +1,4 @@
-#include "type_reader/double_reader.h"
+#include "type_reader/type_reader_priv.h"
 
 void gst_double_type_reader_fill_type(
     const GParamSpec *pspec,
@@ -30,6 +30,3 @@ void gst_double_type_reader_fill_type(
                                                     g_value_get_double(value)));
     gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
 }
-
-GST_DEFINE_TYPE_READER_TYPE(GstDoubleTypeReader, gst_double_type_reader,
-                            gst_double_type_reader_fill_type, NULL, NULL, NULL);
