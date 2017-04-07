@@ -17,8 +17,10 @@ void gst_default_reader_fill_type(const GParamSpec *pspec,
 }
 
 /**
-    @brief Initializer for type readers. Should be called once for a program run, 
-    to provide the type handling and registering the default handler
+    @brief Initializer for type readers.
+    
+    Should be called internally and only once. It will handle registring all the built-in types,
+    as well as registring any built-in content parser
 */
 void _gst_init_type_readers()
 {
@@ -40,6 +42,9 @@ void _gst_init_type_readers()
     gst_type_reader_register(G_TYPE_PARAM_UINT, gst_bool_type_reader_fill_type);
     gst_type_reader_register(G_TYPE_PARAM_UINT64, gst_bool_type_reader_fill_type);
     gst_type_reader_register(G_TYPE_PARAM_ULONG, gst_bool_type_reader_fill_type);
+
+    gst_boxed_content_reader_register(GST_TYPE_CAPS, gst_caps_content_reader_parse);
+    gst_boxed_content_reader_register(GST_TYPE_STRUCTURE, gst_structure_content_reader_parse);
 }
 
 /**
@@ -65,7 +70,7 @@ gboolean gst_type_reader_register(GType pspec_type,
 
     if (!g_hash_table_contains(reader_map, GINT_TO_POINTER(pspec_type)))
     {
-        g_hash_table_insert(reader_map, GINT_TO_POINTER(pspec_type), read_func);
+        g_hash_table_insert(reader_map, GINT_TO_POINTER(pspec_type), (gpointer)read_func);
         return TRUE;
     }
     else
@@ -88,8 +93,8 @@ gboolean gst_type_reader_register(GType pspec_type,
     @param dictionary A dictionary to fill
 */
 void gst_type_reader_fill_type(
-    const GParamSpec *pspec,
-    const GValue *value,
+    GParamSpec *const pspec,
+    GValue *const value,
     GstStructure *const dictionary)
 {
     GstReadTypeFunc read_func = NULL;
@@ -103,7 +108,7 @@ void gst_type_reader_fill_type(
         _gst_init_type_readers();
     }
 
-    read_func = g_hash_table_lookup(
+    read_func = (GstReadTypeFunc)g_hash_table_lookup(
         reader_map, GINT_TO_POINTER(G_PARAM_SPEC_VALUE_TYPE(pspec)));
     if (read_func)
     {

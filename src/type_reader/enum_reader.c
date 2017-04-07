@@ -2,7 +2,7 @@
 
 static gchar *gst_enum_type_reader_find_default(
     const GEnumValue *values,
-    const GValue * value)
+    const GValue *value)
 {
     gint enum_value;
     enum_value = g_value_get_enum(value);
@@ -40,8 +40,8 @@ static gchar *gst_enum_type_reader_parse_options(
 }
 
 void gst_enum_type_reader_fill_type(
-    const GParamSpec *pspec,
-    const GValue *value,
+    GParamSpec *const pspec,
+    GValue *const value,
     GstStructure *const dictionary)
 {
     GValue key_value = G_VALUE_INIT;

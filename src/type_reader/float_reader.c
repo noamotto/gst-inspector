@@ -1,8 +1,8 @@
 #include "type_reader/type_reader_priv.h"
 
 void gst_float_type_reader_fill_type(
-    const GParamSpec *pspec,
-    const GValue *value,
+    GParamSpec *const pspec,
+    GValue *const value,
     GstStructure *const dictionary)
 {
     gfloat float_val = 0;
