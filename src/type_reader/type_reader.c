@@ -2,7 +2,7 @@
 
 static GHashTable *reader_map = NULL;
 
-void gst_default_reader_fill_type(const GParamSpec *pspec,
+static void gst_default_reader_fill_type(const GParamSpec *pspec,
                                   const GValue *value,
                                   GstStructure *const dictionary)
 {
@@ -24,7 +24,7 @@ void gst_default_reader_fill_type(const GParamSpec *pspec,
 */
 void _gst_init_type_readers()
 {
-    g_hash_table_new(g_direct_hash, g_direct_equal);
+    reader_map = g_hash_table_new(g_direct_hash, g_direct_equal);
 
     gst_type_reader_register(G_TYPE_PARAM_BOOLEAN, gst_bool_type_reader_fill_type);
     gst_type_reader_register(G_TYPE_PARAM_BOXED, gst_bool_type_reader_fill_type);
@@ -66,7 +66,7 @@ gboolean gst_type_reader_register(GType pspec_type,
         _gst_init_type_readers();
     }
 
-    g_return_val_if_fail(G_IS_PARAM_SPEC(pspec_type), FALSE);
+    g_return_val_if_fail(g_type_is_a(pspec_type, G_TYPE_PARAM), FALSE);
 
     if (!g_hash_table_contains(reader_map, GINT_TO_POINTER(pspec_type)))
     {
@@ -97,7 +97,8 @@ void gst_type_reader_fill_type(
     GValue *const value,
     GstStructure *const dictionary)
 {
-    GstReadTypeFunc read_func = NULL;
+   GValue key_value = G_VALUE_INIT;
+   GstReadTypeFunc read_func = NULL;
 
     g_return_if_fail(NULL != pspec);
     g_return_if_fail(NULL != value);
@@ -108,8 +109,13 @@ void gst_type_reader_fill_type(
         _gst_init_type_readers();
     }
 
+    g_value_init(&key_value, G_TYPE_STRING);
+    g_value_take_string(&key_value, g_strdup_printf("%s: %s", pspec->name,
+                                                    g_param_spec_get_blurb(pspec)));
+    gst_structure_take_value(dictionary, KEY_NAME, &key_value);
+
     read_func = (GstReadTypeFunc)g_hash_table_lookup(
-        reader_map, GINT_TO_POINTER(G_PARAM_SPEC_VALUE_TYPE(pspec)));
+        reader_map, GINT_TO_POINTER(G_PARAM_SPEC_TYPE(pspec)));
     if (read_func)
     {
         read_func(pspec, value, dictionary);

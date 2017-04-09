@@ -87,7 +87,7 @@ void gst_structure_content_reader_parse(GValue *const boxed,
                                         GstStructure *const dictionary);
 
 //GObject handling
-void gst_object_reader_parse_content(const GObject *object,
+void gst_object_reader_parse_content(GObject *const object,
                                      GstStructure *const dictionary);
 
 #endif //TYPE_READER_PRIV_H

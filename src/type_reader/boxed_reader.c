@@ -7,7 +7,7 @@ gboolean gst_boxed_content_reader_register(GType boxed_type,
 {
     if (G_UNLIKELY(!boxed_map))
     {
-        g_hash_table_new(g_direct_hash, g_direct_equal);
+        boxed_map = g_hash_table_new(g_direct_hash, g_direct_equal);
     }
 
     g_return_val_if_fail(g_type_is_a(boxed_type, G_TYPE_BOXED), FALSE);
