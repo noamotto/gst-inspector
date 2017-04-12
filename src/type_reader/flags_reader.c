@@ -61,7 +61,7 @@ static gchar *gst_flags_type_reader_parse_options(
     return g_string_free(options_string, FALSE);
 }
 
-static void gst_flags_type_reader_fill_type(
+void gst_flags_type_reader_fill_type(
     GParamSpec *const pspec,
     GValue *const value,
     GstStructure *const dictionary)
