@@ -2,11 +2,11 @@
 
 #define MINIMUM (G_MININT64)
 #define MAXIMUM (G_MAXINT64)
-#define VALUE (0)
+#define VALUE (G_GINT64_CONSTANT(0))
 
 int main(int argc, char *argv[])
 {
-    GParamSpec *int_spec = NULL;
+    GParamSpec *int64_spec = NULL;
     const GValue *value = NULL;
     GstStructure *dictionary = NULL;
     gchar *range_string = NULL;
@@ -14,14 +14,14 @@ int main(int argc, char *argv[])
 
     gst_init(&argc, &argv);
 
-    int_spec = g_param_spec_int64("test", "Test param",
+    int64_spec = g_param_spec_int64("test", "Test param",
                                 "Test param", MINIMUM, MAXIMUM, VALUE, G_PARAM_READWRITE);
-    value = g_param_spec_get_default_value(int_spec);
+    value = g_param_spec_get_default_value(int64_spec);
     dictionary = gst_structure_new_empty("dictionary");
     range_string = g_strdup_printf("%" G_GINT64_FORMAT " - %" G_GINT64_FORMAT, MINIMUM, MAXIMUM);
     value_string = g_strdup_printf("%" G_GINT64_FORMAT, VALUE);
 
-    gst_type_reader_fill_type(int_spec, (GValue * const)value, dictionary);
+    gst_type_reader_fill_type(int64_spec, (GValue * const)value, dictionary);
 
     g_return_val_if_fail(gst_structure_has_field_typed(dictionary, KEY_NAME, G_TYPE_STRING), 1);
     g_return_val_if_fail(g_str_equal(

@@ -1,12 +1,12 @@
 #include "type_reader/type_reader.h"
 
-#define MINIMUM (G_MINLONG)
-#define MAXIMUM (G_MAXLONG)
-#define VALUE (0)
+#define MINIMUM (0)
+#define MAXIMUM (G_MAXULONG)
+#define VALUE ((G_MAXULONG - 1) / 2)
 
 int main(int argc, char *argv[])
 {
-    GParamSpec *long_spec = NULL;
+    GParamSpec *ulong_spec = NULL;
     const GValue *value = NULL;
     GstStructure *dictionary = NULL;
     gchar *range_string = NULL;
@@ -14,14 +14,14 @@ int main(int argc, char *argv[])
 
     gst_init(&argc, &argv);
 
-    long_spec = g_param_spec_long("test", "Test param",
+    ulong_spec = g_param_spec_ulong("test", "Test param",
                                 "Test param", MINIMUM, MAXIMUM, VALUE, G_PARAM_READWRITE);
-    value = g_param_spec_get_default_value(long_spec);
+    value = g_param_spec_get_default_value(ulong_spec);
     dictionary = gst_structure_new_empty("dictionary");
-    range_string = g_strdup_printf("%ld - %ld", MINIMUM, MAXIMUM);
-    value_string = g_strdup_printf("%ld", VALUE);
+    range_string = g_strdup_printf("%lu - %lu", MINIMUM, MAXIMUM);
+    value_string = g_strdup_printf("%lu", VALUE);
 
-    gst_type_reader_fill_type(long_spec, (GValue * const)value, dictionary);
+    gst_type_reader_fill_type(ulong_spec, (GValue * const)value, dictionary);
 
     g_return_val_if_fail(gst_structure_has_field_typed(dictionary, KEY_NAME, G_TYPE_STRING), 1);
     g_return_val_if_fail(g_str_equal(
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 
     g_return_val_if_fail(gst_structure_has_field_typed(dictionary, KEY_TYPE, G_TYPE_STRING), 1);
     g_return_val_if_fail(g_str_equal(
-                             gst_structure_get_string(dictionary, KEY_TYPE), "Long"),
+                             gst_structure_get_string(dictionary, KEY_TYPE), "Unsigned Long"),
                          1);
 
     g_return_val_if_fail(gst_structure_has_field_typed(dictionary, KEY_RANGE, G_TYPE_STRING), 1);
