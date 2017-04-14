@@ -1,0 +1,14 @@
+======================================================================
+=                           Type readers                             =
+======================================================================
+
+Type readers are functions that get as input a GParamSpec and a GValue, and outputs a
+dictionary of strings, describing the parameter. The dictionary is represented by a GstStructure.
+The GValue should hold a valid value of the GParamSpec type.
+
+Functions should be abled to be registered easily, to create a dinamyic and easily extendable
+system. In addition, another two systems should be provided, to register special handlers for
+GBoxed types and GObject types.
+
+A special function will recieve the GParamSpec and GValue, and choose the right function to
+handle them. A default handling function will be invoked when no matching handler is found.
