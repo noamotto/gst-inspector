@@ -8,6 +8,7 @@ include(CTest)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+include(TestTools)
 find_package(GStreamer REQUIRED)
 
 file(GLOB_RECURSE src_files "src/**/*.c")
@@ -24,7 +25,8 @@ if (BUILD_TESTING)
 # (currenlty supported only on Windows, using opencppcoverage)
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 
-set(TEST_CASES 
+#Tests for params
+set(PARAM_TEST_CASES 
     bool_param_test
     int_param_test
     int64_param_test
@@ -33,28 +35,37 @@ set(TEST_CASES
     uint64_param_test
     ulong_param_test
     float_param_test
-    double_param_test)
+    double_param_test
+    string_param_test
+    null_string_param_test
+    )
 
-foreach(TEST_CASE ${TEST_CASES})
+set(BOXED_PARAM_TEST_CASES
+    unknown_boxed_param_type_test
+    caps_param_type_test)
 
-add_executable(${TEST_CASE} "tests/params/${TEST_CASE}.c")
-target_link_libraries(${TEST_CASE} gst-inspector)
+foreach(PARAM_TEST_CASE ${PARAM_TEST_CASES})
 
-if(ENABLE_COVERAGE AND MSVC)
-    set(TEST_COMMAND opencppcoverage --export_type=binary:${TEST_CASE}.cov --sources $<SHELL_PATH:${CMAKE_SOURCE_DIR}/src> -- "$<TARGET_FILE:${TEST_CASE}>")
-    list(APPEND REPORT_FILES "--input_coverage=${TEST_CASE}.cov")
-else(ENABLE_COVERAGE AND MSVC)
-    set(TEST_COMMAND ${TEST_CASE})
-endif(ENABLE_COVERAGE AND MSVC)
+add_test_case("tests/params" ${PARAM_TEST_CASE})
 
-add_test(NAME ${TEST_CASE} COMMAND ${TEST_COMMAND})
+endforeach(PARAM_TEST_CASE)
+
+# Tests for boxed params
+foreach(BOXED_PARAM_TEST_CASE ${BOXED_PARAM_TEST_CASES})
+
+add_executable(${BOXED_PARAM_TEST_CASE} "tests/params/boxed/${BOXED_PARAM_TEST_CASE}.c")
+target_link_libraries(${BOXED_PARAM_TEST_CASE} gst-inspector)
+
+create_test_command(${BOXED_PARAM_TEST_CASE})
+
+add_test(NAME ${BOXED_PARAM_TEST_CASE} COMMAND ${TEST_COMMAND})
 
 # When building on VS, add GStreamer's root to PATH when running the tests
 if(MSVC)
-set_property(TEST ${TEST_CASE} PROPERTY ENVIRONMENT PATH=${GSTREAMER_BIN_PATH};$ENV{Path})
+set_property(TEST ${BOXED_PARAM_TEST_CASE} PROPERTY ENVIRONMENT PATH=$<SHELL_PATH:${GSTREAMER_BIN_PATH}>;$ENV{Path})
 endif(MSVC)
 
-endforeach(TEST_CASE)
+endforeach(BOXED_PARAM_TEST_CASE)
 
 #add target to generate coverage report
 if(ENABLE_COVERAGE AND MSVC)

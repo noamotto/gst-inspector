@@ -1,13 +1,18 @@
-======================================================================
-=                           Dictionary                               =
-======================================================================
+Dictionary
+==========
 
-The dictionary is an object that holds all the data read from a parameter, an element or a plugin.
-This data container should be able to hold two types of objects: strings and sub-dictionaries.
+The dictionary is an object that holds all the data read from a parameter, an element
+or a plugin. This data container should be able to hold three types of objects: strings,
+arrays, and sub-dictionaries.
 
-A string will be of type gchar *, and a const version will be retruned to the user. The dictionary
-will free the string. A sub-dictionary will be of the type of the dictionary, and a const pointer to
-it will be returned. Again, it is the dictionary's responsibility to free the sub-directory.
+A string should be of type gchar *, and a const version should be retruned to the user. 
+The dictionary should free the string. A sub-dictionary should be of the type of the dictionary,
+and a const pointer to it should be returned. Again, it is the dictionary's responsibility to free
+the sub-directory.
 
-GstStructures will be used as dictionaries, as they implement all needed functionality,
+Array should be an array of entries of the same type. Array should be of type GArray, and should 
+hold GValue, and can hold any of the available data types, meaning strings, arrays and 
+sub-dictionaries. Types can be distinguished by the GType of the first GValue in the array 
+
+GstStructures should be used as dictionaries, as they implement all needed functionality,
 allow data retrieving based on string/ID, and manage themselves.

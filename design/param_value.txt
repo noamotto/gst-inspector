@@ -1,0 +1,13 @@
+Parameter Value Field
+=======================
+
+The value field in a parameter can be of any of the possible types.
+
+- A string value should simply describe the parameter's value. It is mainly used for 
+simple types, like primitives
+- An array value should hold an array of equally sized components, describing the parameter.
+It can be used to describe a list and such
+- A sub-directory value should be used for complex types that their value should be described
+in multiple fields. This sub-directry can hold in its turn any of the possible data types.
+The value sub-dictionary can hold a value field of its own, to mark a field as the primary field
+of value (Like caps fields vs caps features).

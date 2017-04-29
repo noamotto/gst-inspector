@@ -1,6 +1,10 @@
 # Look for GStreamer
 if(MSVC)
-    set(GLIB2_ROOT $ENV{GSTREAMER_1_0_ROOT_X86})
+    if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+        set(GLIB2_ROOT $ENV{GSTREAMER_1_0_ROOT_X86_64})
+    else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+        set(GLIB2_ROOT $ENV{GSTREAMER_1_0_ROOT_X86})    
+    endif("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")    
 endif(MSVC)
 find_package(GLib2 REQUIRED)
 

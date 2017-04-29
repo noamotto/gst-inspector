@@ -1,6 +1,5 @@
-======================================================================
-=                           Type readers                             =
-======================================================================
+Type readers
+============
 
 Type readers are functions that get as input a GParamSpec and a GValue, and outputs a
 dictionary of strings, describing the parameter. The dictionary is represented by a GstStructure.

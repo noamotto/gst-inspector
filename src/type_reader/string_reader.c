@@ -14,11 +14,13 @@ void gst_string_type_reader_fill_type(
 
     if (string_val == NULL)
     {
+        g_value_init(&key_value, G_TYPE_STRING);
         g_value_take_string(&key_value, g_strdup("null"));
         gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
     }
     else
     {
+        g_value_init(&key_value, G_TYPE_STRING);
         g_value_take_string(&key_value, g_strdup(string_val));
         gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
     }
