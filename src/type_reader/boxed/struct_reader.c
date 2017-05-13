@@ -8,7 +8,7 @@ print_field(
 {
     GValue key_value = G_VALUE_INIT;
     gchar *str = gst_value_serialize(value);
-    gchar *field = g_strdup_printf("%15s: %s\n",
+    gchar *field = g_strdup_printf("%s: %s",
                                    g_quark_to_string(field_id),
                                    str);
 

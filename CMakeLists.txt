@@ -41,7 +41,17 @@ set(PARAM_TEST_CASES
     )
 
 set(BOXED_PARAM_TEST_CASES
-    unknown_boxed_param_type_test)
+    unknown_boxed_param_type_test
+
+    null_caps_param_type_test
+    any_caps_param_type_test
+    empty_caps_param_type_test
+    no_features_caps_param_type_test
+    sysmem_features_caps_param_type_test
+    with_features_caps_param_type_test
+    
+    structure_param_type_test
+    null_structure_param_type_test)
 
 foreach(PARAM_TEST_CASE ${PARAM_TEST_CASES})
 

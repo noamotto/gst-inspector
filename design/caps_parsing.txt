@@ -1,0 +1,18 @@
+Caps Parameter Parsing
+======================
+
+Caps parsing is a difficult thing. A caps is an array of structures, each one with caps type,
+features, and fields. In addition, caps can also be "ANY", "EMPTY" and NULL, and each option is
+different.
+In order to overcome this problem, caps should be parsed in this fashion:
+
+- If caps are NULL, the content of the caps variable will be a string stating it
+- If caps are ANY, the content of the caps variable will be the string "ANY"
+- If caps are EMPTY, the content of the caps variable will be the string "EMPTY"
+- If a specific caps structure is provided, it should be parsed as follows:
+    - Every caps structure, containing a type, features, and fields, will be parsed into a 
+    sub-dictionry with three fields:
+        - type field, holding the caps mime-type (e.g. video/x-raw, application/x-rtp)
+        - optional features field, holding a string describing the caps features
+        - value field, holding an array of strings, each one represents a caps field
+    - All the caps structures should be packed into an array of sub-directories

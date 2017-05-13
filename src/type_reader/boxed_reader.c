@@ -39,7 +39,7 @@ void gst_boxed_reader_parse_content(GValue* const boxed,
     }
 
     read_func = (GstBoxedContentReaderFunc)g_hash_table_lookup(boxed_map,
-                                                               GINT_TO_POINTER(boxed));
+                                                               GINT_TO_POINTER(boxed->g_type));
 
     if (read_func)
     {

@@ -10,7 +10,7 @@ print_field(
 {
     GValue key_value = G_VALUE_INIT;
     gchar *str = gst_value_serialize(value);
-    gchar *field = g_strdup_printf("%15s: %s\n",
+    gchar *field = g_strdup_printf("%s: %s",
                                    g_quark_to_string(field_id),
                                    str);
 
@@ -22,10 +22,13 @@ print_field(
     return TRUE;
 }
 
-static void parse_caps_fields(const GstCaps *caps,
-                              GArray *caps_array)
+static GArray *parse_caps(const GstCaps *caps)
 {
+    GArray *caps_array = g_array_new(FALSE, FALSE, sizeof(GValue));
+    GValue key_value = G_VALUE_INIT;
     GValue caps_value = G_VALUE_INIT;
+
+    g_array_set_clear_func(caps_array, (GDestroyNotify)g_value_unset);
 
     for (guint i = 0; i < gst_caps_get_size(caps); i++)
     {
@@ -33,7 +36,6 @@ static void parse_caps_fields(const GstCaps *caps,
         GArray *fields_array = g_array_new(FALSE, FALSE, sizeof(GValue));
         GstStructure *structure = gst_caps_get_structure(caps, i);
         GstCapsFeatures *features = gst_caps_get_features(caps, i);
-        GValue key_value = G_VALUE_INIT;
 
         g_value_init(&key_value, G_TYPE_STRING);
         g_value_set_string(&key_value, gst_structure_get_name(structure));
@@ -60,46 +62,6 @@ static void parse_caps_fields(const GstCaps *caps,
         g_value_take_boxed(&caps_value, caps_dict);
         g_array_append_val(caps_array, caps_value);
     }
-}
-
-static GArray *parse_caps(
-    const GstCaps *caps)
-{
-    GArray *caps_array = g_array_new(FALSE, FALSE, sizeof(GValue));
-    GValue key_value = G_VALUE_INIT;
-
-    g_array_set_clear_func(caps_array, (GDestroyNotify)g_value_unset);
-
-    if (gst_caps_is_any(caps))
-    {
-        GValue caps_value = G_VALUE_INIT;
-        GstStructure *caps_dict = gst_structure_new_empty("caps_dict");
-
-        g_value_init(&caps_value, GST_TYPE_STRUCTURE);
-        g_value_init(&key_value, G_TYPE_STRING);
-
-        g_value_set_static_string(&key_value, "ANY");
-        gst_structure_take_value(caps_dict, KEY_VALUE, &key_value);
-        g_value_take_boxed(&caps_value, caps_dict);
-        g_array_append_val(caps_array, caps_value);
-    }
-    else if (gst_caps_is_empty(caps))
-    {
-        GValue caps_value = G_VALUE_INIT;
-        GstStructure *caps_dict = gst_structure_new_empty("caps_dict");
-
-        g_value_init(&caps_value, GST_TYPE_STRUCTURE);
-        g_value_init(&key_value, G_TYPE_STRING);
-
-        g_value_set_static_string(&key_value, "EMPTY");
-        gst_structure_take_value(caps_dict, KEY_VALUE, &key_value);
-        g_value_take_boxed(&caps_value, caps_dict);
-        g_array_append_val(caps_array, caps_value);
-    }
-    else
-    {
-        parse_caps_fields(caps, caps_array);
-    }
 
     return caps_array;
 }
@@ -118,6 +80,18 @@ void gst_caps_content_reader_parse(
     {
         g_value_init(&key_value, G_TYPE_STRING);
         g_value_set_static_string(&key_value, "Caps (NULL)");
+        gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
+    }
+    else if (gst_caps_is_any(caps))
+    {
+        g_value_init(&key_value, G_TYPE_STRING);
+        g_value_set_static_string(&key_value, "ANY");
+        gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
+    }
+    else if (gst_caps_is_empty(caps))
+    {
+        g_value_init(&key_value, G_TYPE_STRING);
+        g_value_set_static_string(&key_value, "EMPTY");
         gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
     }
     else
