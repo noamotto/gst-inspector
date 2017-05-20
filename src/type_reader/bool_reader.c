@@ -1,13 +1,14 @@
 #include "type_reader/type_reader_priv.h"
 
 void gst_bool_type_reader_fill_type(
-    GParamSpec *const pspec,
-    GValue *const value,
-    GstStructure *const dictionary)
+    GParamSpec *pspec,
+    GValue *value,
+    GstStructure *dictionary)
 {
     GValue key_value = G_VALUE_INIT;
     gboolean bool_val;
 
+    g_return_if_fail(G_IS_PARAM_SPEC_BOOLEAN(pspec));
     g_return_if_fail(G_VALUE_HOLDS_BOOLEAN(value));
 
     g_value_init(&key_value, G_TYPE_STRING);

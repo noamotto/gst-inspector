@@ -1,9 +1,9 @@
 #include "type_reader/type_reader_priv.h"
 
 void gst_int64_type_reader_fill_type(
-    GParamSpec *const pspec,
-    GValue *const value,
-    GstStructure *const dictionary)
+    GParamSpec *pspec,
+    GValue *value,
+    GstStructure *dictionary)
 {
     GValue key_value = G_VALUE_INIT;
     GParamSpecInt64 *pspec_int64 = NULL;

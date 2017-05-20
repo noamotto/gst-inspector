@@ -2,9 +2,9 @@
 
 static GHashTable *reader_map = NULL;
 
-static void gst_default_reader_fill_type(const GParamSpec *pspec,
-                                  const GValue *value,
-                                  GstStructure *const dictionary)
+static void gst_default_reader_fill_type(GParamSpec *pspec,
+                                         GValue *value,
+                                         GstStructure *dictionary)
 {
     GValue key_value = G_VALUE_INIT;
     (void)(value);
@@ -90,25 +90,29 @@ gboolean gst_type_reader_register(GType pspec_type,
 
     @param pspec A GParamSpec describing the parameter
     @param value A GValue holding a default value for the parameter
-    @param dictionary A dictionary to fill
-*/
-void gst_type_reader_fill_type(
-    GParamSpec *const pspec,
-    GValue *const value,
-    GstStructure *const dictionary)
-{
-   GValue key_value = G_VALUE_INIT;
-   GstReadTypeFunc read_func = NULL;
 
-    g_return_if_fail(NULL != pspec);
-    g_return_if_fail(NULL != value);
-    g_return_if_fail(NULL != dictionary);
+    @returns A dictionary the describes the parameter
+*/
+GstStructure *gst_type_reader_fill_type(
+    GParamSpec *pspec,
+    const GValue *value)
+{
+    GstStructure *dictionary;
+    GValue key_value = G_VALUE_INIT;
+    GValue tmp_value = G_VALUE_INIT;
+    GstReadTypeFunc read_func = NULL;
+
+    g_return_val_if_fail(G_IS_PARAM_SPEC(pspec), NULL);
+
+    gst_value_init_and_copy(&tmp_value, value);
+    g_return_val_if_fail(G_IS_VALUE(&tmp_value), NULL);
 
     if (G_UNLIKELY(NULL == reader_map))
     {
         _gst_init_type_readers();
     }
 
+    dictionary = gst_structure_new_empty("dictionary");
     g_value_init(&key_value, G_TYPE_STRING);
     g_value_take_string(&key_value, g_strdup_printf("%s: %s", pspec->name,
                                                     g_param_spec_get_blurb(pspec)));
@@ -118,10 +122,17 @@ void gst_type_reader_fill_type(
         reader_map, GINT_TO_POINTER(G_PARAM_SPEC_TYPE(pspec)));
     if (read_func)
     {
-        read_func(pspec, value, dictionary);
+        read_func(pspec, &tmp_value, dictionary);
     }
     else
     {
-        gst_default_reader_fill_type(pspec, value, dictionary);
+        gst_default_reader_fill_type(pspec, &tmp_value, dictionary);
     }
+
+    if (G_IS_VALUE(&tmp_value))
+    {
+        g_value_unset(&tmp_value);
+    }
+
+    return dictionary;
 }

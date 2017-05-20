@@ -62,9 +62,9 @@ static gchar *gst_flags_type_reader_parse_options(
 }
 
 void gst_flags_type_reader_fill_type(
-    GParamSpec *const pspec,
-    GValue *const value,
-    GstStructure *const dictionary)
+    GParamSpec *pspec,
+    GValue *value,
+    GstStructure *dictionary)
 {
     GValue key_value = G_VALUE_INIT;
     GParamSpecFlags *pspec_flags = NULL;

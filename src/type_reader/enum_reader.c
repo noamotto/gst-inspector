@@ -40,9 +40,9 @@ static gchar *gst_enum_type_reader_parse_options(
 }
 
 void gst_enum_type_reader_fill_type(
-    GParamSpec *const pspec,
-    GValue *const value,
-    GstStructure *const dictionary)
+    GParamSpec *pspec,
+    GValue *value,
+    GstStructure *dictionary)
 {
     GValue key_value = G_VALUE_INIT;
     const GEnumValue *values;

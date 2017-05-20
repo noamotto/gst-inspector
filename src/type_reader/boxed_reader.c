@@ -27,8 +27,8 @@ gboolean gst_boxed_content_reader_register(GType boxed_type,
     return TRUE;
 }
 
-void gst_boxed_reader_parse_content(GValue* const boxed,
-                                    GstStructure *const dictionary)
+void gst_boxed_reader_parse_content(GValue *boxed,
+                                    GstStructure *dictionary)
 {
     GstBoxedContentReaderFunc read_func = NULL;
     g_return_if_fail(G_VALUE_HOLDS_BOXED(boxed));
@@ -38,8 +38,8 @@ void gst_boxed_reader_parse_content(GValue* const boxed,
         g_hash_table_new(g_direct_hash, g_direct_equal);
     }
 
-    read_func = (GstBoxedContentReaderFunc)g_hash_table_lookup(boxed_map,
-                                                               GINT_TO_POINTER(boxed->g_type));
+    read_func = (GstBoxedContentReaderFunc)
+        g_hash_table_lookup(boxed_map, GINT_TO_POINTER(boxed->g_type));
 
     if (read_func)
     {
@@ -48,9 +48,9 @@ void gst_boxed_reader_parse_content(GValue* const boxed,
 }
 
 void gst_boxed_type_reader_fill_type(
-    GParamSpec *const pspec,
-    GValue *const value,
-    GstStructure *const dictionary)
+    GParamSpec *pspec,
+    GValue *value,
+    GstStructure *dictionary)
 {
     GValue key_value = G_VALUE_INIT;
 

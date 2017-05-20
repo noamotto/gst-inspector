@@ -14,14 +14,13 @@ int main(int argc, char *argv[])
 
     type_string = g_strdup_printf("Boxed pointer of type \"%s\"",
                                   g_type_name(GST_TYPE_STRUCTURE));
-    dictionary = gst_structure_new_empty("dictionary");
     boxed_spec = g_param_spec_boxed("test", "Test param",
                                     "Test param", GST_TYPE_STRUCTURE, G_PARAM_READWRITE);
 
     g_value_init(&value, GST_TYPE_STRUCTURE);
     gst_value_set_structure(&value, structure);
 
-    gst_type_reader_fill_type(boxed_spec, &value, dictionary);
+    dictionary = gst_type_reader_fill_type(boxed_spec, &value);
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_NAME, G_TYPE_STRING));
     g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_NAME), ==, "test: Test param");

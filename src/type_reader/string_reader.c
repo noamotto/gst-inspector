@@ -1,9 +1,9 @@
 #include "type_reader/type_reader_priv.h"
 
 void gst_string_type_reader_fill_type(
-    GParamSpec *const pspec,
-    GValue *const value,
-    GstStructure *const dictionary)
+    GParamSpec *pspec,
+    GValue *value,
+    GstStructure *dictionary)
 {
     const char *string_val = g_value_get_string(value);
     GValue key_value = G_VALUE_INIT;

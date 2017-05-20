@@ -66,9 +66,8 @@ static GArray *parse_caps(const GstCaps *caps)
     return caps_array;
 }
 
-void gst_caps_content_reader_parse(
-    GValue *const boxed,
-    GstStructure *const dictionary)
+void gst_caps_content_reader_parse(GValue *boxed,
+                                   GstStructure *dictionary)
 {
     const GstCaps *caps;
     GValue key_value = G_VALUE_INIT;

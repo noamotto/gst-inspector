@@ -48,9 +48,9 @@ void gst_object_reader_parse_content(GObject *const object,
 }
 
 void gst_object_type_reader_fill_type(
-    GParamSpec *const pspec,
-    GValue *const value,
-    GstStructure *const dictionary)
+    GParamSpec *pspec,
+    GValue *value,
+    GstStructure *dictionary)
 {
     GObject * object = NULL;
     GValue key_value = G_VALUE_INIT;

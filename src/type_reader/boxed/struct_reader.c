@@ -20,9 +20,8 @@ print_field(
     return TRUE;
 }
 
-void gst_structure_content_reader_parse(
-    GValue *const boxed,
-    GstStructure *const dictionary)
+void gst_structure_content_reader_parse(GValue *boxed,
+                                        GstStructure *dictionary)
 {
     const GstStructure *structure;
     GArray *fields_array;
@@ -34,7 +33,7 @@ void gst_structure_content_reader_parse(
     g_array_set_clear_func(fields_array, (GDestroyNotify)g_value_unset);
 
     structure = gst_value_get_structure(boxed);
-    
+
     if (structure)
     {
         gst_structure_foreach(structure,
