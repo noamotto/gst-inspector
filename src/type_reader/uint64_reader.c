@@ -5,7 +5,6 @@ void gst_uint64_type_reader_fill_type(
     GValue *value,
     GstStructure *dictionary)
 {
-    GValue key_value = G_VALUE_INIT;
     GParamSpecUInt64 *pspec_uint64 = NULL;
 
     g_return_if_fail(G_VALUE_HOLDS_UINT64(value));
@@ -13,18 +12,13 @@ void gst_uint64_type_reader_fill_type(
 
     pspec_uint64 = G_PARAM_SPEC_UINT64(pspec);
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup("Unsigned Integer64"));
-    gst_structure_take_value(dictionary, KEY_TYPE, &key_value);
+    gst_dictionary_set_static_string(dictionary, KEY_TYPE, "Unsigned Integer64");
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value,
-                        g_strdup_printf("%" G_GUINT64_FORMAT " - %" G_GUINT64_FORMAT,
-                                        pspec_uint64->minimum, pspec_uint64->maximum));
-    gst_structure_take_value(dictionary, KEY_RANGE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_RANGE,
+                              g_strdup_printf("%" G_GUINT64_FORMAT " - %" G_GUINT64_FORMAT,
+                                              pspec_uint64->minimum,
+                                              pspec_uint64->maximum));
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup_printf("%" G_GUINT64_FORMAT,
-                                                    g_value_get_uint64(value)));
-    gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_VALUE,
+                              g_strdup_printf("%" G_GUINT64_FORMAT, g_value_get_uint64(value)));
 }

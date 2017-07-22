@@ -11,8 +11,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(TestTools)
 find_package(GStreamer REQUIRED)
 
-file(GLOB_RECURSE src_files "src/**/*.c")
-file(GLOB_RECURSE include_files "include/**/*.h")
+file(GLOB_RECURSE src_files src/**/*.c src/*.c)
+file(GLOB_RECURSE include_files include/**/*.h include/*.h)
 add_library(gst-inspector SHARED ${src_files} ${include_files})
 
 target_compile_definitions(gst-inspector PRIVATE "GST_INSPECTOR_EXPORT")
@@ -28,6 +28,7 @@ option(ENABLE_COVERAGE "Enable code coverage" OFF)
 #Tests for params
 set(PARAM_TEST_CASES 
     bool_param_test
+    fraction_param_test
     int_param_test
     int64_param_test
     long_param_test
@@ -38,6 +39,10 @@ set(PARAM_TEST_CASES
     double_param_test
     string_param_test
     null_string_param_test
+    known_pointer_param_test
+    unknown_pointer_param_test
+    enum_param_test
+    flags_param_test
     )
 
 set(BOXED_PARAM_TEST_CASES
@@ -53,6 +58,10 @@ set(BOXED_PARAM_TEST_CASES
     structure_param_type_test
     null_structure_param_type_test)
 
+set(OBJECT_PARAM_TEST_CASES
+    unknown_object_param_type_test
+    object_param_type_test)
+
 foreach(PARAM_TEST_CASE ${PARAM_TEST_CASES})
 
 add_test_case("tests/params" ${PARAM_TEST_CASE})
@@ -65,6 +74,13 @@ foreach(BOXED_PARAM_TEST_CASE ${BOXED_PARAM_TEST_CASES})
 add_test_case("tests/params/boxed" ${BOXED_PARAM_TEST_CASE})
 
 endforeach(BOXED_PARAM_TEST_CASE)
+
+# Tests for object params
+foreach(OBJECT_PARAM_TEST_CASE ${OBJECT_PARAM_TEST_CASES})
+
+add_test_case("tests/params/object" ${OBJECT_PARAM_TEST_CASE})
+
+endforeach(OBJECT_PARAM_TEST_CASE)
 
 #add target to generate coverage report
 if(ENABLE_COVERAGE AND MSVC)

@@ -5,23 +5,21 @@ void gst_string_type_reader_fill_type(
     GValue *value,
     GstStructure *dictionary)
 {
-    const char *string_val = g_value_get_string(value);
-    GValue key_value = G_VALUE_INIT;
-
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup("String"));
-    gst_structure_take_value(dictionary, KEY_TYPE, &key_value);
+    const char *string_val = NULL;
+    
+    g_return_if_fail(G_IS_PARAM_SPEC_STRING(pspec));
+    g_return_if_fail(G_VALUE_HOLDS_STRING(value));
+    
+    gst_dictionary_set_static_string(dictionary, KEY_TYPE, "String");
+    
+    string_val = g_value_get_string(value);
 
     if (string_val == NULL)
     {
-        g_value_init(&key_value, G_TYPE_STRING);
-        g_value_take_string(&key_value, g_strdup("null"));
-        gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
+        gst_dictionary_set_static_string(dictionary, KEY_VALUE, "null");
     }
     else
     {
-        g_value_init(&key_value, G_TYPE_STRING);
-        g_value_take_string(&key_value, g_strdup(string_val));
-        gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
+        gst_dictionary_set_string(dictionary, KEY_VALUE, g_strdup(string_val));
     }
 }

@@ -1,7 +1,7 @@
 #ifndef TYPE_READER_H
 #define TYPE_READER_H
 
-#include "common.h"
+#include "gstdictionary.h"
 
 G_BEGIN_DECLS
 

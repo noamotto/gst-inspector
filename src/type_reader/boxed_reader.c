@@ -52,16 +52,12 @@ void gst_boxed_type_reader_fill_type(
     GValue *value,
     GstStructure *dictionary)
 {
-    GValue key_value = G_VALUE_INIT;
-
     g_return_if_fail(G_IS_PARAM_SPEC_BOXED(pspec));
     g_return_if_fail(G_VALUE_HOLDS_BOXED(value));
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value,
-                        g_strdup_printf("Boxed pointer of type \"%s\"",
-                                        g_type_name(pspec->value_type)));
-    gst_structure_take_value(dictionary, KEY_TYPE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_TYPE,
+                              g_strdup_printf("Boxed pointer of type \"%s\"",
+                                              g_type_name(pspec->value_type)));
 
     gst_boxed_reader_parse_content(value, dictionary);
 }

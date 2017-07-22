@@ -5,7 +5,6 @@ void gst_ulong_type_reader_fill_type(
     GValue *value,
     GstStructure *dictionary)
 {
-    GValue key_value = G_VALUE_INIT;
     GParamSpecULong *pspec_ulong = NULL;
 
     g_return_if_fail(G_VALUE_HOLDS_ULONG(value));
@@ -13,18 +12,12 @@ void gst_ulong_type_reader_fill_type(
 
     pspec_ulong = G_PARAM_SPEC_ULONG(pspec);
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup("Unsigned Long"));
-    gst_structure_take_value(dictionary, KEY_TYPE, &key_value);
+    gst_dictionary_set_static_string(dictionary, KEY_TYPE, "Unsigned Long");
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value,
-                        g_strdup_printf("%lu - %lu", pspec_ulong->minimum,
-                                        pspec_ulong->maximum));
-    gst_structure_take_value(dictionary, KEY_RANGE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_RANGE, g_strdup_printf("%lu - %lu",
+                                                                     pspec_ulong->minimum,
+                                                                     pspec_ulong->maximum));
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup_printf("%lu",
-                                                    g_value_get_ulong(value)));
-    gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_VALUE,
+                              g_strdup_printf("%lu", g_value_get_ulong(value)));
 }

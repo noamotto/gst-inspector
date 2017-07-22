@@ -7,18 +7,19 @@ void gst_pointer_type_reader_fill_type(
 {
     GValue key_value = G_VALUE_INIT;
 
-    (void)value;
+    g_return_if_fail(G_IS_PARAM_SPEC_POINTER(pspec));
+    g_return_if_fail(G_IS_VALUE(value));
+
     g_value_init(&key_value, G_TYPE_STRING);
 
     if (pspec->value_type != G_TYPE_POINTER)
     {
-        g_value_take_string(&key_value, g_strdup_printf("Pointer of type \"%s\".",
-                                                        g_type_name(pspec->value_type)));
-        gst_structure_take_value(dictionary, KEY_TYPE, &key_value);
+        gst_dictionary_set_string(dictionary, KEY_TYPE,
+                                  g_strdup_printf("Pointer of type \"%s\".",
+                                                  g_type_name(pspec->value_type)));
     }
     else
     {
-        g_value_take_string(&key_value, g_strdup_printf("Pointer."));
-        gst_structure_take_value(dictionary, KEY_TYPE, &key_value);
+        gst_dictionary_set_static_string(dictionary, KEY_TYPE, "Pointer.");
     }
 }

@@ -25,11 +25,10 @@ void gst_structure_content_reader_parse(GValue *boxed,
 {
     const GstStructure *structure;
     GArray *fields_array;
-    GValue key_value = G_VALUE_INIT;
 
     g_return_if_fail(GST_VALUE_HOLDS_STRUCTURE(boxed));
 
-    fields_array = g_array_new(FALSE, FALSE, sizeof(GValue));
+    fields_array = g_array_new(FALSE, TRUE, sizeof(GValue));
     g_array_set_clear_func(fields_array, (GDestroyNotify)g_value_unset);
 
     structure = gst_value_get_structure(boxed);
@@ -41,7 +40,5 @@ void gst_structure_content_reader_parse(GValue *boxed,
                               fields_array);
     }
 
-    g_value_init(&key_value, G_TYPE_ARRAY);
-    g_value_take_boxed(&key_value, fields_array);
-    gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
+    gst_dictionary_set_array(dictionary, KEY_VALUE, fields_array);
 }

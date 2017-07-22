@@ -20,7 +20,7 @@ static gchar *gst_flags_type_reader_find_default(
     flags_string = g_string_new(NULL);
 
     /* we assume the values are sorted from lowest to highest value */
-    for (guint i = flags_class->n_values - 1; i > 0 && 0 != flags_left; --i)
+    for (guint i = flags_class->n_values - 1; i >= 0 && 0 != flags_left; --i)
     {
         if (values[i].value != 0 && (flags_left & values[i].value) == values[i].value)
         {
@@ -41,24 +41,27 @@ static gchar *gst_flags_type_reader_find_default(
     return g_string_free(flags_string, FALSE);
 }
 
-static gchar *gst_flags_type_reader_parse_options(
+static GArray *gst_flags_type_reader_parse_options(
     const GFlagsClass *flags_class)
 {
+    GArray *options_array = g_array_new(FALSE, TRUE, sizeof(GValue));
+    g_array_set_clear_func(options_array, (GDestroyNotify)g_value_unset);
     GFlagsValue *values = flags_class->values;
-    GString *options_string = g_string_new(NULL);
 
     for (guint i = 0; i < flags_class->n_values; i++)
     {
-        gchar *option = g_strdup_printf("(0x%08x): %-16s - %s\n", "",
+        GValue option_val = G_VALUE_INIT;
+        gchar *option = g_strdup_printf("(0x%08x): %-16s - %s",
                                         values[i].value,
                                         values[i].value_nick,
                                         values[i].value_name);
-        options_string = g_string_append(options_string, option);
 
-        g_free(option);
+        g_value_init(&option_val, G_TYPE_STRING);
+        g_value_take_string(&option_val, option);
+        g_array_append_val(options_array, option_val);
     }
 
-    return g_string_free(options_string, FALSE);
+    return options_array;
 }
 
 void gst_flags_type_reader_fill_type(
@@ -77,21 +80,16 @@ void gst_flags_type_reader_fill_type(
 
     value_string = gst_flags_type_reader_find_default(pspec_flags->flags_class, value);
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup_printf("Flags \"%s\"",
-                                                    G_VALUE_TYPE_NAME(value)));
-    gst_structure_take_value(dictionary, KEY_TYPE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_TYPE, g_strdup_printf("Flags \"%s\"",
+                                                                    G_VALUE_TYPE_NAME(value)));
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup_printf("0x%08x, \"%s\"",
-                                                    g_value_get_flags(value),
-                                                    value_string));
-    gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_VALUE, g_strdup_printf("0x%08x, \"%s\"",
+                                                                     g_value_get_flags(value),
+                                                                     value_string));
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value,
-                        gst_flags_type_reader_parse_options(pspec_flags->flags_class));
-    gst_structure_take_value(dictionary, KEY_OPTIONS, &key_value);
+    gst_dictionary_set_array(dictionary,
+                             KEY_OPTIONS,
+                             gst_flags_type_reader_parse_options(pspec_flags->flags_class));
 
     g_free(value_string);
 }

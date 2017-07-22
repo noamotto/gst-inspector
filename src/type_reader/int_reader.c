@@ -5,7 +5,6 @@ void gst_int_type_reader_fill_type(
     GValue *value,
     GstStructure *dictionary)
 {
-    GValue key_value = G_VALUE_INIT;
     GParamSpecInt *pspec_int = NULL;
 
     g_return_if_fail(G_VALUE_HOLDS_INT(value));
@@ -13,17 +12,13 @@ void gst_int_type_reader_fill_type(
 
     pspec_int = G_PARAM_SPEC_INT(pspec);
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup("Integer"));
-    gst_structure_take_value(dictionary, KEY_TYPE, &key_value);
+    gst_dictionary_set_static_string(dictionary, KEY_TYPE, "Integer");
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup_printf("%d - %d",
-                                                    pspec_int->minimum,
-                                                    pspec_int->maximum));
-    gst_structure_take_value(dictionary, KEY_RANGE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_RANGE,
+                              g_strdup_printf("%d - %d",
+                                              pspec_int->minimum,
+                                              pspec_int->maximum));
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup_printf("%d", g_value_get_int(value)));
-    gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_VALUE,
+                              g_strdup_printf("%d", g_value_get_int(value)));
 }

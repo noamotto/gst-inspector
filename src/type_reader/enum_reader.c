@@ -20,23 +20,26 @@ static gchar *gst_enum_type_reader_find_default(
     return g_strdup_printf("%d, \"%s\"", enum_value, value_nick);
 }
 
-static gchar *gst_enum_type_reader_parse_options(
+static GArray *gst_enum_type_reader_parse_options(
     const GEnumValue *values)
 {
-    GString *options_string = g_string_new(NULL);
+    GArray *options_array = g_array_new(FALSE, TRUE, sizeof(GValue));
+    g_array_set_clear_func(options_array, (GDestroyNotify)g_value_unset);
 
     for (guint j = 0; NULL != values[j].value_name; j++)
     {
-        gchar *option = g_strdup_printf("(%d): %-16s - %s\n",
+        GValue option_val = G_VALUE_INIT;
+        gchar *option = g_strdup_printf("(%d): %-16s - %s",
                                         values[j].value,
                                         values[j].value_nick,
                                         values[j].value_name);
 
-        g_string_append(options_string, option);
-        g_free(option);
+        g_value_init(&option_val, G_TYPE_STRING);
+        g_value_take_string(&option_val, option);
+        g_array_append_val(options_array, option_val);
     }
 
-    return g_string_free(options_string, FALSE);
+    return options_array;
 }
 
 void gst_enum_type_reader_fill_type(
@@ -44,7 +47,6 @@ void gst_enum_type_reader_fill_type(
     GValue *value,
     GstStructure *dictionary)
 {
-    GValue key_value = G_VALUE_INIT;
     const GEnumValue *values;
 
     g_return_if_fail(G_IS_PARAM_SPEC_ENUM(pspec));
@@ -52,17 +54,14 @@ void gst_enum_type_reader_fill_type(
 
     values = G_ENUM_CLASS(g_type_class_peek(pspec->value_type))->values;
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value,
-                        g_strdup_printf("Enum \"%s\"",
-                                        g_type_name(G_VALUE_TYPE(value))));
-    gst_structure_take_value(dictionary, KEY_TYPE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_TYPE,
+                              g_strdup_printf("Enum \"%s\"",
+                                              g_type_name(G_VALUE_TYPE(value))));
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, gst_enum_type_reader_find_default(values, value));
-    gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_VALUE,
+                              gst_enum_type_reader_find_default(values, value));
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, gst_enum_type_reader_parse_options(values));
-    gst_structure_take_value(dictionary, KEY_OPTIONS, &key_value);
+    g_print("I'm here\n");
+
+    gst_dictionary_set_array(dictionary, KEY_OPTIONS, gst_enum_type_reader_parse_options(values));
 }

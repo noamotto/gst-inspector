@@ -6,14 +6,13 @@ static void gst_default_reader_fill_type(GParamSpec *pspec,
                                          GValue *value,
                                          GstStructure *dictionary)
 {
-    GValue key_value = G_VALUE_INIT;
-    (void)(value);
+    g_return_if_fail(G_IS_PARAM_SPEC(pspec));
+    g_return_if_fail(G_IS_VALUE(value));
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup_printf("Unknown type %ld \"%s\"", "",
-                                                    (glong)pspec->value_type, g_type_name(pspec->value_type)));
-
-    gst_structure_take_value(dictionary, KEY_TYPE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_TYPE,
+                              g_strdup_printf("Unknown type %ld \"%s\"", "",
+                                              (glong)pspec->value_type,
+                                              g_type_name(pspec->value_type)));
 }
 
 /**
@@ -98,7 +97,6 @@ GstStructure *gst_type_reader_fill_type(
     const GValue *value)
 {
     GstStructure *dictionary;
-    GValue key_value = G_VALUE_INIT;
     GValue tmp_value = G_VALUE_INIT;
     GstReadTypeFunc read_func = NULL;
 
@@ -113,10 +111,9 @@ GstStructure *gst_type_reader_fill_type(
     }
 
     dictionary = gst_structure_new_empty("dictionary");
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup_printf("%s: %s", pspec->name,
-                                                    g_param_spec_get_blurb(pspec)));
-    gst_structure_take_value(dictionary, KEY_NAME, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_NAME,
+                              g_strdup_printf("%s: %s", pspec->name,
+                                              g_param_spec_get_blurb(pspec)));
 
     read_func = (GstReadTypeFunc)g_hash_table_lookup(
         reader_map, GINT_TO_POINTER(G_PARAM_SPEC_TYPE(pspec)));

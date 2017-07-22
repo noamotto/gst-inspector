@@ -5,7 +5,6 @@ void gst_int64_type_reader_fill_type(
     GValue *value,
     GstStructure *dictionary)
 {
-    GValue key_value = G_VALUE_INIT;
     GParamSpecInt64 *pspec_int64 = NULL;
 
     g_return_if_fail(G_VALUE_HOLDS_INT64(value));
@@ -13,19 +12,13 @@ void gst_int64_type_reader_fill_type(
 
     pspec_int64 = G_PARAM_SPEC_INT64(pspec);
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup("Integer64"));
-    gst_structure_take_value(dictionary, KEY_TYPE, &key_value);
+    gst_dictionary_set_static_string(dictionary, KEY_TYPE, "Integer64");
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value,
-                        g_strdup_printf("%" G_GINT64_FORMAT " - %" G_GINT64_FORMAT,
-                                        pspec_int64->minimum,
-                                        pspec_int64->maximum));
-    gst_structure_take_value(dictionary, KEY_RANGE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_RANGE,
+                              g_strdup_printf("%" G_GINT64_FORMAT " - %" G_GINT64_FORMAT,
+                                              pspec_int64->minimum,
+                                              pspec_int64->maximum));
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, g_strdup_printf("%" G_GINT64_FORMAT,
-                                                    g_value_get_int64(value)));
-    gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
+    gst_dictionary_set_string(dictionary, KEY_VALUE, g_strdup_printf("%" G_GINT64_FORMAT,
+                                                                     g_value_get_int64(value)));
 }
