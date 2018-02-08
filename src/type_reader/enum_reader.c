@@ -6,7 +6,7 @@ static gchar *gst_enum_type_reader_find_default(
 {
     gint enum_value;
     enum_value = g_value_get_enum(value);
-    const gchar *value_nick = "";
+    const gchar *value_nick = "unknown";
 
     for (guint j = 0; NULL != values[j].value_name; j++)
     {
@@ -60,8 +60,6 @@ void gst_enum_type_reader_fill_type(
 
     gst_dictionary_set_string(dictionary, KEY_VALUE,
                               gst_enum_type_reader_find_default(values, value));
-
-    g_print("I'm here\n");
 
     gst_dictionary_set_array(dictionary, KEY_OPTIONS, gst_enum_type_reader_parse_options(values));
 }

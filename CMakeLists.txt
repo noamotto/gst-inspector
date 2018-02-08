@@ -26,7 +26,7 @@ if (BUILD_TESTING)
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 
 #Tests for params
-set(PARAM_TEST_CASES 
+set(PARAM_TEST_CASES
     bool_param_test
     fraction_param_test
     int_param_test
@@ -41,12 +41,20 @@ set(PARAM_TEST_CASES
     null_string_param_test
     known_pointer_param_test
     unknown_pointer_param_test
+
     enum_param_test
-    flags_param_test
+    unknown_value_enum_param_test
+
+    no_flags_param_test
+    single_flags_param_test
+    combination_flags_param_test
     )
 
 set(BOXED_PARAM_TEST_CASES
     unknown_boxed_param_type_test
+
+    register_boxed_content_reader_succeeds_test
+    register_boxed_content_reader_twice_fails_test
 
     null_caps_param_type_test
     any_caps_param_type_test
@@ -60,7 +68,9 @@ set(BOXED_PARAM_TEST_CASES
 
 set(OBJECT_PARAM_TEST_CASES
     unknown_object_param_type_test
-    object_param_type_test)
+    object_param_type_test
+    
+    register_same_object_content_reader_twice_fails_test)
 
 foreach(PARAM_TEST_CASE ${PARAM_TEST_CASES})
 

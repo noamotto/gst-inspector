@@ -39,7 +39,7 @@ void gst_object_reader_parse_content(GObject *object,
     }
 
     read_func = (GstObjectContentReaderFunc)g_hash_table_lookup(object_map,
-                                                                GINT_TO_POINTER(object));
+                                                                GINT_TO_POINTER(G_OBJECT_TYPE(object)));
 
     if (read_func)
     {
