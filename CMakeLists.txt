@@ -25,6 +25,14 @@ if (BUILD_TESTING)
 # (currenlty supported only on Windows, using opencppcoverage)
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 
+#test for type reader's core functionality
+set(PARAMS_CORE_TEST_CASES
+    register_new_param_type_succeeds
+    register_new_param_type_twice_fails
+    unknown_type_calls_default_reader
+    fill_type_calls_reading_function
+    )
+
 #Tests for params
 set(PARAM_TEST_CASES
     bool_param_test
@@ -71,6 +79,13 @@ set(OBJECT_PARAM_TEST_CASES
     object_param_type_test
     
     register_same_object_content_reader_twice_fails_test)
+
+# Core functionality tests
+foreach(PARAMS_CORE_TEST_CASE ${PARAMS_CORE_TEST_CASES})
+
+add_test_case("tests/params/core" ${PARAMS_CORE_TEST_CASE})
+    
+endforeach(PARAMS_CORE_TEST_CASE)
 
 foreach(PARAM_TEST_CASE ${PARAM_TEST_CASES})
 

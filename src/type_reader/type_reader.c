@@ -2,6 +2,11 @@
 
 static GHashTable *reader_map = NULL;
 
+/**
+    @brief Default param reader
+
+    This reader is called when no suitable reader is found for a given param type.
+*/
 static void gst_default_reader_fill_type(GParamSpec *pspec,
                                          GValue *value,
                                          GstStructure *dictionary)
@@ -10,7 +15,7 @@ static void gst_default_reader_fill_type(GParamSpec *pspec,
     g_return_if_fail(G_IS_VALUE(value));
 
     gst_dictionary_set_string(dictionary, KEY_TYPE,
-                              g_strdup_printf("Unknown type %ld \"%s\"", "",
+                              g_strdup_printf("Unknown type %ld \"%s\"",
                                               (glong)pspec->value_type,
                                               g_type_name(pspec->value_type)));
 }
