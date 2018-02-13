@@ -1,3 +1,7 @@
 language: c
 
-compiler: cmake
+script:
+   - mkdir -p build
+   - cd build
+   - cmake
+   - make
