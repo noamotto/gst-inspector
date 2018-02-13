@@ -24,10 +24,10 @@ void gst_dictionary_set_string(GstStructure *dictionary, const gchar *field_name
 }
 
 /**
-    @brief Sets a string into the dictionary.
+    @brief Sets a static string into the dictionary.
 
-    This function practically works as setting a GValue into a GstStructure.
-    For more information, look for gst_structure_take_value
+    The static counterpart of gst_dictionary_set_string. It assumes the string 
+    is static and does not copy it for effeciency.
 
     @param dictionary A GstStructure dictionary
     @param field_name The field name to set
@@ -96,6 +96,15 @@ void gst_dictionary_set_sub_dictionary(GstStructure *dictionary, const gchar *fi
     gst_structure_take_value(dictionary, field_name, &val);
 }
 
+/**
+    @brief Retrieves an array field from a dictionary
+
+    @param dictionary A GstStructure dictionary
+    @param field_name The name of the field to retrieve
+    
+    @returns The array field in the dictionary, or NULL if the given field does
+    not exist or isn't an array.
+*/
 GArray *gst_dictionary_get_array(GstStructure *dictionary, const gchar *field_name)
 {
     const GValue *val;
@@ -111,6 +120,15 @@ GArray *gst_dictionary_get_array(GstStructure *dictionary, const gchar *field_na
     return g_value_get_boxed(val);
 }
 
+/**
+    @brief Retrieves a sub-dictionary from a dictionary
+
+    @param dictionary A GstStructure dictionary
+    @param field_name The name of the field to retrieve
+    
+    @returns The sub-dictionary field in the dictionary, or NULL if the given 
+    field does not exist or isn't a sub-dictionary (GstStructure).
+*/
 GstStructure *gst_dictionary_get_sub_dictionary(GstStructure *dictionary, const gchar *field_name)
 {
     const GValue *val;

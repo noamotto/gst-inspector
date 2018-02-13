@@ -25,6 +25,9 @@ if (BUILD_TESTING)
 # (currenlty supported only on Windows, using opencppcoverage)
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 
+set(DICTIONARY_TEST_CASES
+    test_dictionary_strings)
+
 #test for type reader's core functionality
 set(PARAMS_CORE_TEST_CASES
     register_new_param_type_succeeds
@@ -81,6 +84,12 @@ set(OBJECT_PARAM_TEST_CASES
     register_same_object_content_reader_twice_fails_test)
 
 # Core functionality tests
+foreach(DICTIONARY_TEST_CASE ${DICTIONARY_TEST_CASES})
+
+add_test_case("tests/core/dictionary" ${DICTIONARY_TEST_CASE})
+    
+endforeach(DICTIONARY_TEST_CASE)
+
 foreach(PARAMS_CORE_TEST_CASE ${PARAMS_CORE_TEST_CASES})
 
 add_test_case("tests/params/core" ${PARAMS_CORE_TEST_CASE})
