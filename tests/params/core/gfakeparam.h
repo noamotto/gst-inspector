@@ -24,7 +24,7 @@ typedef struct _GParamSpecFake
  */
 GType g_param_spec_fake_get_type(void)
 {
-    static volatile guint g_fake_param_type = 0;
+    static volatile gsize g_fake_param_type = 0;
 
     if (g_once_init_enter(&g_fake_param_type))
     {

@@ -34,6 +34,6 @@ else(MSVC)
     include(FindPkgConfig)
 
 	if ( PKG_CONFIG_FOUND )
-		PKG_SEARCH_MODULE( GSTREAMER REQUIRED gstreamer-1.0 )
+        PKG_SEARCH_MODULE( GSTREAMER REQUIRED gstreamer-1.0 )
 	endif ( PKG_CONFIG_FOUND )
 endif(MSVC)
