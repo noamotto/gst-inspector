@@ -16,9 +16,14 @@ file(GLOB_RECURSE include_files include/**/*.h include/*.h)
 add_library(gst-inspector SHARED ${src_files} ${include_files})
 
 target_compile_definitions(gst-inspector PRIVATE "GST_INSPECTOR_EXPORT")
-target_include_directories(gst-inspector PUBLIC ${GLIB2_INCLUDE_DIRS} ${GSTREAMER_INCLUDE_PATH} "include/")
-target_link_libraries(gst-inspector PUBLIC ${GLIB2_LIBRARIES} ${GSTREAMER_LIBRARY})
+target_include_directories(gst-inspector PUBLIC ${GLIB2_INCLUDE_DIRS} ${GSTREAMER_INCLUDE_DIRS} "include/")
+target_link_libraries(gst-inspector PUBLIC ${GLIB2_LIBRARIES} ${GSTREAMER_LIBRARY_DIRS} ${GSTREAMER_LIBRARIES})
 
+if ( CMAKE_COMPILER_IS_GNUCC )
+    target_compile_options(gst-inspector PUBLIC "-std=c99" "-pthread")
+endif ( CMAKE_COMPILER_IS_GNUCC )
+
+# Testing
 if (BUILD_TESTING)
 
 #give the option to create code coverage report for the tests
