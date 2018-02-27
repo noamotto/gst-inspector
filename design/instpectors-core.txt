@@ -1,0 +1,18 @@
+gst-inspectors core
+===================
+
+The core of this library should be a simple system that manages lists of inspectors
+for different types of inspectable objects (currently only elements and plugins).
+The system should allow registering of new inspectors, as well as deleting old ones.
+
+The system should allow two types inspections of every type of inspectable objects:
+- A full inspection should run through all the inspectors registered for the given
+type of object, in order of registration, and create an unified dictionary with the
+inspectors' results.
+- A custom inspection should recieve a list of inspectors to invoke, and invoke them
+in given order. (note that this operation will probably be less effecient).
+
+The inspectors will be held in linked lists, to allow a consistent order of inspectors,
+insertion to random spots easily and easy removal. The inspectors will be registered
+with a name as ID, meaning inpectors should have unique names. One should be able to 
+query the list of resitered inspectors' name using the API.

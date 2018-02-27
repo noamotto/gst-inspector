@@ -1,0 +1,16 @@
+gst-inspectors Utilities
+========================
+
+In addition to the core several methods should be implemented, for easier access 
+and usage.
+
+An initialization function for the library should be implemented, to initialize 
+the inspector lists with preset inspectors (as found in gst-inspect today). This
+function should be called before any call to the library's API.
+
+The main one will be a function that will inspect object by name, meaning it will
+recieve a name of an element of a plugin, and will look for it. If the method finds
+an object matching the given name it will inspect it return a dictionary with the
+inspection result. If not a message should be logged and NULL should returned.
+
+More methods should be added if neccessary.
