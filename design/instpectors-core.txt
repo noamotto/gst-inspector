@@ -3,7 +3,13 @@ gst-inspectors core
 
 The core of this library should be a simple system that manages lists of inspectors
 for different types of inspectable objects (currently only elements and plugins).
-The system should allow registering of new inspectors, as well as deleting old ones.
+
+Two different API set of functions should be used for elements and plugins. Those 
+sets should include:
+1. An insertion function, allowing the user to register a new inspector at given
+location.
+2. A deletion function, allowing the user to remove a registered inspector by name
+3. Querying function. Should return a list of the registered inspectors' names.
 
 The system should allow two types inspections of every type of inspectable objects:
 - A full inspection should run through all the inspectors registered for the given
