@@ -31,25 +31,26 @@ typedef GstStructure *(*GstElementInspectFunc)(GstElementFactory *element);
  */
 typedef GstStructure *(*GstPluginInspectFunc)(GstPlugin *plugin);
 
-void gst_inspector_init();
+// Element inspection
+GST_INSPECTOR_API gboolean
+gst_inspector_register_element_inspector(GstElementInspectFunc inspector,
+                                         const gchar *name,
+                                         gint position);
+GST_INSPECTOR_API gboolean gst_inspector_remove_element_inspector(const gchar *name);
+GST_INSPECTOR_API GList *gst_inspector_get_installed_element_inspectors();
 
-gboolean gst_inspector_register_element_inspector(GstElementInspectFunc *inspector,
-                                                  const gchar *name,
-                                                  guint location);
-gboolean gst_inspector_remove_element_inspector(const gchar *name);
-GList *gst_inspector_get_installed_element_inspectors();
-
-
-gboolean gst_inspector_register_plugin_inspector(GstPluginInspectFunc *inspector,
-                                                  const gchar *name,
-                                                  guint location);
-gboolean gst_inspector_remove_plugin_inspector(const gchar *name);
-GList *gst_inspector_get_installed_plugin_inspectors();
+// Plugin inspection
+GST_INSPECTOR_API gboolean
+gst_inspector_register_plugin_inspector(GstPluginInspectFunc inspector,
+                                        const gchar *name,
+                                        gint position);
+GST_INSPECTOR_API gboolean gst_inspector_remove_plugin_inspector(const gchar *name);
+GST_INSPECTOR_API GList *gst_inspector_get_installed_plugin_inspectors();
 
 // Inspection functions
-GstStructure *gst_inspector_inspect_element(GstElementFactory *element);
-GstStructure *gst_inspector_inspect_plugin(GstPlugin *plugin);
-GstStructure *gst_inspector_inspect_by_name(const gchar *object_name);
+GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element(GstElementFactory *element);
+GST_INSPECTOR_API GstStructure *gst_inspector_inspect_plugin(GstPlugin *plugin);
+GST_INSPECTOR_API GstStructure *gst_inspector_inspect_by_name(const gchar *object_name);
 
 G_END_DECLS
 
