@@ -11,14 +11,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(TestTools)
 find_package(GStreamer REQUIRED)
 
-# Configure
-
-if (BUILD_TESTING)
-    set(ENABLE_TESTING ON)
-endif (BUILD_TESTING)
-
-configure_file(config.h.in ${CMAKE_SOURCE_DIR}/include/config.h)
-
 # Create main target
 
 file(GLOB_RECURSE src_files src/**/*.c src/*.c)
