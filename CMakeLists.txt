@@ -11,6 +11,16 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(TestTools)
 find_package(GStreamer REQUIRED)
 
+# Configure
+
+if (BUILD_TESTING)
+    set(ENABLE_TESTING ON)
+endif (BUILD_TESTING)
+
+configure_file(config.h.in ${CMAKE_SOURCE_DIR}/include/config.h)
+
+# Create main target
+
 file(GLOB_RECURSE src_files src/**/*.c src/*.c)
 file(GLOB_RECURSE include_files include/**/*.h include/*.h)
 add_library(gst-inspector SHARED ${src_files} ${include_files})
@@ -26,6 +36,8 @@ endif ( CMAKE_COMPILER_IS_GNUCC )
 # Testing
 if (BUILD_TESTING)
 
+target_compile_definitions(gst-inspector PRIVATE "ENABLE_TESTING")
+
 #give the option to create code coverage report for the tests
 # (currenlty supported only on Windows, using opencppcoverage)
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
@@ -35,6 +47,12 @@ set(CORE_TEST_CASES
     register_same_element_inspector_twice_fails
     remove_exists_element_inspector_succeeds
     remove_nonexists_element_inspector_fails
+    get_element_inspectors_names_works
+
+    register_plugin_inspector_succeeds
+    register_same_plugin_inspector_twice_fails
+    remove_exists_plugin_inspector_succeeds
+    remove_nonexists_plugin_inspector_fails
     )
 
 #test for type reader's core functionality

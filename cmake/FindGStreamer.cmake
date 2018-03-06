@@ -19,7 +19,7 @@ if(MSVC)
                   HINTS ${GSTREAMER_ROOT_PATH}
                   PATH_SUFFIXES "lib/")
 
-        find_path(GSTREAMER_LIBRARY_DIRS libgstreamer-1.0-0.dll
+        find_path(GSTREAMER_BIN_PATH libgstreamer-1.0-0.dll
                   HINTS ${GSTREAMER_ROOT_PATH}
                   PATH_SUFFIXES "bin/")
         

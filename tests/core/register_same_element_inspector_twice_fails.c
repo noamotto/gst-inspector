@@ -2,6 +2,7 @@
 
 static GstStructure *fake_inspector(GstElementFactory *element)
 {
+    (void)element;    
     return NULL;
 }
 
