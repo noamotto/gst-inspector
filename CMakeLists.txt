@@ -45,6 +45,7 @@ set(CORE_TEST_CASES
     register_same_plugin_inspector_twice_fails
     remove_exists_plugin_inspector_succeeds
     remove_nonexists_plugin_inspector_fails
+    get_plugin_inspectors_names_works
     )
 
 #test for type reader's core functionality

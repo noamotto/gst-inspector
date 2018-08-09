@@ -2,7 +2,7 @@
 
 static gchar *test_list[] = {"test1", "test2", "test3"};
 
-static GstStructure *fake_inspector(GstElementFactory *element)
+static GstStructure *fake_inspector(GstElement *element)
 {
     (void)element;
     return NULL;

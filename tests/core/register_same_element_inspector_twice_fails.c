@@ -1,6 +1,6 @@
 #include "gstinspector.h"
 
-static GstStructure *fake_inspector(GstElementFactory *element)
+static GstStructure *fake_inspector(GstElement *element)
 {
     (void)element;    
     return NULL;

@@ -16,7 +16,7 @@ typedef struct _GFakeBoxed
 
 GFakeBoxed *g_fake_boxed_new(gint num);
 GFakeBoxed *g_fake_boxed_copy(GFakeBoxed *other);
-GType g_fake_boxed_get_type();
+GType g_fake_boxed_get_type(void);
 
 GFakeBoxed *g_fake_boxed_new(gint num)
 {
@@ -34,6 +34,6 @@ GFakeBoxed *g_fake_boxed_copy(GFakeBoxed *other)
     return new_fake;
 }
 
-G_DEFINE_BOXED_TYPE(GFakeBoxed, g_fake_boxed, (GBoxedCopyFunc)g_fake_boxed_copy, g_free);
+G_DEFINE_BOXED_TYPE(GFakeBoxed, g_fake_boxed, (GBoxedCopyFunc)g_fake_boxed_copy, g_free)
 
 #endif //G_FAKE_BOXED_H

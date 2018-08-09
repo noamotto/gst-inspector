@@ -15,7 +15,7 @@ G_BEGIN_DECLS
 #define TESTING_API
 #endif
 
-TESTING_API void gst_inspector_set_testing_mode();
+TESTING_API void gst_inspector_set_testing_mode(void);
 
 G_END_DECLS
 
