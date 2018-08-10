@@ -40,12 +40,14 @@ set(CORE_TEST_CASES
     remove_exists_element_inspector_succeeds
     remove_nonexists_element_inspector_fails
     get_element_inspectors_names_works
+    element_inspector_works
 
     register_plugin_inspector_succeeds
     register_same_plugin_inspector_twice_fails
     remove_exists_plugin_inspector_succeeds
     remove_nonexists_plugin_inspector_fails
     get_plugin_inspectors_names_works
+    plugin_inspector_works
     )
 
 #test for type reader's core functionality

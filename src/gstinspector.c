@@ -1,34 +1,54 @@
+/**
+ *  @file gstinspector.c
+ *  @brief Core API implementation
+ */
+
 #include "gstinspector_priv.h"
 
+/**
+ *  @brief Basic node struct for inspector nodes
+ */
 typedef struct _InspectorNode
 {
-    gchar *name;
+    gchar *name; /**< Node's name */
 } InspectorNode;
 
+/**
+ *  @brief Element inspector node structure
+ */
 typedef struct _ElementInspectorNode
 {
     InspectorNode node;
 
-    GstElementInspectFunc inspector;
+    GstElementInspectFunc inspector; /**< Inspector function */
 } ElementInspectorNode;
 
+/**
+ *  @brief Plugin inspector node structure
+ */
 typedef struct _PluginInspectorNode
 {
     InspectorNode node;
 
-    GstPluginInspectFunc inspector;
+    GstPluginInspectFunc inspector; /**< Inspector function */
 } PluginInspectorNode;
 
+/**
+ *  @brief Represents a list of inspectors
+ */
 typedef struct _InspectorList
 {
-    GList *list;
-    gsize length;
+    GList *list;  /**< List of inspectors */
+    gsize length; /**< List's size */
 } InspectorList;
 
+/**
+ *  @brief Data passed to inspector functions
+ */
 typedef struct _InspectorData
 {
-    GstStructure *inspect_data;
-    GstObject *inspect_object;
+    GstStructure *inspect_data; /**< Dictionary to fill */
+    GstObject *inspect_object;  /**< Object to inspect */
 } InspectorData;
 
 static InspectorList *element_inspectors = NULL;
@@ -73,6 +93,9 @@ void gst_inspector_set_testing_mode()
     testing_mode = TRUE;
 }
 
+/**
+ *  @brief Checks if the library is initialied and initializes if not
+ */
 #define CHECK_INIT              \
     if (G_UNLIKELY(!is_inited)) \
     {                           \
@@ -144,11 +167,24 @@ static GList *inspector_list_lookup(InspectorList *list, const gchar *name)
     return g_list_find_custom(list->list, name, (GCompareFunc)&inspector_lookup_func);
 }
 
+/**
+ *  @brief Retrieves the name of given inspector node. Used to get the list 
+ *  of inspector names 
+ * 
+ *  @param node Node to get name from
+ *  @param names_list List to add the name to
+ */
 static void get_node_names(InspectorNode *node, GPtrArray *names_list)
 {
     g_ptr_array_add(names_list, node->name);
 }
 
+/**
+ *  @brief Retrieves a list of names of all inspector nodes in a given list
+ *
+ *  @param list An inspector list
+ *  @returns An array of all inspector nodes in the list
+ */
 static gchar **inspector_list_get_names(InspectorList *list)
 {
     GPtrArray *name_list = g_ptr_array_sized_new((guint)list->length);
@@ -157,6 +193,12 @@ static gchar **inspector_list_get_names(InspectorList *list)
     return (gchar **)g_ptr_array_free(name_list, FALSE);
 }
 
+/**
+ *  @brief Creates an error dictionary with given string, to return as error.
+ * 
+ *  @param error_string Error string to put in the dictionary
+ *  @returns Newly created error dictionary
+ */
 static GstStructure *create_error_dict(const gchar *error_string)
 {
     GstStructure *err = gst_structure_new_empty("Error");
@@ -331,8 +373,7 @@ gchar **gst_inspector_get_installed_plugin_inspectors()
 }
 
 /**
- *  @brief Runs all installed element inspectors on given element. Used as 
- *  GList foreach function.
+ *  @brief Runs all installed element inspectors on given element
  * 
  *  @param node Current element inspector to run
  *  @param data Data object that holds the element and accumulated data
@@ -340,7 +381,7 @@ gchar **gst_inspector_get_installed_plugin_inspectors()
 static void run_element_inspectors(ElementInspectorNode *node, InspectorData *data)
 {
     GstStructure *result = node->inspector(GST_ELEMENT(data->inspect_object));
-    gst_dictionary_set_sub_dictionary(data->inspect_data, gst_structure_get_name(result),
+    gst_dictionary_set_sub_dictionary(data->inspect_data, node->node.name,
                                       result);
 }
 
@@ -354,7 +395,7 @@ static void run_element_inspectors(ElementInspectorNode *node, InspectorData *da
 GstStructure *gst_inspector_inspect_element(GstElementFactory *factory)
 {
     GstElement *element;
-    InspectorData *data;
+    InspectorData data;
     GstStructure *result;
 
     CHECK_INIT;
@@ -373,14 +414,25 @@ GstStructure *gst_inspector_inspect_element(GstElementFactory *factory)
         return create_error_dict("couldn't construct element for some reason");
     }
 
-    data = g_new(InspectorData, 1);
     result = gst_structure_new_empty(GST_OBJECT_NAME(factory));
-    data->inspect_data = result;
-    data->inspect_object = GST_OBJECT_CAST(element);
+    data.inspect_data = result;
+    data.inspect_object = GST_OBJECT_CAST(element);
 
-    g_list_foreach(element_inspectors->list, (GFunc)run_element_inspectors, data);
-    g_free(data);
+    g_list_foreach(element_inspectors->list, (GFunc)run_element_inspectors, &data);
     return result;
+}
+
+/**
+ *  @brief Runs all installed plugin inspectors on given plugin
+ * 
+ *  @param node Current plugin inspector to run
+ *  @param data Data object that holds the plugin and accumulated data
+ */
+static void run_plugin_inspectors(PluginInspectorNode *node, InspectorData *data)
+{
+    GstStructure *result = node->inspector(GST_PLUGIN(data->inspect_object));
+    gst_dictionary_set_sub_dictionary(data->inspect_data, gst_structure_get_name(result),
+                                      result);
 }
 
 /**
@@ -392,9 +444,17 @@ GstStructure *gst_inspector_inspect_element(GstElementFactory *factory)
  */
 GstStructure *gst_inspector_inspect_plugin(GstPlugin *plugin)
 {
+    GstStructure *result;
+    InspectorData data;
+
     CHECK_INIT;
 
-    return NULL;
+    result = gst_structure_new_empty(gst_plugin_get_name(plugin));
+    data.inspect_data = result;
+    data.inspect_object = GST_OBJECT_CAST(plugin);
+
+    g_list_foreach(plugin_inspectors->list, (GFunc)run_plugin_inspectors, &data);
+    return result;
 }
 
 /**
