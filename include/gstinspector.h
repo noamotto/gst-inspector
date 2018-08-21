@@ -50,6 +50,7 @@ GST_INSPECTOR_API gchar **gst_inspector_get_installed_plugin_inspectors(void);
 // Inspection functions
 GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element(GstElementFactory *factory);
 GST_INSPECTOR_API GstStructure *gst_inspector_inspect_plugin(GstPlugin *plugin);
+GST_INSPECTOR_API GstStructure *gst_inspector_inspect_plugin_feature(GstPluginFeature *feature);
 GST_INSPECTOR_API GstStructure *gst_inspector_inspect_by_name(const gchar *object_name);
 
 G_END_DECLS

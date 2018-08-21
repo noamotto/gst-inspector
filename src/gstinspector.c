@@ -199,10 +199,10 @@ static gchar **inspector_list_get_names(InspectorList *list)
  *  @param error_string Error string to put in the dictionary
  *  @returns Newly created error dictionary
  */
-static GstStructure *create_error_dict(const gchar *error_string)
+static GstStructure *create_error_dict(gchar *error_string)
 {
     GstStructure *err = gst_structure_new_empty("Error");
-    gst_dictionary_set_static_string(err, "Description", error_string);
+    gst_dictionary_set_string(err, "Description", error_string);
     return err;
 }
 
@@ -400,6 +400,12 @@ GstStructure *gst_inspector_inspect_element(GstElementFactory *factory)
 
     CHECK_INIT;
 
+    if (!GST_IS_ELEMENT_FACTORY(factory))
+    {
+        return create_error_dict(gst_info_strdup_printf(
+            "%" GST_PTR_FORMAT " is not a valid GstElementFactory", factory));
+    }
+
     factory =
         GST_ELEMENT_FACTORY(gst_plugin_feature_load(GST_PLUGIN_FEATURE(factory)));
 
@@ -449,6 +455,12 @@ GstStructure *gst_inspector_inspect_plugin(GstPlugin *plugin)
 
     CHECK_INIT;
 
+    if (!GST_IS_PLUGIN(plugin))
+    {
+        return create_error_dict(gst_info_strdup_printf(
+            "%" GST_PTR_FORMAT " is not a valid GstPlugin", plugin));
+    }
+
     result = gst_structure_new_empty(gst_plugin_get_name(plugin));
     data.inspect_data = result;
     data.inspect_object = GST_OBJECT_CAST(plugin);
@@ -458,16 +470,74 @@ GstStructure *gst_inspector_inspect_plugin(GstPlugin *plugin)
 }
 
 /**
- *  Inspects an object using a given name. Note that if a plugin and an 
- *  element shares the same name, the element takes precedence.
+ *  @brief A generic inspection function for different kinds of GstPluginFeatures.
  * 
- *  @param object_name Name of object to inpect
+ *  @param feature A GstPluginFeature to inspect
+ *
+ *  @returns GstStructure with the inspection results
+ */
+GstStructure *gst_inspector_inspect_plugin_feature(GstPluginFeature *feature)
+{
+    if (!GST_IS_PLUGIN_FEATURE(feature))
+    {
+        return create_error_dict(gst_info_strdup_printf(
+            "%" GST_PTR_FORMAT " is not a valid GstPluginFeature", feature));
+    }
+
+    if (GST_IS_ELEMENT_FACTORY(feature))
+    {
+        return gst_inspector_inspect_element(GST_ELEMENT_FACTORY(feature));
+    }
+    else if (GST_IS_TYPE_FIND_FACTORY(feature))
+    {
+        GstStructure *dict = gst_structure_new_empty(GST_OBJECT_NAME(feature));
+        gst_dictionary_set_string(dict, "Type", "A typefind function");
+        return dict;
+    }
+    else if (GST_IS_TRACER_FACTORY(feature))
+    {
+        GstStructure *dict = gst_structure_new_empty(GST_OBJECT_NAME(feature));
+        gst_dictionary_set_string(dict, "Type", "A tracer function");
+        return dict;
+    }
+
+    return create_error_dict(gst_info_strdup_printf(
+        "%" GST_PTR_FORMAT " is an unsupported GstPluginFeature", feature));
+}
+
+/**
+ *  @brief Inspects an object using a given name.
+ * 
+ *  If a plugin and an element shares the same name, the element takes
+ *  precedence.
+ * 
+ *  @param object_name Name of object to inspect
  * 
  *  @returns GstStructure with the inspection results
  */
 GstStructure *gst_inspector_inspect_by_name(const gchar *object_name)
 {
+    GstPluginFeature *feature;
+    GstPlugin *plugin;
+
     CHECK_INIT;
 
-    return NULL;
+    g_return_val_if_fail(object_name == NULL,
+                         create_error_dict("Object name cannot be NULL"));
+
+    feature = gst_registry_lookup_feature(gst_registry_get(), object_name);
+    if (feature)
+    {
+        return gst_inspector_inspect_plugin_feature(feature);
+    }
+
+    // Try to find plugin
+    plugin = gst_registry_find_plugin(gst_registry_get(), object_name);
+    if (plugin)
+    {
+        return gst_inspector_inspect_plugin(plugin);
+    }
+
+    return create_error_dict(g_strdup_printf("Could not find object named %s",
+                                             object_name));
 }
