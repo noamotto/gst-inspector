@@ -6,6 +6,7 @@ before_install:
    - git clone https://github.com/GStreamer/gstreamer.git -b 1.8.3 gstreamer
    - cd gstreamer
    - ./autogen.sh --disable-gtk-doc && make && sudo make install
+   - cd ../
    - gst-inspect-1.0 --version
 
 script:
