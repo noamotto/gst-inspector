@@ -2,7 +2,7 @@ language: c
 
 before_install:
    - sudo apt-get update -qq
-   - sudo apt-get install autoconf automake libtool bison flex
+   - sudo apt-get install autoconf automake autopoint pkg-config libtool bison flex
    - git clone https://github.com/GStreamer/gstreamer.git -b 1.8.3 gstreamer
    - cd gstreamer
    - ./autogen.sh --disable-gtk-doc && make && sudo make install
