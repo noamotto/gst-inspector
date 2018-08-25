@@ -1,4 +1,4 @@
-#include "gstinspector_priv.h"
+#include "gstinspector.h"
 
 static gchar *test_list[] = {"test1", "test2", "test3"};
 
@@ -13,8 +13,6 @@ int main(int argc, char *argv[])
     gchar ** names = NULL;
 
     gst_init(&argc, &argv);
-
-    gst_inspector_set_testing_mode();
 
     gst_inspector_register_element_inspector(fake_inspector, test_list[0], -1);
     gst_inspector_register_element_inspector(fake_inspector, test_list[1], -1);

@@ -3,7 +3,7 @@
  *  @brief Core API implementation
  */
 
-#include "gstinspector_priv.h"
+#include "gstinspector.h"
 
 /**
  *  @brief Basic node struct for inspector nodes
@@ -62,6 +62,12 @@ static gboolean testing_mode = FALSE;
  */
 static void _gst_inspector_init()
 {
+    const gchar *testing_env = g_getenv("GST_INSPECTOR_TEST");
+    if (testing_env && g_strcmp0(testing_env, "1") == 0)
+    {
+        testing_mode = TRUE;
+    }
+
     if (!element_inspectors)
     {
         element_inspectors = g_slice_new0(InspectorList);
@@ -79,18 +85,8 @@ static void _gst_inspector_init()
             //Populate stock inspectors
         }
     }
-}
 
-/**
- *  @brief Sets the system to testing mode.
- * 
- *  This function is hidden from normal users, and serves as an internal function
- *  for testing purposes. The function does the following things:
- *  1. Initializes the system without stock inspectors
- */
-void gst_inspector_set_testing_mode()
-{
-    testing_mode = TRUE;
+    is_inited = TRUE;
 }
 
 /**

@@ -1,0 +1,13 @@
+Testing Mechanisms
+===================
+
+In order to test the library and its features, a small testing mechanism is needed,
+in order to create a close environment for testing.
+
+The implementation of this system should be done using environment variables, allowing
+developers to test their features without the need of some hidden API. The environment
+variable that should be set for this is GST_INSPECTOR_TEST, and it should contain a 
+value indicating the testing flags to use.
+
+Current list of test features:
+1. Initializing the library without stock inspectors (for closed testing of features)

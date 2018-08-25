@@ -1,4 +1,4 @@
-#include "gstinspector_priv.h"
+#include "gstinspector.h"
 
 #define FACTORY_NAME        ("fakesrc")
 #define TEST_NAME           ("test")
@@ -21,8 +21,6 @@ int main(int argc, char *argv[])
     const gchar *test_field_value;
 
     gst_init(&argc, &argv);
-
-    gst_inspector_set_testing_mode();
 
     gst_inspector_register_element_inspector(fake_inspector, TEST_NAME, -1);
 
