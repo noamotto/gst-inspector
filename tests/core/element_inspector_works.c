@@ -1,6 +1,7 @@
 #include "gstinspector.h"
+#include "gsttestplugin.h"
 
-#define FACTORY_NAME        ("fakesrc")
+#define FACTORY_NAME        ("testelement")
 #define TEST_NAME           ("test")
 #define TEST_FIELD_NAME     ("Test field")
 #define TEST_FIELD_VALUE    ("hello")
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
     const gchar *test_field_value;
 
     gst_init(&argc, &argv);
+    GST_PLUGIN_STATIC_REGISTER(testplugin);
 
     gst_inspector_register_element_inspector(fake_inspector, TEST_NAME, -1);
 
