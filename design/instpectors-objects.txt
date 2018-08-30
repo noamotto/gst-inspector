@@ -5,6 +5,6 @@ An inspector object is a static object capable of inspecting an element or a plu
 Currently there are two types of inspectors, one for each of those objects. 
 
 Because an inspector is a static object, it is represented as a functon. It should 
-expect either a GstElementFactory or a GstPlugin, depending on the inspector's type,
-and should return a dictionary filled with the inspected data, or NULL if no data was
+expect either a GstElement or a GstPlugin, depending on the inspector's type, and 
+should return a dictionary filled with the inspected data, or NULL if no data was
 found.

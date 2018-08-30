@@ -2,7 +2,8 @@
 
 #define FLAGS_NAME ("GFakeFlags")
 
-typedef enum _GFakeFlags {
+typedef enum _GFakeFlags
+{
     FAKE_VALUE_0 = 1 << 0,
     FAKE_VALUE_1 = 1 << 1,
     FAKE_VALUE_2 = 1 << 2
@@ -56,17 +57,18 @@ int main(int argc, char *argv[])
 {
     GParamSpec *flags_spec = NULL;
     const GValue *value = NULL;
-    GstStructure *dictionary = NULL;
+    GstStructure *dictionary;
     gchar *type_string = NULL;
 
     gst_init(&argc, &argv);
 
+    dictionary = gst_structure_new_empty("test");
     type_string = g_strdup_printf("Flags \"%s\"", FLAGS_NAME);
     flags_spec = g_param_spec_flags("test", "Test param", "Test param", GST_TYPE_FAKE_FLAGS,
-                                  FAKE_VALUE_0 | FAKE_VALUE_2, G_PARAM_READWRITE);
+                                    FAKE_VALUE_0 | FAKE_VALUE_2, G_PARAM_READWRITE);
 
     value = g_param_spec_get_default_value(flags_spec);
-    dictionary = gst_type_reader_fill_type(flags_spec, value);
+    gst_type_reader_fill_type(flags_spec, value, dictionary);
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_NAME, G_TYPE_STRING));
     g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_NAME), ==, "test: Test param");

@@ -12,13 +12,14 @@ int main(int argc, char *argv[])
 {
     GParamSpec *boxed_spec = NULL;
     GValue value = G_VALUE_INIT;
-    GstStructure *dictionary = NULL;
+    GstStructure *dictionary;
     gchar *type_string = NULL;
     GstStructure *structure = NULL;
     GArray *fields_array = NULL;
 
     gst_init(&argc, &argv);
 
+    dictionary = gst_structure_new_empty("test");
     structure = gst_structure_from_string(STRUCTURE, NULL);
     type_string = g_strdup_printf("Boxed pointer of type \"%s\"",
                                   g_type_name(GST_TYPE_STRUCTURE));
@@ -28,7 +29,7 @@ int main(int argc, char *argv[])
     g_value_init(&value, GST_TYPE_STRUCTURE);
     gst_value_set_structure(&value, structure);
 
-    dictionary = gst_type_reader_fill_type(boxed_spec, &value);
+    gst_type_reader_fill_type(boxed_spec, &value, dictionary);
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_NAME, G_TYPE_STRING));
     g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_NAME), ==, "test: Test param");

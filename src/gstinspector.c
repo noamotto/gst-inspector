@@ -3,7 +3,7 @@
  *  @brief Core API implementation
  */
 
-#include "gstinspector.h"
+#include "gstinspectors.h"
 
 /**
  *  @brief Basic node struct for inspector nodes
@@ -73,6 +73,7 @@ static void _gst_inspector_init()
         element_inspectors = g_slice_new0(InspectorList);
         if (!testing_mode)
         {
+            gst_inspector_register_element_inspector(param_inspector, "params", -1);
             //Populate stock inspectors
         }
     }
@@ -377,8 +378,12 @@ gchar **gst_inspector_get_installed_plugin_inspectors()
 static void run_element_inspectors(ElementInspectorNode *node, InspectorData *data)
 {
     GstStructure *result = node->inspector(GST_ELEMENT(data->inspect_object));
-    gst_dictionary_set_sub_dictionary(data->inspect_data, node->node.name,
-                                      result);
+
+    if (GST_IS_STRUCTURE(result))
+    {
+        gst_dictionary_set_sub_dictionary(data->inspect_data, node->node.name,
+                                          result);
+    }
 }
 
 /**
@@ -433,8 +438,12 @@ GstStructure *gst_inspector_inspect_element(GstElementFactory *factory)
 static void run_plugin_inspectors(PluginInspectorNode *node, InspectorData *data)
 {
     GstStructure *result = node->inspector(GST_PLUGIN(data->inspect_object));
-    gst_dictionary_set_sub_dictionary(data->inspect_data, gst_structure_get_name(result),
-                                      result);
+
+    if (GST_IS_STRUCTURE(result))
+    {
+        gst_dictionary_set_sub_dictionary(data->inspect_data, gst_structure_get_name(result),
+                                          result);
+    }
 }
 
 /**

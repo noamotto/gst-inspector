@@ -1,0 +1,25 @@
+Stock Inspectors
+================
+
+The gst-inspector library should support a list of stock inspectors. Those inspectors 
+should fulfill all the features currently found in the gst-inspect tool, and should be 
+installed into the system on initialization.
+
+The list of element inspectors is:
+- Element factory description inspector
+- Heirarchy inspector
+- Interfaces inspector
+- Pad templates inspector
+- Element flag inspector
+- Element implementation inspector
+- Clocking inspector
+- URI handler inspector
+- Pad inspector
+- Element properties inspector
+- Element signals inspector
+- Element children inspector
+- Element preset list inspector
+
+The list of plugin inspectors is:
+- Plugin description inspector
+- Plugin features inspector

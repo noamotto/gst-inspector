@@ -26,8 +26,9 @@ GST_INSPECTOR_API gboolean
 gst_object_content_reader_register(GType object_type,
                                    GstObjectContentReaderFunc read_func);
 
-GST_INSPECTOR_API GstStructure * gst_type_reader_fill_type(GParamSpec * pspec,
-                                                 const GValue * value);
+GST_INSPECTOR_API void gst_type_reader_fill_type(GParamSpec * pspec,
+                                                 const GValue * value,
+                                                 GstStructure * dictionary);
 
 G_END_DECLS
 

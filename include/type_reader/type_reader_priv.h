@@ -9,7 +9,7 @@
 #include "type_reader.h"
 
 // Internal functions
-void _gst_init_type_readers();
+void _gst_init_type_readers(void);
 
 //Built-in type readers
 void gst_bool_type_reader_fill_type(GParamSpec *pspec,

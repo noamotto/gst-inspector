@@ -6,21 +6,22 @@
 
 int main(int argc, char *argv[])
 {
-    GParamSpec *int64_spec = NULL;
+    GParamSpec *frac_spec = NULL;
     const GValue *value = NULL;
-    GstStructure *dictionary = NULL;
+    GstStructure *dictionary;
     gchar *range_string = NULL;
     gchar *value_string = NULL;
 
     gst_init(&argc, &argv);
 
-    int64_spec = gst_param_spec_fraction("test", "Test param",
+    dictionary = gst_structure_new_empty("test");
+    frac_spec = gst_param_spec_fraction("test", "Test param",
                                 "Test param", MINIMUM, MAXIMUM, VALUE, G_PARAM_READWRITE);
-    value = g_param_spec_get_default_value(int64_spec);
+    value = g_param_spec_get_default_value(frac_spec);
     range_string = g_strdup_printf("%d/%d - %d/%d", MINIMUM, MAXIMUM);
     value_string = g_strdup_printf("%d/%d", VALUE);
 
-    dictionary = gst_type_reader_fill_type(int64_spec, value);
+    gst_type_reader_fill_type(frac_spec, value, dictionary);
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_NAME, G_TYPE_STRING));
     g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_NAME), ==, "test: Test param");
