@@ -1,26 +1,24 @@
 ##############################################################################
 #                      Varity of utilities for tests                         #
 ##############################################################################
+include(CTest)
 
 macro(create_test_command test_case)
     if(ENABLE_COVERAGE AND MSVC)
-        set(TEST_COMMAND opencppcoverage --export_type=binary:${test_case}.cov --sources $<SHELL_PATH:${CMAKE_SOURCE_DIR}/src> -- "$<TARGET_FILE:${test_case}>")
+        set(TEST_COMMAND ${OPENCPPCOVERAGE_PATH} --export_type=binary:${test_case}.cov --sources $<SHELL_PATH:${CMAKE_SOURCE_DIR}/src> -- "$<TARGET_FILE:${test_case}>")
         list(APPEND REPORT_FILES "--input_coverage=${test_case}.cov")
     else(ENABLE_COVERAGE AND MSVC)
         set(TEST_COMMAND ${test_case})
     endif(ENABLE_COVERAGE AND MSVC)
-    foreach(arg IN LISTS ${ARGN})
-        set(TEST_COMMAND ${TEST_COMMAND} ${arg})
-    endforeach(arg)
 endmacro(create_test_command)
 
 macro(add_test_case test_prefix test_case)
     add_executable(${test_case} "${test_prefix}/${test_case}.c")
     target_link_libraries(${test_case} gst-inspector)
 
-    create_test_command(${test_case} ${ARGN})
+    create_test_command(${test_case})
 
-    add_test(NAME ${test_case} COMMAND ${TEST_COMMAND})
+    add_test(NAME ${test_case} COMMAND ${TEST_COMMAND} WORKING_DIRECTORY $<TARGET_FILE_DIR:gst-inspector>)
 
     # When building on VS, add GStreamer's root to PATH when running the tests
     if(MSVC)
@@ -29,3 +27,15 @@ macro(add_test_case test_prefix test_case)
     set_property(TEST ${test_case} PROPERTY ENVIRONMENT GST_INSPECTOR_TEST=1)
     endif(MSVC)
 endmacro(add_test_case)
+
+# Give the option to create code coverage report for the tests
+option(ENABLE_COVERAGE "Enable code coverage" OFF)
+
+if (ENABLE_COVERAGE)
+    if (MSVC)
+        # Allow one to give a path to opencppcoverage
+        set(OPENCPPCOVERAGE_PATH opencppcoverage CACHE FILEPATH "Path to opencppcoverage program to use")
+    else(MSVC)
+        # Look for gcov and gcovr
+    endif(MSVC)
+endif(ENABLE_COVERAGE)
