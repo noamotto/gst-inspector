@@ -15,6 +15,10 @@ set(CORE_TEST_CASES
     remove_nonexists_plugin_inspector_fails
     get_plugin_inspectors_names_works
     plugin_inspector_works
+
+    invalid_plugin_feature_inspector_fails
+    element_plugin_feature_inspector_works
+    typefind_plugin_feature_inspector_works
     )
 
 #test for type reader's core functionality
