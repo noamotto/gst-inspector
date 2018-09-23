@@ -13,4 +13,4 @@ before_install:
 script:
    - mkdir -p build
    - cd build
-   - cmake ../ && make -j 4 && ctest -V
+   - cmake --version && cmake ../ && make -j 4 && ctest -V
