@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.0)
 
 include(CMakeToolsHelpers OPTIONAL)
 project(gst-inspect-server)
@@ -21,7 +21,10 @@ target_include_directories(gst-inspector PUBLIC ${GLIB2_INCLUDE_DIRS} ${GSTREAME
 target_link_libraries(gst-inspector PUBLIC ${GLIB2_LIBRARIES} ${GSTREAMER_LIBRARIES})
 
 if ( CMAKE_COMPILER_IS_GNUCC )
-    target_compile_options(gst-inspector PUBLIC "-std=c99" "-pthread")
+    target_compile_options(gst-inspector PUBLIC "-std=c99" "-pthread" )
+    if (ENABLE_COVERAGE)
+        target_link_libraries(gst-inspector PUBLIC gcov)
+    endif (ENABLE_COVERAGE)
 endif ( CMAKE_COMPILER_IS_GNUCC )
 
 add_subdirectory(tests)
