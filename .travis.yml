@@ -9,8 +9,12 @@ before_install:
    - ./autogen.sh --disable-gtk-doc --prefix=/usr/ && make -j 4 && sudo make install
    - cd ../
    - gst-inspect-1.0 --version
+   - pip install cpp-coveralls
 
 script:
    - mkdir -p build
    - cd build
    - cmake --version && cmake ../ && make -j 4 && ctest -V
+   
+after_success:
+   - coveralls
