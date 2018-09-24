@@ -18,4 +18,4 @@ script:
    - cmake --version && cmake ../ -DENABLE_COVERAGE=1 && make -j 4 && ctest -V
    
 after_success:
-   - coveralls
+   - coveralls --gcov-options '\-lp'
