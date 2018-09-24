@@ -18,4 +18,5 @@ script:
    - cmake --version && cmake ../ -DENABLE_COVERAGE=1 && make -j 4 && ctest -V
    
 after_success:
-   - coveralls --gcov-options '\-lp'
+   - lcov -c -d CMakeFiles/gst-inspector.dir -o coverage.info
+   - coveralls -l coverage.info
