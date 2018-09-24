@@ -1,6 +1,9 @@
 ### Stability:
 - Travis (linux-gcc): ![Travis](https://travis-ci.org/noamotto/gst-inspector.svg?branch=master)
 
+Test coverage: [![Coverage Status](https://coveralls.io/repos/github/noamotto/gst-inspector/badge.svg?branch=master)](https://coveralls.io/github/noamotto/gst-inspector?branch=master)
+
+
 # gst-inspector
 
 The main goal of this repository is to create a simple interface to create custom tools for showing GStreamer's plugin information, in a same way like gst-inspect.
