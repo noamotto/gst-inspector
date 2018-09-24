@@ -12,7 +12,7 @@ void gst_fraction_type_reader_fill_type(
 
     pspec_fraction = GST_PARAM_SPEC_FRACTION(pspec);
 
-    gst_dictionary_set_static_string(dictionary, KEY_TYPE, g_strdup("Fraction"));
+    gst_dictionary_set_static_string(dictionary, KEY_TYPE, "Fraction");
 
     gst_dictionary_set_string(dictionary, KEY_RANGE,
                               g_strdup_printf("%d/%d - %d/%d",

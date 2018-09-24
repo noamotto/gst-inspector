@@ -494,6 +494,7 @@ GstStructure *gst_inspector_inspect_element(GstElementFactory *factory)
     data.inspect_object = GST_OBJECT_CAST(element);
 
     g_list_foreach(element_inspectors->list, (GFunc)run_element_inspectors, &data);
+    gst_object_unref(element);
     return result;
 }
 

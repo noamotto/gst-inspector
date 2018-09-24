@@ -24,6 +24,8 @@ int main(int argc, char *argv[])
     g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_TYPE), ==, type_string);
 
     g_free(type_string);
+    gst_structure_free(dictionary);
+    g_param_spec_unref(fake_spec);
 
     return 0;
 }
