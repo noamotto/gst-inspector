@@ -3,7 +3,7 @@ language: c
 before_install:
    - sudo apt-get update -qq
    - sudo apt-get remove libgstreamer1.0-0
-   - sudo apt-get install autoconf automake autopoint pkg-config libtool bison flex
+   - sudo apt-get install autoconf automake autopoint pkg-config libtool bison flex lcov
    - git clone https://github.com/GStreamer/gstreamer.git -b 1.8.3 gstreamer
    - cd gstreamer
    - ./autogen.sh --disable-gtk-doc --prefix=/usr/ && make -j 4 && sudo make install
@@ -18,4 +18,5 @@ script:
    - cmake --version && cmake ../ -DENABLE_COVERAGE=1 && make -j 4 && ctest -V
    
 after_success:
-   - coveralls --gcov-options '\-lp'
+   - lcov -c -d CMakeFiles/gst-inspector.dir -o coverage.info
+   - coveralls -l coverage.info
