@@ -23,7 +23,8 @@ target_link_libraries(gst-inspector PUBLIC ${GLIB2_LIBRARIES} ${GSTREAMER_LIBRAR
 if ( CMAKE_COMPILER_IS_GNUCC )
     target_compile_options(gst-inspector PUBLIC "-std=c99" "-pthread" )
     if (ENABLE_COVERAGE)
-        target_link_libraries(gst-inspector PUBLIC gcov)
+        target_link_libraries(gst-inspector PRIVATE --coverage)
+        target_compile_options(gst-inspector PRIVATE --coverage -O0 -g)
     endif (ENABLE_COVERAGE)
 endif ( CMAKE_COMPILER_IS_GNUCC )
 
