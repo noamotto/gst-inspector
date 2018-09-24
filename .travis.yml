@@ -15,7 +15,7 @@ before_install:
 script:
    - mkdir -p build
    - cd build
-   - cmake --version && cmake ../ && make -j 4 && ctest -V
+   - cmake --version && cmake ../ -DENABLE_COVERAGE=1 && make -j 4 && ctest -V
    
 after_success:
    - coveralls
