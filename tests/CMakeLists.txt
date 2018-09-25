@@ -8,6 +8,7 @@ set(CORE_TEST_CASES
     remove_nonexists_element_inspector_fails
     get_element_inspectors_names_works
     element_inspector_works
+    element_inspector_invalid_element_fails
 
     register_plugin_inspector_succeeds
     register_same_plugin_inspector_twice_fails
@@ -15,6 +16,7 @@ set(CORE_TEST_CASES
     remove_nonexists_plugin_inspector_fails
     get_plugin_inspectors_names_works
     plugin_inspector_works
+    pluign_inspector_invalid_plugin_fails
 
     invalid_plugin_feature_inspector_fails
     element_plugin_feature_inspector_works
@@ -23,7 +25,11 @@ set(CORE_TEST_CASES
 
     element_inspect_by_name_works
     plugin_inspect_by_name_works
+    typefind_inspect_by_name_works
+    tracer_inspect_by_name_works
     null_inspect_by_name_fails
+    nonexists_feature_inspect_by_name_fails
+    element_preceeds_plugin_by_name_inspection
     )
 
 #test for type reader's core functionality
