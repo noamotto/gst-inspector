@@ -502,7 +502,7 @@ GstStructure *gst_inspector_inspect_plugin_feature(GstPluginFeature *feature)
     else if (GST_IS_TRACER_FACTORY(feature))
     {
         GstStructure *dict = gst_structure_new_empty(GST_OBJECT_NAME(feature));
-        gst_dictionary_set_string(dict, "Type", "A tracer function");
+        gst_dictionary_set_string(dict, "Type", "A tracer module");
         return dict;
     }
 
@@ -527,7 +527,7 @@ GstStructure *gst_inspector_inspect_by_name(const gchar *object_name)
 
     CHECK_INIT;
 
-    g_return_val_if_fail(object_name == NULL,
+    g_return_val_if_fail(object_name != NULL,
                          create_error_dict("Object name cannot be NULL"));
 
     feature = gst_registry_lookup_feature(gst_registry_get(), object_name);
