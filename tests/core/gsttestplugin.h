@@ -2,10 +2,10 @@
  * Small plugin for test purposes
  */
 
-#include <gst/gst.h>
-
 #ifndef TESTPLUGIN_H
 #define TESTPLUGIN_H
+
+#include <gst/gst.h>
 
 G_BEGIN_DECLS
 
@@ -39,6 +39,14 @@ GType gst_test_tracer_get_type(void);
 // Test element. Does practically nothing, for test purposes
 G_DEFINE_TYPE(GstTestElement, gst_test_element, GST_TYPE_ELEMENT)
 
+#ifndef TEST_ELEMENT_CLASS_INIT_CODE
+#define TEST_ELEMENT_CLASS_INIT_CODE
+#endif
+
+#ifndef TEST_ELEMENT_INIT_CODE
+#define TEST_ELEMENT_INIT_CODE (void)self;
+#endif
+
 void gst_test_element_class_init(GstTestElementClass *klass)
 {
     gst_element_class_set_static_metadata(GST_ELEMENT_CLASS(klass),
@@ -46,11 +54,13 @@ void gst_test_element_class_init(GstTestElementClass *klass)
                                           "TEST",
                                           "Test Element",
                                           "Noam Ottolenghi");
+
+    TEST_ELEMENT_CLASS_INIT_CODE
 }
 
 void gst_test_element_init(GstTestElement *self)
 {
-    (void)self;
+    TEST_ELEMENT_INIT_CODE
 }
 
 // Test typefind function
@@ -78,7 +88,8 @@ static gboolean plugin_init(GstPlugin *plugin)
 {
     return gst_element_register(plugin, "testelement", GST_RANK_NONE, GST_TYPE_TEST_ELEMENT) &&
            gst_type_find_register(plugin, "testtypefind", GST_RANK_NONE,
-                                  (GstTypeFindFunction)fake_typefind, NULL, NULL, NULL, NULL);
+                                  (GstTypeFindFunction)fake_typefind, NULL, NULL, NULL, NULL) &&
+           gst_tracer_register(plugin, "testtracer", GST_TYPE_TEST_TRACER);
 }
 
 GST_PLUGIN_STATIC_DECLARE(testplugin);

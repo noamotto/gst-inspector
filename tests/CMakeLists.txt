@@ -19,6 +19,11 @@ set(CORE_TEST_CASES
     invalid_plugin_feature_inspector_fails
     element_plugin_feature_inspector_works
     typefind_plugin_feature_inspector_works
+    tracer_plugin_feature_inspector_works
+
+    element_inspect_by_name_works
+    plugin_inspect_by_name_works
+    null_inspect_by_name_fails
     )
 
 #test for type reader's core functionality

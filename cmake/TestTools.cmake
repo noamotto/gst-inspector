@@ -15,7 +15,8 @@ endmacro(create_test_command)
 macro(add_test_case test_prefix test_case)
     add_executable(${test_case} "${test_prefix}/${test_case}.c")
     target_link_libraries(${test_case} gst-inspector)
-
+    target_compile_definitions(${test_case} PRIVATE GST_USE_UNSTABLE_API)
+    
     create_test_command(${test_case})
 
     add_test(NAME ${test_case} COMMAND ${TEST_COMMAND} WORKING_DIRECTORY $<TARGET_FILE_DIR:gst-inspector>)
