@@ -60,6 +60,10 @@ void gst_pointer_type_reader_fill_type(GParamSpec *pspec,
                                        GValue *value,
                                        GstStructure *dictionary);
 
+void gst_value_array_type_reader_fill_type(GParamSpec *pspec,
+                                           GValue *value,
+                                           GstStructure *dictionary);
+
 void gst_string_type_reader_fill_type(GParamSpec *pspec,
                                       GValue *value,
                                       GstStructure *dictionary);

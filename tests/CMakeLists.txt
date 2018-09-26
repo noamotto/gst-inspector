@@ -54,8 +54,12 @@ set(PARAM_TEST_CASES
     double_param_test
     string_param_test
     null_string_param_test
+
     known_pointer_param_test
     unknown_pointer_param_test
+
+    known_value_array_param_test
+    unknown_value_array_param_test
 
     enum_param_test
     unknown_value_enum_param_test

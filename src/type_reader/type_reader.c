@@ -49,6 +49,7 @@ void _gst_init_type_readers(void)
     gst_type_reader_register(G_TYPE_PARAM_LONG, gst_long_type_reader_fill_type);
     gst_type_reader_register(G_TYPE_PARAM_OBJECT, gst_object_type_reader_fill_type);
     gst_type_reader_register(G_TYPE_PARAM_POINTER, gst_pointer_type_reader_fill_type);
+    gst_type_reader_register(G_TYPE_PARAM_VALUE_ARRAY, gst_value_array_type_reader_fill_type);
     gst_type_reader_register(G_TYPE_PARAM_STRING, gst_string_type_reader_fill_type);
     gst_type_reader_register(G_TYPE_PARAM_UINT, gst_uint_type_reader_fill_type);
     gst_type_reader_register(G_TYPE_PARAM_UINT64, gst_uint64_type_reader_fill_type);

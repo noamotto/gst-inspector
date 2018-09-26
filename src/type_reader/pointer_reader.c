@@ -5,12 +5,8 @@ void gst_pointer_type_reader_fill_type(
     GValue *value,
     GstStructure *dictionary)
 {
-    GValue key_value = G_VALUE_INIT;
-
     g_return_if_fail(G_IS_PARAM_SPEC_POINTER(pspec));
     g_return_if_fail(G_IS_VALUE(value));
-
-    g_value_init(&key_value, G_TYPE_STRING);
 
     if (pspec->value_type != G_TYPE_POINTER)
     {
