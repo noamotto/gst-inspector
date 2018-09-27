@@ -12,8 +12,8 @@ macro(create_test_command test_case)
     endif(ENABLE_COVERAGE AND MSVC)
 endmacro(create_test_command)
 
-macro(add_test_case test_prefix test_case)
-    add_executable(${test_case} "${test_prefix}/${test_case}.c")
+macro(add_test_case test_case)
+    add_executable(${test_case} "${test_case}.c")
     target_link_libraries(${test_case} gst-inspector)
     target_compile_definitions(${test_case} PRIVATE GST_USE_UNSTABLE_API)
     

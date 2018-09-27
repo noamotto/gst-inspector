@@ -59,7 +59,6 @@ int main(int argc, char *argv[])
     GstStructure *data;
     GstStructure *inspector_data;
     gchar *expected_message = g_strdup_printf("Could not find object named %s", FACTORY_NAME);
-    const gchar *actual_message;
 
     gst_init(&argc, &argv);
     GST_PLUGIN_STATIC_REGISTER(testplugin);
