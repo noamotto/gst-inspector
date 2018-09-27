@@ -7,8 +7,7 @@
 #define TEST_FIELD_NAME ("Test field")
 #define TEST_FIELD_VALUE ("hello")
 
-#define ERROR_MESSAGE_NAME ("Error")
-#define DESCRIPTION_KEY ("Description")
+#define DESCRIPTION_KEY ("Error")
 
 static GstStructure *fake_element_inspector(GstElement *element)
 {
@@ -35,13 +34,10 @@ int main(int argc, char *argv[])
     gst_init(&argc, &argv);
     GST_PLUGIN_STATIC_REGISTER(testplugin);
 
-    gst_inspector_register_element_inspector(fake_element_inspector, ELEMENT_TEST_NAME, -1);
-    gst_inspector_register_plugin_inspector(fake_plugin_inspector, PLUGIN_TEST_NAME, -1);
+    gst_inspector_register_element_inspector(fake_element_inspector, ELEMENT_TEST_NAME, ELEMENT_TEST_NAME, -1);
+    gst_inspector_register_plugin_inspector(fake_plugin_inspector, PLUGIN_TEST_NAME, PLUGIN_TEST_NAME, -1);
 
     data = gst_inspector_inspect_by_name(FAKE_NAME);
-
-    g_assert_cmpstr(ERROR_MESSAGE_NAME, ==, gst_structure_get_name(data));
-
 
     actual_message = gst_dictionary_get_string(data, DESCRIPTION_KEY);
     g_assert_cmpstr(actual_message, ==, expected_message);

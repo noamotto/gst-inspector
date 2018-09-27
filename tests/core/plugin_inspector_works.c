@@ -1,10 +1,10 @@
 #include "gstinspector.h"
 #include "gsttestplugin.h"
 
-#define PLUGIN_NAME         ("testplugin")
-#define TEST_NAME           ("test")
-#define TEST_FIELD_NAME     ("Test field")
-#define TEST_FIELD_VALUE    ("hello")
+#define PLUGIN_NAME ("testplugin")
+#define TEST_NAME ("test")
+#define TEST_FIELD_NAME ("Test field")
+#define TEST_FIELD_VALUE ("hello")
 
 static GstStructure *fake_inspector(GstPlugin *plugin)
 {
@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
     gst_init(&argc, &argv);
     GST_PLUGIN_STATIC_REGISTER(testplugin);
 
-    gst_inspector_register_plugin_inspector(fake_inspector, TEST_NAME, -1);
+    gst_inspector_register_plugin_inspector(fake_inspector, TEST_NAME, TEST_NAME, -1);
 
-    plugin = gst_registry_find_plugin (gst_registry_get (), PLUGIN_NAME);
+    plugin = gst_registry_find_plugin(gst_registry_get(), PLUGIN_NAME);
     data = gst_inspector_inspect_plugin(plugin);
 
     g_assert_cmpstr(PLUGIN_NAME, ==, gst_structure_get_name(data));

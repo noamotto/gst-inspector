@@ -35,6 +35,7 @@ typedef GstStructure *(*GstPluginInspectFunc)(GstPlugin *plugin);
 GST_INSPECTOR_API gboolean
 gst_inspector_register_element_inspector(GstElementInspectFunc inspector,
                                          gchar *name,
+                                         gchar *longname,
                                          gint position);
 GST_INSPECTOR_API gboolean gst_inspector_remove_element_inspector(const gchar *name);
 GST_INSPECTOR_API gchar **gst_inspector_get_installed_element_inspectors(void);
@@ -43,6 +44,7 @@ GST_INSPECTOR_API gchar **gst_inspector_get_installed_element_inspectors(void);
 GST_INSPECTOR_API gboolean
 gst_inspector_register_plugin_inspector(GstPluginInspectFunc inspector,
                                         gchar *name,
+                                        gchar *longname,
                                         gint position);
 GST_INSPECTOR_API gboolean gst_inspector_remove_plugin_inspector(const gchar *name);
 GST_INSPECTOR_API gchar **gst_inspector_get_installed_plugin_inspectors(void);

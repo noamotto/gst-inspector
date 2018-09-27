@@ -42,4 +42,6 @@ add_test_case(${TEST_CASE})
 
 endforeach(TEST_CASE)
 
+add_subdirectory(inspectors)
+
 endif (BUILD_TESTING)

@@ -10,7 +10,8 @@
  */
 typedef struct _InspectorNode
 {
-    gchar *name; /**< Node's name */
+    gchar *name;     /**< Node's name */
+    gchar *longname; /**< Node's long (shown) name */
 } InspectorNode;
 
 /**
@@ -73,7 +74,8 @@ static void _gst_inspector_init()
         element_inspectors = g_slice_new0(InspectorList);
         if (!testing_mode)
         {
-            gst_inspector_register_element_inspector(param_inspector, "params", -1);
+            gst_inspector_register_element_inspector(param_inspector, "params",
+                                                     "Element Properties", -1);
             //Populate stock inspectors
         }
     }
@@ -199,7 +201,7 @@ static gchar **inspector_list_get_names(InspectorList *list)
 static GstStructure *create_error_dict(gchar *error_string)
 {
     GstStructure *err = gst_structure_new_empty("Error");
-    gst_dictionary_set_string(err, "Description", error_string);
+    gst_dictionary_set_string(err, "Error", error_string);
     return err;
 }
 
@@ -219,6 +221,7 @@ static GstStructure *create_error_dict(gchar *error_string)
  */
 gboolean gst_inspector_register_element_inspector(GstElementInspectFunc inspector,
                                                   gchar *name,
+                                                  gchar *longname,
                                                   gint position)
 {
     CHECK_INIT;
@@ -233,6 +236,7 @@ gboolean gst_inspector_register_element_inspector(GstElementInspectFunc inspecto
     //Insert the inspector at given position
     ElementInspectorNode *new_inspector = g_slice_new0(ElementInspectorNode);
     new_inspector->node.name = name;
+    new_inspector->node.longname = longname;
     new_inspector->inspector = inspector;
     inspector_list_add(element_inspectors, (InspectorNode *)new_inspector, position);
 
@@ -302,6 +306,7 @@ gchar **gst_inspector_get_installed_element_inspectors()
  */
 gboolean gst_inspector_register_plugin_inspector(GstPluginInspectFunc inspector,
                                                  gchar *name,
+                                                 gchar *longname,
                                                  gint position)
 {
     CHECK_INIT;
@@ -316,6 +321,7 @@ gboolean gst_inspector_register_plugin_inspector(GstPluginInspectFunc inspector,
     //Insert the inspector at given place
     PluginInspectorNode *new_inspector = g_slice_new0(PluginInspectorNode);
     new_inspector->node.name = name;
+    new_inspector->node.longname = longname;
     new_inspector->inspector = inspector;
     inspector_list_add(plugin_inspectors, (InspectorNode *)new_inspector, position);
 
@@ -381,7 +387,7 @@ static void run_element_inspectors(ElementInspectorNode *node, InspectorData *da
 
     if (GST_IS_STRUCTURE(result))
     {
-        gst_dictionary_set_sub_dictionary(data->inspect_data, node->node.name,
+        gst_dictionary_set_sub_dictionary(data->inspect_data, node->node.longname,
                                           result);
     }
 }
@@ -441,7 +447,7 @@ static void run_plugin_inspectors(PluginInspectorNode *node, InspectorData *data
 
     if (GST_IS_STRUCTURE(result))
     {
-        gst_dictionary_set_sub_dictionary(data->inspect_data, gst_structure_get_name(result),
+        gst_dictionary_set_sub_dictionary(data->inspect_data, node->node.longname,
                                           result);
     }
 }

@@ -5,8 +5,7 @@
 #define TEST_FIELD_NAME ("Test field")
 #define TEST_FIELD_VALUE ("hello")
 
-#define ERROR_MESSAGE_NAME ("Error")
-#define DESCRIPTION_KEY ("Description")
+#define DESCRIPTION_KEY ("Error")
 
 static GstStructure *fake_inspector(GstPlugin *plugin)
 {
@@ -28,11 +27,7 @@ int main(int argc, char *argv[])
     expected_message = gst_info_strdup_printf(
         "%" GST_PTR_FORMAT " is not a valid GstPlugin", NULL);
 
-    gst_inspector_register_plugin_inspector(fake_inspector, TEST_NAME, -1);
-
     data = gst_inspector_inspect_plugin(NULL);
-
-    g_assert_cmpstr(ERROR_MESSAGE_NAME, ==, gst_structure_get_name(data));
 
     actual_message = gst_dictionary_get_string(data, DESCRIPTION_KEY);
     g_assert_cmpstr(actual_message, ==, expected_message);

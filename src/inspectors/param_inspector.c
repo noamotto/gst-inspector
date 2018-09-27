@@ -19,15 +19,16 @@ GstStructure *param_inspector(GstElement *element)
     g_qsort_with_data(pspecs, (gint)n_properties, sizeof(GParamSpec *),
                       (GCompareDataFunc)cmp_pspecs, NULL);
 
-    dictionary = gst_structure_new_empty("Element Properties");
+    dictionary = gst_structure_new_empty("params");
 
     for (guint i = 0; i < n_properties; i++)
     {
         GstStructure *param_dict = gst_structure_new_empty(pspecs[i]->name);
-        GValue param_val;
+        GValue param_val = G_VALUE_INIT;
 
         if (pspecs[i]->flags & G_PARAM_READABLE)
         {
+            g_value_init(&param_val, pspecs[i]->value_type);
             g_object_get_property(G_OBJECT(element), pspecs[i]->name, &param_val);
         }
         else

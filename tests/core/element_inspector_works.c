@@ -1,10 +1,10 @@
 #include "gstinspector.h"
 #include "gsttestplugin.h"
 
-#define FACTORY_NAME        ("testelement")
-#define TEST_NAME           ("test")
-#define TEST_FIELD_NAME     ("Test field")
-#define TEST_FIELD_VALUE    ("hello")
+#define FACTORY_NAME ("testelement")
+#define TEST_NAME ("test")
+#define TEST_FIELD_NAME ("Test field")
+#define TEST_FIELD_VALUE ("hello")
 
 static GstStructure *fake_inspector(GstElement *element)
 {
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     gst_init(&argc, &argv);
     GST_PLUGIN_STATIC_REGISTER(testplugin);
 
-    gst_inspector_register_element_inspector(fake_inspector, TEST_NAME, -1);
+    gst_inspector_register_element_inspector(fake_inspector, TEST_NAME, TEST_NAME, -1);
 
     factory = gst_element_factory_find(FACTORY_NAME);
     data = gst_inspector_inspect_element(factory);

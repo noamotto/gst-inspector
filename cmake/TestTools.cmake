@@ -35,6 +35,7 @@ option(ENABLE_COVERAGE "Enable code coverage" OFF)
 if (ENABLE_COVERAGE)
     if (MSVC)
         # Allow one to give a path to opencppcoverage
+        set(REPORT_FILES "" CACHE STRING "List of coverage file to use in the report")
         set(OPENCPPCOVERAGE_PATH opencppcoverage CACHE FILEPATH "Path to opencppcoverage program to use")
     else(MSVC)
         # Look for gcov and gcovr

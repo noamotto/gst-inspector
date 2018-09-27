@@ -1,0 +1,21 @@
+Inspector's inspection result format
+====================================
+
+The returned format for each inspector should be as follows:
+- If the inspector succeeded in its inspection, a dictionary containing the inspected
+data should be returned. The name of any dictionary (GstStructure) does not have to 
+have any meaning, and should not be read. Instead, the field name assigned to the 
+dictionary should be informative.
+- If the inspector could not find any data to inspect, the inspector should return 
+NULL. In this case its result will not be added to the main inspection result 
+dictionary.
+- If the inspection failed due to some error, Its dictionary should contain only
+one string field describing the error, under an "Error" field name.
+- Additional possible inspection result can be returned if the inspection failed 
+before the inspectors were invoked. This dictionary should also contain only one 
+string field describing the error, under the "Error" field name.
+
+Note that in order to set the shown name for each inspector, each inspector should
+be registered with two strings:
+1. A name, for identification.
+2. A longname, that should be used as the inspector's result dictionary's field name.

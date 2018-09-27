@@ -11,12 +11,12 @@
 typedef struct _GstDuplicateElement
 {
     GstElement element;
-}GstDuplicateElement;
+} GstDuplicateElement;
 
 typedef struct _GstDuplicateElementClass
 {
     GstElementClass klass;
-}GstDuplicateElementClass;
+} GstDuplicateElementClass;
 
 #define GST_TYPE_DUPLICATE_ELEMENT (gst_duplicate_element_get_type())
 GType gst_duplicate_element_get_type(void);
@@ -65,8 +65,8 @@ int main(int argc, char *argv[])
 
     gst_element_register(NULL, "testplugin", GST_RANK_NONE, GST_TYPE_DUPLICATE_ELEMENT);
 
-    gst_inspector_register_element_inspector(fake_element_inspector, ELEMENT_TEST_NAME, -1);
-    gst_inspector_register_plugin_inspector(fake_plugin_inspector, PLUGIN_TEST_NAME, -1);
+    gst_inspector_register_element_inspector(fake_element_inspector, ELEMENT_TEST_NAME, ELEMENT_TEST_NAME, -1);
+    gst_inspector_register_plugin_inspector(fake_plugin_inspector, PLUGIN_TEST_NAME, PLUGIN_TEST_NAME, -1);
 
     data = gst_inspector_inspect_by_name(FACTORY_NAME);
 

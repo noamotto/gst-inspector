@@ -10,16 +10,16 @@ static GstStructure *fake_inspector(GstPlugin *plugin)
 
 int main(int argc, char *argv[])
 {
-    gchar ** names = NULL;
+    gchar **names = NULL;
 
     gst_init(&argc, &argv);
 
-    gst_inspector_register_plugin_inspector(fake_inspector, test_list[0], -1);
-    gst_inspector_register_plugin_inspector(fake_inspector, test_list[1], -1);
-    gst_inspector_register_plugin_inspector(fake_inspector, test_list[2], -1);
+    gst_inspector_register_plugin_inspector(fake_inspector, test_list[0], test_list[0], -1);
+    gst_inspector_register_plugin_inspector(fake_inspector, test_list[1], test_list[1], -1);
+    gst_inspector_register_plugin_inspector(fake_inspector, test_list[2], test_list[2], -1);
 
     names = gst_inspector_get_installed_plugin_inspectors();
-    for (gsize i=0;i<3;i++)
+    for (gsize i = 0; i < 3; i++)
     {
         g_assert_cmpstr(names[i], ==, test_list[i]);
     }

@@ -155,7 +155,7 @@ GArray *gst_dictionary_get_array(GstStructure *dictionary, const gchar *field_na
     g_return_val_if_fail(NULL != field_name, NULL);
 
     val = gst_structure_get_value(dictionary, field_name);
-    if (G_TYPE_ARRAY != val->g_type)
+    if (!val || G_TYPE_ARRAY != val->g_type)
     {
         return NULL;
     }
@@ -179,7 +179,7 @@ GstStructure *gst_dictionary_get_sub_dictionary(GstStructure *dictionary, const 
     g_return_val_if_fail(NULL != field_name, NULL);
 
     val = gst_structure_get_value(dictionary, field_name);
-    if (GST_TYPE_STRUCTURE != val->g_type)
+    if (!val || GST_TYPE_STRUCTURE != val->g_type)
     {
         return NULL;
     }
