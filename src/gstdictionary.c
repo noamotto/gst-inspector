@@ -27,7 +27,7 @@ GArray *g_array_add_static_string(GArray *array, const gchar *string)
 /**
  *  @brief Adds a static string into an array
  *
- *  The function adds a GValue holding a given string to a GArray, allowing simpler API for 
+ *  The function adds a GValue holding a given string to a GArray, allowing simpler API 
  *
  *  @param array Array to add to
  *  @param string A string to add. The function takes ownership on the string
@@ -38,6 +38,24 @@ GArray * g_array_add_string(GArray *array, gchar *string)
     GValue val = G_VALUE_INIT;
     g_value_init(&val, G_TYPE_STRING);
     g_value_take_string(&val, string);
+
+    return g_array_append_val(array, val);
+}
+
+/**
+ *  @brief Adds a subdictionary into an array
+ *
+ *  The function adds a GValue holding a given dictionary to a GArray, allowing simpler API 
+ *
+ *  @param array Array to add to
+ *  @param dictionary A sub-dictionary to add. The function takes ownership on the sub-dictionary
+ *  @returns The array
+ */
+GArray * g_array_add_subdictionary(GArray *array, GstStructure *dictionary)
+{
+    GValue val = G_VALUE_INIT;
+    g_value_init(&val, GST_TYPE_STRUCTURE);
+    g_value_take_boxed(&val, dictionary);
 
     return g_array_append_val(array, val);
 }

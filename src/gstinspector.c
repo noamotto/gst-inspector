@@ -74,8 +74,10 @@ static void _gst_inspector_init()
         element_inspectors = g_slice_new0(InspectorList);
         if (!testing_mode)
         {
-            gst_inspector_register_element_inspector(param_inspector, "params",
-                                                     "Element Properties", -1);
+            gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
+                                                     "padtemplates", "Pad Templates", -1);
+            gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
+                                                     "params", "Element Properties", -1);
             //Populate stock inspectors
         }
     }

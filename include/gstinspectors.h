@@ -11,7 +11,9 @@
 
 G_BEGIN_DECLS
 
-GST_INSPECTOR_API GstStructure *param_inspector(GstElement *element);
+GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element_properties(GstElement *element);
+
+GST_INSPECTOR_API GstStructure *gst_inspector_inspect_pad_templates(GstElement *element);
 
 G_END_DECLS
 

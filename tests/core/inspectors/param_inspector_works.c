@@ -70,7 +70,8 @@ int main(int argc, char *argv[])
     gst_init(&argc, &argv);
     GST_PLUGIN_STATIC_REGISTER(testplugin);
 
-    gst_inspector_register_element_inspector(param_inspector, "params", "Element Properties", -1);
+    gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
+                                             "params", "Element Properties", -1);
 
     factory = gst_element_factory_find(FACTORY_NAME);
     data = gst_inspector_inspect_element(factory);

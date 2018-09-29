@@ -14,6 +14,7 @@ G_BEGIN_DECLS
 
 GST_INSPECTOR_API GArray *g_array_add_static_string(GArray *array, const gchar *string);
 GST_INSPECTOR_API GArray *g_array_add_string(GArray *array, gchar *string);
+GST_INSPECTOR_API GArray * g_array_add_subdictionary(GArray *array, GstStructure *dictionary);
 
 GST_INSPECTOR_API void gst_dictionary_set_string(GstStructure *dictionary, const gchar *field_name, gchar *string);
 GST_INSPECTOR_API void gst_dictionary_set_static_string(GstStructure *dictionary, const gchar *field_name,

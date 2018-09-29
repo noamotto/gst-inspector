@@ -4,3 +4,4 @@ build
 temp
 Testing
 CoverageReport*
+/opencppcoverage_config.txt

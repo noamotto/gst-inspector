@@ -7,6 +7,7 @@
 #define TYPE_READER_PRIV_H
 
 #include "type_reader.h"
+#include "gstinspector_priv.h"
 
 // Internal functions
 void _gst_init_type_readers(void);
