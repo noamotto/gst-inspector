@@ -25,10 +25,10 @@ GstStructure *param_inspector(GstElement *element)
     {
         GstStructure *param_dict = gst_structure_new_empty(pspecs[i]->name);
         GValue param_val = G_VALUE_INIT;
+        g_value_init(&param_val, pspecs[i]->value_type);
 
         if (pspecs[i]->flags & G_PARAM_READABLE)
         {
-            g_value_init(&param_val, pspecs[i]->value_type);
             g_object_get_property(G_OBJECT(element), pspecs[i]->name, &param_val);
         }
         else

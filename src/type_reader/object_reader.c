@@ -31,19 +31,22 @@ void gst_object_reader_parse_content(GObject *object,
                                      GstStructure *dictionary)
 {
     GstObjectContentReaderFunc read_func = NULL;
-    g_return_if_fail(G_IS_OBJECT(object));
+    g_return_if_fail(G_IS_OBJECT(object) || !object);
 
     if (G_UNLIKELY(!object_map))
     {
         object_map = g_hash_table_new(g_direct_hash, g_direct_equal);
     }
 
-    read_func = (GstObjectContentReaderFunc)g_hash_table_lookup(object_map,
-                                                                GINT_TO_POINTER(G_OBJECT_TYPE(object)));
-
-    if (read_func)
+    if (object)
     {
-        read_func(object, dictionary);
+        read_func = (GstObjectContentReaderFunc)g_hash_table_lookup(object_map,
+                                                                    GINT_TO_POINTER(G_OBJECT_TYPE(object)));
+
+        if (read_func)
+        {
+            read_func(object, dictionary);
+        }
     }
 }
 

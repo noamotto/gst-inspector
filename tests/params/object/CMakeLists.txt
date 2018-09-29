@@ -8,6 +8,7 @@ set(TEST_CASES
     # General object tests
     unknown_object_param_type_test
     object_param_type_test
+    null_object_param_type_test
     )
 
 foreach(TEST_CASE ${TEST_CASES})
