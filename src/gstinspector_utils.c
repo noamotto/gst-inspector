@@ -108,3 +108,48 @@ gchar *get_rank_name(gint rank)
                            (rank - ranks[best_match] > 0) ? '+' : '-',
                            abs(ranks[best_match] - rank));
 }
+
+GArray *parse_type_hierarchy(GType type)
+{
+    GArray *hierarchy = g_array_new(FALSE, FALSE, sizeof(GValue));
+    g_array_set_clear_func(hierarchy, (GDestroyNotify)g_value_unset);
+
+    while (type != 0)
+    {
+        GValue hierarchy_node = G_VALUE_INIT;
+        g_value_init(&hierarchy_node, G_TYPE_STRING);
+
+        g_value_set_static_string(&hierarchy_node, g_type_name(type));
+        g_array_prepend_val(hierarchy, hierarchy_node);
+
+        type = g_type_parent(type);
+    }
+
+    return hierarchy;
+}
+
+GArray *parse_type_interfaces(GType type)
+{
+    guint n_ifaces;
+    GArray *result = NULL;
+    GType *ifaces = g_type_interfaces(type, &n_ifaces);
+
+    if (ifaces)
+    {
+        if (n_ifaces)
+        {
+            result = g_array_new(FALSE, FALSE, sizeof(GValue));
+            g_array_set_clear_func(result, (GDestroyNotify)g_value_unset);
+
+            GType *iface = ifaces;
+            while (*iface)
+            {
+                g_array_add_static_string(result, g_type_name(*iface));
+                iface++;
+            }
+        }
+        g_free(ifaces);
+    }
+
+    return result;
+}

@@ -1,7 +1,8 @@
 /**
  *  @file gstinspectors.h
  *  
- *  @brief Header for all the stock inspectors
+ *  @brief Header for all the stock inspectors. These can be used
+ *  to re-register removed plugins, for custom inspection results
  */
 
 #include "gstinspector.h"
@@ -12,9 +13,12 @@
 G_BEGIN_DECLS
 
 // Element inspectors
-GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element_properties(GstElement *element);
-GST_INSPECTOR_API GstStructure *gst_inspector_inspect_pad_templates(GstElement *element);
 GST_INSPECTOR_API GstStructure *gst_inspector_inspect_factory_details(GstElement *element);
+GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element_plugin(GstElement *element);
+GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element_hierarchy(GstElement *element);
+GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element_interfaces(GstElement *element);
+GST_INSPECTOR_API GstStructure *gst_inspector_inspect_pad_templates(GstElement *element);
+GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element_properties(GstElement *element);
 
 // Plugin inspectors
 GST_INSPECTOR_API GstStructure *gst_inspector_inspect_plugin_details(GstPlugin *plugin);

@@ -74,9 +74,15 @@ static void _gst_inspector_init()
         element_inspectors = g_slice_new0(InspectorList);
         if (!testing_mode)
         {
-            gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
+            gst_inspector_register_element_inspector(gst_inspector_inspect_factory_details,
                                                      "factorydetails", "Factory Details", -1);
-            gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
+            gst_inspector_register_element_inspector(gst_inspector_inspect_element_plugin,
+                                                     "elementplugin", "Plugin Details", -1);
+            gst_inspector_register_element_inspector(gst_inspector_inspect_element_hierarchy,
+                                                     "hierarchy", "Type Hierarchy", -1);
+            gst_inspector_register_element_inspector(gst_inspector_inspect_element_interfaces,
+                                                     "interfaces", "Implemented Interfaces", -1);
+            gst_inspector_register_element_inspector(gst_inspector_inspect_pad_templates,
                                                      "padtemplates", "Pad Templates", -1);
             gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
                                                      "params", "Element Properties", -1);
