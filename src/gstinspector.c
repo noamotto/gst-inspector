@@ -88,7 +88,8 @@ static void _gst_inspector_init()
         plugin_inspectors = g_slice_new0(InspectorList);
         if (!testing_mode)
         {
-            //Populate stock inspectors
+            gst_inspector_register_plugin_inspector(gst_inspector_inspect_plugin_details,
+                                                     "plugindetails", "Plugin Details", -1);
         }
     }
 
