@@ -75,10 +75,11 @@ static void _gst_inspector_init()
         if (!testing_mode)
         {
             gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
+                                                     "factorydetails", "Factory Details", -1);
+            gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
                                                      "padtemplates", "Pad Templates", -1);
             gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
                                                      "params", "Element Properties", -1);
-            //Populate stock inspectors
         }
     }
 

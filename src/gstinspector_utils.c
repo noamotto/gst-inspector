@@ -1,5 +1,6 @@
 #include "gstinspector_priv.h"
 #include "type_reader/type_reader.h"
+#include <math.h>
 
 #define KEY_FEATURES ("Features")
 
@@ -80,4 +81,30 @@ GstStructure *parse_object_property(GObject *object, GParamSpec *pspec)
 
     g_value_unset(&param_val);
     return param_dict;
+}
+
+gchar *get_rank_name(gint rank)
+{
+    static const gint ranks[4] = {
+        GST_RANK_NONE, GST_RANK_MARGINAL, GST_RANK_SECONDARY, GST_RANK_PRIMARY};
+    static const gchar *rank_names[4] = {"none", "marginal", "secondary",
+                                         "primary"};
+
+    gint best_match = 0;
+
+    for (gint i = 0; i < 4; i++)
+    {
+        if (rank == ranks[i])
+        {
+            return g_strdup(rank_names[i]);
+        }
+        if (abs(rank - ranks[i]) < abs(rank - ranks[best_match]))
+        {
+            best_match = i;
+        }
+    }
+
+    return g_strdup_printf("%s %c %d", rank_names[best_match],
+                           (rank - ranks[best_match] > 0) ? '+' : '-',
+                           abs(ranks[best_match] - rank));
 }

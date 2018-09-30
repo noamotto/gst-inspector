@@ -13,6 +13,8 @@ GArray *parse_caps(const GstCaps *caps);
 
 GstStructure *parse_object_property(GObject *object, GParamSpec *pspec);
 
+gchar *get_rank_name(gint rank);
+
 G_END_DECLS
 
 #endif //GST_INSPECTOR_PRIV_H

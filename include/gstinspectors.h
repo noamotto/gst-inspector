@@ -15,6 +15,8 @@ GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element_properties(GstElem
 
 GST_INSPECTOR_API GstStructure *gst_inspector_inspect_pad_templates(GstElement *element);
 
+GstStructure *gst_inspector_inspect_factory_details(GstElement *element);
+
 G_END_DECLS
 
 #endif // GST_INSPECTORS_H
