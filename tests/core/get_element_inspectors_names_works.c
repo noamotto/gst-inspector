@@ -2,10 +2,10 @@
 
 static gchar *test_list[] = {"test1", "test2", "test3"};
 
-static GstStructure *fake_inspector(GstElement *element)
+static void fake_inspector(GstElement *element, GValue *result)
 {
     (void)element;
-    return NULL;
+    (void)result;
 }
 
 int main(int argc, char *argv[])

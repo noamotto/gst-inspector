@@ -1,9 +1,9 @@
 #include "gstinspector.h"
 
-static GstStructure *fake_inspector(GstElementFactory *element)
+static void fake_inspector(GstElement *element, GValue *result)
 {
-    (void)element;    
-    return NULL;
+    (void)element;
+    (void)result;
 }
 
 int main(int argc, char *argv[])

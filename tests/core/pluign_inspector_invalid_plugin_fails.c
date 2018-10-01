@@ -7,12 +7,13 @@
 
 #define DESCRIPTION_KEY ("Error")
 
-static GstStructure *fake_inspector(GstPlugin *plugin)
+static void fake_inspector(GstPlugin *plugin, GValue *result)
 {
     (void)plugin;
     GstStructure *test = gst_structure_new_empty(TEST_NAME);
     gst_dictionary_set_string(test, TEST_FIELD_NAME, TEST_FIELD_VALUE);
-    return test;
+    g_value_init(result, GST_TYPE_STRUCTURE);
+    g_value_take_boxed(result, test);
 }
 
 int main(int argc, char *argv[])

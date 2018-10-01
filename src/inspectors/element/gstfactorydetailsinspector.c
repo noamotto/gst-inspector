@@ -1,17 +1,18 @@
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
-GstStructure *gst_inspector_inspect_factory_details(GstElement *element)
+void gst_inspector_inspect_factory_details(GstElement *element, GValue *result)
 {
     GstStructure *dictionary;
     GstElementFactory *factory;
     gchar **keys, **k;
     guint rank;
 
-    g_return_val_if_fail(GST_IS_ELEMENT(element), NULL);
+    g_return_if_fail(GST_IS_ELEMENT(element));
 
     factory = gst_element_get_factory(element);
     dictionary = gst_structure_new_empty("factorydetails");
+    g_value_init(result, GST_TYPE_STRUCTURE);
 
     rank = gst_plugin_feature_get_rank(GST_PLUGIN_FEATURE(factory));
 
@@ -33,5 +34,5 @@ GstStructure *gst_inspector_inspect_factory_details(GstElement *element)
         g_strfreev(keys);
     }
 
-    return dictionary;
+    g_value_take_boxed(result, dictionary);
 }

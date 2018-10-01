@@ -9,20 +9,24 @@
 
 #define DESCRIPTION_KEY ("Error")
 
-static GstStructure *fake_element_inspector(GstElement *element)
+static void fake_element_inspector(GstElement *element, GValue *result)
 {
     (void)element;
+
     GstStructure *test = gst_structure_new_empty(ELEMENT_TEST_NAME);
     gst_dictionary_set_string(test, TEST_FIELD_NAME, TEST_FIELD_VALUE);
-    return test;
+    g_value_init(result, GST_TYPE_STRUCTURE);
+    g_value_take_boxed(result, test);
 }
 
-static GstStructure *fake_plugin_inspector(GstPlugin *plugin)
+static void fake_plugin_inspector(GstPlugin *plugin, GValue *result)
 {
     (void)plugin;
+
     GstStructure *test = gst_structure_new_empty(PLUGIN_TEST_NAME);
     gst_dictionary_set_string(test, TEST_FIELD_NAME, TEST_FIELD_VALUE);
-    return test;
+    g_value_init(result, GST_TYPE_STRUCTURE);
+    g_value_take_boxed(result, test);
 }
 
 int main(int argc, char *argv[])

@@ -22,6 +22,7 @@ GST_INSPECTOR_API void gst_dictionary_set_static_string(GstStructure *dictionary
 GST_INSPECTOR_API void gst_dictionary_set_array(GstStructure *dictionary, const gchar *field_name, GArray *array);
 GST_INSPECTOR_API void gst_dictionary_set_sub_dictionary(GstStructure *dictionary, const gchar *field_name,
                                        GstStructure *sub_dictionary);
+GST_INSPECTOR_API void gst_dictionary_set_value(GstStructure *dictionary, const gchar *field_name, GValue *value);
 
 #define gst_dictionary_get_string gst_structure_get_string
 GST_INSPECTOR_API GArray *gst_dictionary_get_array(GstStructure *dictionary, const gchar *field_name);

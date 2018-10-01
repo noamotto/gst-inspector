@@ -14,22 +14,24 @@ G_BEGIN_DECLS
  *
  *  @param element An element to inspect. The function should not take
  *  ownership on the received element and should not free it.
- *
- *  @return A dictionary filled with the inspected data from the element, or
- *  NULL if no data was found.
+ *  @param result An unitialized GValue to fill with the inspection results.
+ *  At the end of the inspction the GValue should either be initialized and 
+ *  hold either a string, an array or a dictionary with the inspected data,
+ *  or stay uninitialized if the inspection failed.
  */
-typedef GstStructure *(*GstElementInspectFunc)(GstElement *element);
+typedef void (*GstElementInspectFunc)(GstElement *element, GValue *result);
 
 /**
  *  @brief Inspection function for plugins
  *
  *  @param plugin A plugin to inspect. The function should not take ownership
  *  on the received plugin and should not free it.
- *
- *  @return A dictionary filled with the inspected data from the plugin, or
- *  NULL if no data was found.
+ *  @param result An unitialized GValue to fill with the inspection results.
+ *  At the end of the inspction the GValue should either be initialized and 
+ *  hold either a string, an array or a dictionary with the inspected data,
+ *  or stay uninitialized if the inspection failed.
  */
-typedef GstStructure *(*GstPluginInspectFunc)(GstPlugin *plugin);
+typedef void(*GstPluginInspectFunc)(GstPlugin *plugin, GValue *result);
 
 // Element inspection
 GST_INSPECTOR_API gboolean

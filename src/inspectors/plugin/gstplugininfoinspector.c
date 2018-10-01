@@ -1,14 +1,15 @@
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
-GstStructure *gst_inspector_inspect_plugin_details(GstPlugin *plugin)
+void gst_inspector_inspect_plugin_details(GstPlugin *plugin, GValue *result)
 {
     GstStructure *dictionary;
     const gchar *release_date = gst_plugin_get_release_date_string(plugin);
     const gchar *filename = gst_plugin_get_filename(plugin);
 
-    g_return_val_if_fail(GST_IS_PLUGIN(plugin), NULL);
+    g_return_if_fail(GST_IS_PLUGIN(plugin));
 
+    g_value_init(result, GST_TYPE_STRUCTURE);
     dictionary = gst_structure_new_empty("plugindetails");
 
     gst_dictionary_set_static_string(dictionary, "Name", gst_plugin_get_name(plugin));
@@ -46,5 +47,5 @@ GstStructure *gst_inspector_inspect_plugin_details(GstPlugin *plugin)
     gst_dictionary_set_static_string(dictionary, "Binary package", gst_plugin_get_package(plugin));
     gst_dictionary_set_static_string(dictionary, "Origin URL", gst_plugin_get_origin(plugin));
 
-    return dictionary;
+    g_value_take_boxed(result, dictionary);
 }

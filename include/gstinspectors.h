@@ -13,15 +13,15 @@
 G_BEGIN_DECLS
 
 // Element inspectors
-GST_INSPECTOR_API GstStructure *gst_inspector_inspect_factory_details(GstElement *element);
-GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element_plugin(GstElement *element);
-GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element_hierarchy(GstElement *element);
-GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element_interfaces(GstElement *element);
-GST_INSPECTOR_API GstStructure *gst_inspector_inspect_pad_templates(GstElement *element);
-GST_INSPECTOR_API GstStructure *gst_inspector_inspect_element_properties(GstElement *element);
+GST_INSPECTOR_API void gst_inspector_inspect_factory_details(GstElement *element, GValue *result);
+GST_INSPECTOR_API void gst_inspector_inspect_element_plugin(GstElement *element, GValue *result);
+GST_INSPECTOR_API void gst_inspector_inspect_element_hierarchy(GstElement *element, GValue *result);
+GST_INSPECTOR_API void gst_inspector_inspect_element_interfaces(GstElement *element, GValue *result);
+GST_INSPECTOR_API void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result);
+GST_INSPECTOR_API void gst_inspector_inspect_element_properties(GstElement *element, GValue *result);
 
 // Plugin inspectors
-GST_INSPECTOR_API GstStructure *gst_inspector_inspect_plugin_details(GstPlugin *plugin);
+GST_INSPECTOR_API void gst_inspector_inspect_plugin_details(GstPlugin *plugin, GValue *result);
 
 G_END_DECLS
 

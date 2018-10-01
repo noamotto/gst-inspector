@@ -33,7 +33,7 @@ GArray *g_array_add_static_string(GArray *array, const gchar *string)
  *  @param string A string to add. The function takes ownership on the string
  *  @returns The array
  */
-GArray * g_array_add_string(GArray *array, gchar *string)
+GArray *g_array_add_string(GArray *array, gchar *string)
 {
     GValue val = G_VALUE_INIT;
     g_value_init(&val, G_TYPE_STRING);
@@ -51,7 +51,7 @@ GArray * g_array_add_string(GArray *array, gchar *string)
  *  @param dictionary A sub-dictionary to add. The function takes ownership on the sub-dictionary
  *  @returns The array
  */
-GArray * g_array_add_subdictionary(GArray *array, GstStructure *dictionary)
+GArray *g_array_add_subdictionary(GArray *array, GstStructure *dictionary)
 {
     GValue val = G_VALUE_INIT;
     g_value_init(&val, GST_TYPE_STRUCTURE);
@@ -154,6 +154,38 @@ void gst_dictionary_set_sub_dictionary(GstStructure *dictionary, const gchar *fi
     g_value_init(&val, GST_TYPE_STRUCTURE);
     g_value_take_boxed(&val, sub_dictionary);
     gst_structure_take_value(dictionary, field_name, &val);
+}
+
+/**
+ *  @brief Sets a value into the dictionary
+ *
+ *  This function can be used as a generic way to add values to a dictionary.
+ *  The function makes sure the value type fits the supported dictionary field
+ *  types (string, array or dictionary), and handles the insertion. If the value
+ *  does not fit, a warning is issued.
+ *
+ *  @param dictionary A GstStructure dictionary
+ *  @param field_name The field name to set
+ *  @param value A value to set. The function takes ownership of the value 
+ *  regardless to whether it was set or not
+ */
+void gst_dictionary_set_value(GstStructure *dictionary, const gchar *field_name, GValue *value)
+{
+    g_return_if_fail(GST_IS_STRUCTURE(dictionary));
+    g_return_if_fail(NULL != field_name);
+    g_return_if_fail(G_IS_VALUE(value));
+
+    if (G_VALUE_HOLDS(value, G_TYPE_STRING) ||
+        G_VALUE_HOLDS(value, G_TYPE_ARRAY) ||
+        G_VALUE_HOLDS(value, GST_TYPE_STRUCTURE))
+    {
+        gst_structure_take_value(dictionary, field_name, value);
+    }
+    else
+    {
+        g_warning("Got invalid type %s for dictionary", G_VALUE_TYPE_NAME(value));
+        g_value_unset(value);
+    }
 }
 
 /**

@@ -7,14 +7,15 @@ static gint cmp_pspecs(GParamSpec **p1, GParamSpec **p2)
     return g_strcmp0(g_param_spec_get_name(*p1), g_param_spec_get_name(*p2));
 }
 
-GstStructure *gst_inspector_inspect_element_properties(GstElement *element)
+void gst_inspector_inspect_element_properties(GstElement *element, GValue *result)
 {
     GstStructure *dictionary;
     guint n_properties;
     GParamSpec **pspecs;
 
-    g_return_val_if_fail(GST_IS_ELEMENT(element), NULL);
+    g_return_if_fail(GST_IS_ELEMENT(element));
 
+    g_value_init(result, GST_TYPE_STRUCTURE);
     pspecs = g_object_class_list_properties(G_OBJECT_GET_CLASS(G_OBJECT(element)),
                                             &n_properties);
     g_qsort_with_data(pspecs, (gint)n_properties, sizeof(GParamSpec *),
@@ -28,5 +29,5 @@ GstStructure *gst_inspector_inspect_element_properties(GstElement *element)
                                           parse_object_property(G_OBJECT(element), pspecs[i]));
     }
 
-    return dictionary;
+    g_value_take_boxed(result, dictionary);
 }

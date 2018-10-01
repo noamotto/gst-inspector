@@ -95,7 +95,7 @@ static void _gst_inspector_init()
         if (!testing_mode)
         {
             gst_inspector_register_plugin_inspector(gst_inspector_inspect_plugin_details,
-                                                     "plugindetails", "Plugin Details", -1);
+                                                    "plugindetails", "Plugin Details", -1);
         }
     }
 
@@ -393,12 +393,12 @@ gchar **gst_inspector_get_installed_plugin_inspectors()
  */
 static void run_element_inspectors(ElementInspectorNode *node, InspectorData *data)
 {
-    GstStructure *result = node->inspector(GST_ELEMENT(data->inspect_object));
+    GValue result = G_VALUE_INIT;
+    node->inspector(GST_ELEMENT(data->inspect_object), &result);
 
-    if (GST_IS_STRUCTURE(result))
+    if (G_IS_VALUE(&result))
     {
-        gst_dictionary_set_sub_dictionary(data->inspect_data, node->node.longname,
-                                          result);
+        gst_dictionary_set_value(data->inspect_data, node->node.longname, &result);
     }
 }
 
@@ -453,12 +453,12 @@ GstStructure *gst_inspector_inspect_element(GstElementFactory *factory)
  */
 static void run_plugin_inspectors(PluginInspectorNode *node, InspectorData *data)
 {
-    GstStructure *result = node->inspector(GST_PLUGIN(data->inspect_object));
+    GValue result = G_VALUE_INIT;
+    node->inspector(GST_PLUGIN(data->inspect_object), &result);
 
-    if (GST_IS_STRUCTURE(result))
+    if (G_IS_VALUE(&result))
     {
-        gst_dictionary_set_sub_dictionary(data->inspect_data, node->node.longname,
-                                          result);
+        gst_dictionary_set_value(data->inspect_data, node->node.longname, &result);
     }
 }
 

@@ -73,26 +73,28 @@ static void parse_pad_template(GstElement *element,
     }
 }
 
-GstStructure *gst_inspector_inspect_pad_templates(GstElement *element)
+void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result)
 {
     const GList *pads;
     GstElementFactory *factory;
     GstStructure *dictionary;
 
-    g_return_val_if_fail(GST_IS_ELEMENT(element), NULL);
+    g_return_if_fail(GST_IS_ELEMENT(element));
     factory = gst_element_get_factory(element);
 
     dictionary = gst_structure_new_empty("padtamplates");
 
     if (gst_element_factory_get_num_pad_templates(factory) == 0)
     {
-        gst_dictionary_set_static_string(dictionary, "Pads", "none");
+        g_value_init(result, G_TYPE_STRING);
+        g_value_set_static_string(result, "none");
     }
     else
     {
         GArray *templ_array = g_array_new(FALSE, FALSE, sizeof(GValue));
         g_array_set_clear_func(templ_array, (GDestroyNotify)g_value_unset);
-
+        g_value_init(result, G_TYPE_ARRAY);
+        
         pads = gst_element_factory_get_static_pad_templates(factory);
         while (pads)
         {
@@ -120,8 +122,6 @@ GstStructure *gst_inspector_inspect_pad_templates(GstElement *element)
             g_array_add_subdictionary(templ_array, template_dict);
         }
 
-        gst_dictionary_set_array(dictionary, "Pads", templ_array);
+        g_value_take_boxed(result, templ_array);
     }
-
-    return dictionary;
 }
