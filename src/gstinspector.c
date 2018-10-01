@@ -84,6 +84,12 @@ static void _gst_inspector_init()
                                                      "interfaces", "Implemented Interfaces", -1);
             gst_inspector_register_element_inspector(gst_inspector_inspect_pad_templates,
                                                      "padtemplates", "Pad Templates", -1);
+            gst_inspector_register_element_inspector(gst_inspector_inspect_element_clocking,
+                                                     "clocking", "Clocking Interaction", -1);
+            gst_inspector_register_element_inspector(gst_inspector_inspect_element_uri_handler,
+                                                     "urihandler", "URI handling capabilities", -1);
+            gst_inspector_register_element_inspector(gst_inspector_inspect_element_pads,
+                                                     "pads", "Pads", -1);
             gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
                                                      "params", "Element Properties", -1);
         }
