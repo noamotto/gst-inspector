@@ -55,7 +55,6 @@ typedef struct _InspectorData
 static InspectorList *element_inspectors = NULL;
 static InspectorList *plugin_inspectors = NULL;
 static gboolean is_inited = FALSE;
-static gboolean testing_mode = FALSE;
 
 /**
  *  @brief Internal library initializer. Initializes and populates inspector lists
@@ -63,50 +62,42 @@ static gboolean testing_mode = FALSE;
  */
 static void _gst_inspector_init()
 {
-    const gchar *testing_env = g_getenv("GST_INSPECTOR_TEST");
-    if (testing_env && g_strcmp0(testing_env, "1") == 0)
-    {
-        testing_mode = TRUE;
-    }
-
     if (!element_inspectors)
     {
         element_inspectors = g_slice_new0(InspectorList);
-        if (!testing_mode)
-        {
-            gst_inspector_register_element_inspector(gst_inspector_inspect_factory_details,
-                                                     "factorydetails", "Factory Details", -1);
-            gst_inspector_register_element_inspector(gst_inspector_inspect_element_plugin,
-                                                     "elementplugin", "Plugin Details", -1);
-            gst_inspector_register_element_inspector(gst_inspector_inspect_element_hierarchy,
-                                                     "hierarchy", "Type Hierarchy", -1);
-            gst_inspector_register_element_inspector(gst_inspector_inspect_element_interfaces,
-                                                     "interfaces", "Implemented Interfaces", -1);
-            gst_inspector_register_element_inspector(gst_inspector_inspect_pad_templates,
-                                                     "padtemplates", "Pad Templates", -1);
-            gst_inspector_register_element_inspector(gst_inspector_inspect_element_clocking,
-                                                     "clocking", "Clocking Interaction", -1);
-            gst_inspector_register_element_inspector(gst_inspector_inspect_element_uri_handler,
-                                                     "urihandler", "URI handling capabilities", -1);
-            gst_inspector_register_element_inspector(gst_inspector_inspect_element_pads,
-                                                     "pads", "Pads", -1);
-            gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
-                                                     "params", "Element Properties", -1);
-            gst_inspector_register_element_inspector(gst_inspector_inspect_element_signals,
-                                                     "signals", "Element Signals", -1);
-            gst_inspector_register_element_inspector(gst_inspector_inspect_element_actions,
-                                                     "actions", "Element Actions", -1);
-        }
+        gst_inspector_register_element_inspector(gst_inspector_inspect_factory_details,
+                                                 "factorydetails", "Factory Details", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_element_plugin,
+                                                 "elementplugin", "Plugin Details", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_element_hierarchy,
+                                                 "hierarchy", "Type Hierarchy", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_element_interfaces,
+                                                 "interfaces", "Implemented Interfaces", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_pad_templates,
+                                                 "padtemplates", "Pad Templates", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_element_clocking,
+                                                 "clocking", "Clocking Interaction", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_element_uri_handler,
+                                                 "urihandler", "URI handling capabilities", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_element_pads,
+                                                 "pads", "Pads", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
+                                                 "params", "Element Properties", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_element_signals,
+                                                 "signals", "Element Signals", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_element_actions,
+                                                 "actions", "Element Actions", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_element_children,
+                                                 "children", "Children", -1);
+        gst_inspector_register_element_inspector(gst_inspector_inspect_element_presets,
+                                                 "presets", "Presets", -1);
     }
 
     if (!plugin_inspectors)
     {
         plugin_inspectors = g_slice_new0(InspectorList);
-        if (!testing_mode)
-        {
-            gst_inspector_register_plugin_inspector(gst_inspector_inspect_plugin_details,
-                                                    "plugindetails", "Plugin Details", -1);
-        }
+        gst_inspector_register_plugin_inspector(gst_inspector_inspect_plugin_details,
+                                                "plugindetails", "Plugin Details", -1);
     }
 
     is_inited = TRUE;
@@ -167,6 +158,21 @@ static void inspector_list_remove(InspectorList *list, GList *inspector_node)
     g_slice_free(ElementInspectorNode, inspector_node->data);
     g_list_free(inspector_node);
     --list->length;
+}
+
+/**
+ *  @brief Clears an inspector list
+ *
+ *  The list is deleted by iterating on each node and deleting it
+ *
+ *  @param list List to clear
+ */
+static void inspector_list_clear(InspectorList *list)
+{
+    while (list->list)
+    {
+        inspector_list_remove(list, list->list);
+    }
 }
 
 /**
@@ -290,6 +296,16 @@ gboolean gst_inspector_remove_element_inspector(const gchar *name)
 }
 
 /**
+ *  @brief Clears the element inspector's list
+ */
+void gst_inspector_clear_element_inspectors()
+{
+    CHECK_INIT;
+
+    inspector_list_clear(element_inspectors);
+}
+
+/**
  *  @brief Retrieves a list of registered element inspectors' names, ordered by
  *  registration order.
  *
@@ -371,6 +387,16 @@ gboolean gst_inspector_remove_plugin_inspector(const gchar *name)
 
     inspector_list_remove(plugin_inspectors, inspector_node);
     return TRUE;
+}
+
+/**
+ *  @brief Clears the plugin inspector's list
+ */
+void gst_inspector_clear_plugin_inspectors()
+{
+    CHECK_INIT;
+
+    inspector_list_clear(plugin_inspectors);
 }
 
 /**

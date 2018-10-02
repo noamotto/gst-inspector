@@ -40,6 +40,7 @@ gst_inspector_register_element_inspector(GstElementInspectFunc inspector,
                                          gchar *longname,
                                          gint position);
 GST_INSPECTOR_API gboolean gst_inspector_remove_element_inspector(const gchar *name);
+GST_INSPECTOR_API void gst_inspector_clear_element_inspectors(void);
 GST_INSPECTOR_API gchar **gst_inspector_get_installed_element_inspectors(void);
 
 // Plugin inspection
@@ -49,6 +50,7 @@ gst_inspector_register_plugin_inspector(GstPluginInspectFunc inspector,
                                         gchar *longname,
                                         gint position);
 GST_INSPECTOR_API gboolean gst_inspector_remove_plugin_inspector(const gchar *name);
+GST_INSPECTOR_API void gst_inspector_clear_plugin_inspectors(void);
 GST_INSPECTOR_API gchar **gst_inspector_get_installed_plugin_inspectors(void);
 
 // Inspection functions
