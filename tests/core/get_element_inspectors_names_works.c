@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 
     gst_init(&argc, &argv);
 
+    gst_inspector_clear_element_inspectors();
     gst_inspector_register_element_inspector(fake_inspector, test_list[0], test_list[0], -1);
     gst_inspector_register_element_inspector(fake_inspector, test_list[1], test_list[1], -1);
     gst_inspector_register_element_inspector(fake_inspector, test_list[2], test_list[2], -1);
