@@ -153,3 +153,47 @@ GArray *parse_type_interfaces(GType type)
 
     return result;
 }
+
+gboolean gtype_needs_ptr_marker(GType type)
+{
+    if (type == G_TYPE_POINTER)
+    {
+        return FALSE;
+    }
+    if (G_TYPE_FUNDAMENTAL(type) == G_TYPE_POINTER ||
+        G_TYPE_IS_BOXED(type) ||
+        G_TYPE_IS_OBJECT(type))
+    {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+GstStructure *parse_signal(GSignalQuery *query)
+{
+    GstStructure *signal_dict = gst_structure_new_empty("signal");
+    GArray *params_array = g_array_new(FALSE, FALSE, sizeof(GValue));
+    g_array_set_clear_func(params_array, (GDestroyNotify)g_value_unset);
+
+    gst_dictionary_set_string(signal_dict, "Signal name", g_strdup(query->signal_name));
+
+    gst_dictionary_set_string(signal_dict, "Return type",
+                              g_strdup_printf("%s%s", g_type_name(query->return_type),
+                                              gtype_needs_ptr_marker(query->return_type) ? " *" : ""));
+
+    g_array_add_string(params_array, g_strdup_printf("%s* object", g_type_name(query->itype)));
+
+    for (guint i = 0; i < query->n_params; i++)
+    {
+        g_array_add_string(params_array,
+                           g_strdup_printf("%s%s arg%d", g_type_name(query->param_types[i]),
+                                           gtype_needs_ptr_marker(query->param_types[i]) ? "*" : "",
+                                           i));
+    }
+
+    g_array_add_static_string(params_array, "gpointer user_data");
+
+    gst_dictionary_set_array(signal_dict, "Signal parameters", params_array);
+
+    return signal_dict;
+}

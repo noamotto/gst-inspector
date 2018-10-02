@@ -14,6 +14,8 @@ GstStructure *parse_object_property(GObject *object, GParamSpec *pspec);
 gchar *get_rank_name(gint rank);
 GArray *parse_type_hierarchy(GType type);
 GArray *parse_type_interfaces(GType type);
+gboolean gtype_needs_ptr_marker(GType type);
+GstStructure *parse_signal(GSignalQuery *query);
 
 G_END_DECLS
 

@@ -22,6 +22,8 @@ GST_INSPECTOR_API void gst_inspector_inspect_element_clocking(GstElement *elemen
 GST_INSPECTOR_API void gst_inspector_inspect_element_uri_handler(GstElement *element, GValue *result);
 GST_INSPECTOR_API void gst_inspector_inspect_element_pads(GstElement *element, GValue *result);
 GST_INSPECTOR_API void gst_inspector_inspect_element_properties(GstElement *element, GValue *result);
+GST_INSPECTOR_API void gst_inspector_inspect_element_signals(GstElement *element, GValue *result);
+GST_INSPECTOR_API void gst_inspector_inspect_element_actions(GstElement *element, GValue *result);
 
 // Plugin inspectors
 GST_INSPECTOR_API void gst_inspector_inspect_plugin_details(GstPlugin *plugin, GValue *result);

@@ -92,6 +92,10 @@ static void _gst_inspector_init()
                                                      "pads", "Pads", -1);
             gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
                                                      "params", "Element Properties", -1);
+            gst_inspector_register_element_inspector(gst_inspector_inspect_element_signals,
+                                                     "signals", "Element Signals", -1);
+            gst_inspector_register_element_inspector(gst_inspector_inspect_element_actions,
+                                                     "actions", "Element Actions", -1);
         }
     }
 
