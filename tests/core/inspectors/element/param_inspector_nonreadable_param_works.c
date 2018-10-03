@@ -20,7 +20,7 @@ void test_set_property(GObject *object,
                                     g_param_spec_boolean("param", "param", \
                                                          "param", TRUE, G_PARAM_WRITABLE));
 
-#include "../gsttestplugin.h"
+#include "../../gsttestplugin.h"
 
 void test_get_property(GObject *object,
                        guint property_id,
