@@ -23,9 +23,7 @@ macro(add_test_case test_case)
 
     # When building on VS, add GStreamer's root to PATH when running the tests
     if(MSVC)
-    set_property(TEST ${test_case} PROPERTY ENVIRONMENT PATH=$<SHELL_PATH:${GSTREAMER_BIN_PATH}>;$ENV{Path} GST_INSPECTOR_TEST=1)
-    else(MSVC)
-    set_property(TEST ${test_case} PROPERTY ENVIRONMENT GST_INSPECTOR_TEST=1)
+    set_property(TEST ${test_case} PROPERTY ENVIRONMENT PATH=$<SHELL_PATH:${GSTREAMER_BIN_PATH}>;$ENV{Path})
     endif(MSVC)
 endmacro(add_test_case)
 

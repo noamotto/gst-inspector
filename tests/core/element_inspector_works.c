@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     gst_init(&argc, &argv);
     GST_PLUGIN_STATIC_REGISTER(testplugin);
 
+    gst_inspector_clear_element_inspectors();
     gst_inspector_register_element_inspector(fake_inspector, TEST_NAME, TEST_NAME, -1);
 
     factory = gst_element_factory_find(FACTORY_NAME);

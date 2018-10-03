@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
     gst_init(&argc, &argv);
     GST_PLUGIN_STATIC_REGISTER(testplugin);
 
+    gst_inspector_clear_element_inspectors();
+    gst_inspector_clear_plugin_inspectors();
     gst_inspector_register_element_inspector(fake_element_inspector, ELEMENT_TEST_NAME, ELEMENT_TEST_NAME, -1);
     gst_inspector_register_plugin_inspector(fake_plugin_inspector, PLUGIN_TEST_NAME, PLUGIN_TEST_NAME, -1);
 

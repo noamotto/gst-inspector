@@ -29,6 +29,7 @@ GST_INSPECTOR_API void gst_inspector_inspect_element_presets(GstElement *element
 
 // Plugin inspectors
 GST_INSPECTOR_API void gst_inspector_inspect_plugin_details(GstPlugin *plugin, GValue *result);
+GST_INSPECTOR_API void gst_inspector_inspect_plugin_features(GstPlugin *plugin, GValue *result);
 
 G_END_DECLS
 

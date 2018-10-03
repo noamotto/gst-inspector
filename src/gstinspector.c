@@ -98,6 +98,8 @@ static void _gst_inspector_init()
         plugin_inspectors = g_slice_new0(InspectorList);
         gst_inspector_register_plugin_inspector(gst_inspector_inspect_plugin_details,
                                                 "plugindetails", "Plugin Details", -1);
+        gst_inspector_register_plugin_inspector(gst_inspector_inspect_plugin_features,
+                                                "pluginfeatures", "Plugin Features", -1);
     }
 
     is_inited = TRUE;

@@ -62,26 +62,23 @@ void test_set_property(GObject *object,
 
 int main(int argc, char *argv[])
 {
-    GstElementFactory *factory;
+    GstElement *element;
+    GValue result = G_VALUE_INIT;
     GstStructure *data;
-    GstStructure *inspector_data;
     GstStructure *param_data;
 
     gst_init(&argc, &argv);
     GST_PLUGIN_STATIC_REGISTER(testplugin);
 
-    gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
-                                             "params", "Element Properties", -1);
+    element = gst_element_factory_make(FACTORY_NAME, NULL);
 
-    factory = gst_element_factory_find(FACTORY_NAME);
-    data = gst_inspector_inspect_element(factory);
+    gst_inspector_inspect_element_properties(element, &result);
 
-    g_assert_cmpstr(FACTORY_NAME, ==, gst_structure_get_name(data));
+    g_assert_true(GST_VALUE_HOLDS_STRUCTURE(&result));
 
-    inspector_data = gst_dictionary_get_sub_dictionary(data, "Element Properties");
-    g_assert_nonnull(inspector_data);
+    data = g_value_get_boxed(&result);
 
-    param_data = gst_dictionary_get_sub_dictionary(inspector_data, "param");
+    param_data = gst_dictionary_get_sub_dictionary(data, "param");
     g_assert_nonnull(param_data);
 
     g_assert_true(gst_structure_has_field_typed(param_data, KEY_NAME, G_TYPE_STRING));
@@ -92,6 +89,9 @@ int main(int argc, char *argv[])
 
     g_assert_true(gst_structure_has_field_typed(param_data, KEY_VALUE, G_TYPE_STRING));
     g_assert_cmpstr(gst_dictionary_get_string(param_data, KEY_VALUE), ==, "true");
+
+    g_value_unset(&result);
+    gst_object_unref(element);
 
     return 0;
 }
