@@ -3,6 +3,21 @@
 #define FACTORY_NAME ("testelement")
 #define TEST_PROP_ID (1)
 
+typedef struct _GstTestElement
+{
+    GstElement element;
+} GstTestElement;
+
+typedef struct _GstTestElementClass
+{
+    GstElementClass klass;
+} GstTestElementClass;
+
+#define GST_TYPE_TEST_ELEMENT gst_test_element_get_type()
+GType gst_test_element_get_type(void);
+
+G_DEFINE_TYPE(GstTestElement, gst_test_element, GST_TYPE_ELEMENT)
+
 void test_get_property(GObject *object,
                        guint property_id,
                        GValue *value,
@@ -13,14 +28,25 @@ void test_set_property(GObject *object,
                        const GValue *value,
                        GParamSpec *pspec);
 
-#define TEST_ELEMENT_CLASS_INIT_CODE                                       \
-    G_OBJECT_CLASS(klass)->get_property = test_get_property;               \
-    G_OBJECT_CLASS(klass)->set_property = test_set_property;               \
-    g_object_class_install_property(G_OBJECT_CLASS(klass), TEST_PROP_ID,   \
-                                    g_param_spec_boolean("param", "param", \
-                                                         "param", TRUE, G_PARAM_WRITABLE));
+void gst_test_element_class_init(GstTestElementClass *klass)
+{
+    gst_element_class_set_static_metadata(GST_ELEMENT_CLASS(klass),
+                                          "testelement",
+                                          "TEST",
+                                          "Test Element",
+                                          "Noam Ottolenghi");
 
-#include "../../gsttestplugin.h"
+    G_OBJECT_CLASS(klass)->get_property = test_get_property;
+    G_OBJECT_CLASS(klass)->set_property = test_set_property;
+    g_object_class_install_property(G_OBJECT_CLASS(klass), TEST_PROP_ID,
+                                    g_param_spec_boolean("param", "param",
+                                                         "param", TRUE, G_PARAM_WRITABLE));
+}
+
+void gst_test_element_init(GstTestElement *self)
+{
+    (void)self;
+}
 
 void test_get_property(GObject *object,
                        guint property_id,
@@ -48,7 +74,8 @@ int main(int argc, char *argv[])
     GstStructure *param_data;
 
     gst_init(&argc, &argv);
-    GST_PLUGIN_STATIC_REGISTER(testplugin);
+
+    gst_element_register(NULL, FACTORY_NAME, GST_RANK_NONE, GST_TYPE_TEST_ELEMENT);
 
     element = gst_element_factory_make(FACTORY_NAME, NULL);
 
