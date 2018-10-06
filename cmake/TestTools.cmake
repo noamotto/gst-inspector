@@ -16,6 +16,7 @@ macro(add_test_case test_case)
     add_executable(${test_case} "${test_case}.c")
     target_link_libraries(${test_case} gst-inspector)
     target_compile_definitions(${test_case} PRIVATE GST_USE_UNSTABLE_API)
+    target_include_directories(${test_case} PRIVATE $<SHELL_PATH:${CMAKE_SOURCE_DIR}/tests>)
     
     create_test_command(${test_case})
 

@@ -29,8 +29,8 @@ static void check_parse(const GValue *value)
 
     g_assert_false(gst_structure_has_field_typed(caps_struct, KEY_FEATURES, G_TYPE_STRING));
 
-    g_assert_true(gst_structure_has_field_typed(caps_struct, KEY_VALUE, G_TYPE_ARRAY));
-    fields_array = g_value_get_boxed(gst_structure_get_value(caps_struct, KEY_VALUE));
+    g_assert_true(gst_structure_has_field_typed(caps_struct, "Caps", G_TYPE_ARRAY));
+    fields_array = g_value_get_boxed(gst_structure_get_value(caps_struct, "Caps"));
     for (guint i = 0; i < fields_array->len; i++)
     {
         const GValue *field_value = &g_array_index(fields_array, GValue, i);

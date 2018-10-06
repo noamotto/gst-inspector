@@ -52,7 +52,7 @@ GArray *parse_caps(const GstCaps *caps)
                               fields_array);
         g_array_set_clear_func(fields_array, (GDestroyNotify)g_value_unset);
 
-        gst_dictionary_set_array(caps_dict, KEY_VALUE, fields_array);
+        gst_dictionary_set_array(caps_dict, "Caps", fields_array);
 
         g_value_init(&caps_value, GST_TYPE_STRUCTURE);
         g_value_take_boxed(&caps_value, caps_dict);

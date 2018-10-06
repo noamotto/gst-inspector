@@ -1,5 +1,26 @@
 #include "gstinspectors.h"
-#include "../../gsttestplugin.h"
+
+GST_PLUGIN_STATIC_DECLARE(testplugin);
+
+static gboolean plugin_init(GstPlugin *plugin)
+{
+    (void)plugin;
+    return TRUE;
+}
+
+void gst_plugin_testplugin_register(void)
+{
+    gst_plugin_register_static(GST_VERSION_MAJOR,
+                               GST_VERSION_MINOR,
+                               "testplugin",
+                               "Test Plugin",
+                               plugin_init,
+                               "0.0.1",
+                               GST_LICENSE_UNKNOWN,
+                               "none",
+                               "test",
+                               "here");
+}
 
 #define PLUGIN_NAME ("testplugin")
 #define PLUGIN_DESC ("Test Plugin")

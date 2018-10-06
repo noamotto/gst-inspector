@@ -4,6 +4,7 @@
  */
 
 #include "gstinspectors.h"
+#include "gstinspector_priv.h"
 
 /**
  *  @brief Basic node struct for inspector nodes
@@ -528,6 +529,119 @@ GstStructure *gst_inspector_inspect_plugin(GstPlugin *plugin)
     return result;
 }
 
+static GstStructure *inspect_typefind(GstPluginFeature *feature)
+{
+    GstStructure *results, *factory_dict;
+    GstTypeFindFactory *factory;
+    GstPlugin *plugin;
+    GstCaps *caps;
+    guint rank;
+    const gchar *const *extensions;
+
+    factory = GST_TYPE_FIND_FACTORY(gst_plugin_feature_load(feature));
+    if (!factory)
+    {
+        return create_error_dict("typefind plugin couldn't be loaded");
+    }
+
+    results = gst_structure_new_empty(GST_OBJECT_NAME(factory));
+
+    rank = gst_plugin_feature_get_rank(feature);
+    factory_dict = gst_structure_new_empty("factory");
+    gst_dictionary_set_string(factory_dict, "Rank",
+                              g_strdup_printf("%s (%d)", get_rank_name((gint)rank), rank));
+
+    gst_dictionary_set_static_string(factory_dict, "Name", GST_OBJECT_NAME(factory));
+    gst_dictionary_set_sub_dictionary(results, "Factory Details", factory_dict);
+
+    caps = gst_type_find_factory_get_caps(factory);
+    if (caps)
+    {
+        gst_dictionary_set_array(results, "Caps", parse_caps(caps));
+    }
+    extensions = gst_type_find_factory_get_extensions(factory);
+    if (extensions && *extensions)
+    {
+        GArray *extensions_arr;
+        guint i = 0;
+
+        G_VALUE_ARRAY_NEW(extensions_arr);
+
+        while (extensions[i])
+        {
+            g_array_add_static_string(extensions_arr, extensions[i]);
+            i++;
+        }
+        gst_dictionary_set_array(results, "Extensions", extensions_arr);
+    }
+
+    plugin = gst_plugin_feature_get_plugin(GST_PLUGIN_FEATURE(factory));
+    if (plugin)
+    {
+        GValue val = G_VALUE_INIT;
+        gst_inspector_inspect_plugin_details(plugin, &val);
+        gst_dictionary_set_value(results, "Plugin Details", &val);
+        gst_object_unref(plugin);
+    }
+
+    gst_object_unref(factory);
+    return results;
+}
+
+static GstStructure *inspect_tracer(GstPluginFeature *feature)
+{
+    GstStructure *results;
+    GstTracerFactory *factory;
+    GstTracer *tracer;
+    GstPlugin *plugin;
+    GArray *tracer_ifaces;
+
+    factory = GST_TRACER_FACTORY(gst_plugin_feature_load(feature));
+    if (!factory)
+    {
+        return create_error_dict("tracer plugin couldn't be loaded");
+    }
+
+    tracer = (GstTracer *)g_object_new(gst_tracer_factory_get_tracer_type(factory), NULL);
+    if (!tracer)
+    {
+        gst_object_unref(factory);
+        return create_error_dict("couldn't construct tracer for some reason");
+    }
+
+    results = gst_structure_new_empty(GST_OBJECT_NAME(factory));
+
+    gst_dictionary_set_static_string(results, "Factory Name", GST_OBJECT_NAME(factory));
+
+    plugin = gst_plugin_feature_get_plugin(GST_PLUGIN_FEATURE(factory));
+    if (plugin)
+    {
+        GValue val = G_VALUE_INIT;
+        gst_inspector_inspect_plugin_details(plugin, &val);
+        gst_dictionary_set_value(results, "Plugin Details", &val);
+        gst_object_unref(plugin);
+    }
+
+    gst_dictionary_set_array(results, "Type Hierarchy",
+                             parse_type_hierarchy(G_OBJECT_TYPE(tracer)));
+
+    tracer_ifaces = parse_type_interfaces(G_OBJECT_TYPE(tracer));
+    if (tracer_ifaces)
+    {
+        gst_dictionary_set_array(results, "Implemented Interfaces",
+                                 tracer_ifaces);
+    }
+
+    // TODO: Inspect registered hooks
+    // Will require access to private headers
+
+    // TODO: Inspect tracer's record logs
+
+    gst_object_unref(tracer);
+    gst_object_unref(factory);
+    return results;
+}
+
 /**
  *  @brief A generic inspection function for different kinds of GstPluginFeatures.
  * 
@@ -549,15 +663,11 @@ GstStructure *gst_inspector_inspect_plugin_feature(GstPluginFeature *feature)
     }
     else if (GST_IS_TYPE_FIND_FACTORY(feature))
     {
-        GstStructure *dict = gst_structure_new_empty(GST_OBJECT_NAME(feature));
-        gst_dictionary_set_string(dict, "Type", "A typefind function");
-        return dict;
+        return inspect_typefind(feature);
     }
     else if (GST_IS_TRACER_FACTORY(feature))
     {
-        GstStructure *dict = gst_structure_new_empty(GST_OBJECT_NAME(feature));
-        gst_dictionary_set_string(dict, "Type", "A tracer module");
-        return dict;
+        return inspect_tracer(feature);
     }
 
     return create_error_dict(gst_info_strdup_printf(
