@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     g_assert_cmpstr(gst_dictionary_get_string(data, "Factory Name"), ==, TRACER_NAME);
 
     g_assert_true(gst_structure_has_field_typed(data, "Plugin Details", GST_TYPE_STRUCTURE));
-    check_plugin_detais(gst_plugin_feature_get_plugin(factory),
+    check_plugin_details(gst_plugin_feature_get_plugin(factory),
                         gst_dictionary_get_sub_dictionary(data, "Plugin Details"));
 
     hierarchy_arr = parse_type_hierarchy(gst_tracer_factory_get_tracer_type(

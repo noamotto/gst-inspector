@@ -108,7 +108,7 @@ static gchar *parse_release_date(const gchar *date)
     return result;
 }
 
-static void check_plugin_detais(GstPlugin *plugin, GstStructure *dict)
+static void check_plugin_details(GstPlugin *plugin, GstStructure *dict)
 {
     const gchar *filename = gst_plugin_get_filename(plugin);
     gchar *release_date = parse_release_date(gst_plugin_get_release_date_string(plugin));

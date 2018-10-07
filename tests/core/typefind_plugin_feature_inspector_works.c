@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     }
 
     g_assert_true(gst_structure_has_field_typed(data, "Plugin Details", GST_TYPE_STRUCTURE));
-    check_plugin_detais(gst_plugin_feature_get_plugin(feature),
+    check_plugin_details(gst_plugin_feature_get_plugin(feature),
                         gst_dictionary_get_sub_dictionary(data, "Plugin Details"));
 
     gst_object_unref(feature);

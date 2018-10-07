@@ -9,6 +9,10 @@ set(TEST_CASES
     #Element factory inspector tests
     element_factory_inspector_works
     element_factory_inspector_works_additional_metadata
+
+    #Element plugin inspector tests
+    element_plugin_inspector_works
+    static_element_plugin_inspector_does_nothing
     )
 
 foreach(TEST_CASE ${TEST_CASES})
