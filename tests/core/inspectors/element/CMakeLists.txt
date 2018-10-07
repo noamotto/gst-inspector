@@ -5,6 +5,10 @@ set(TEST_CASES
     # Element property inspector tests
     param_inspector_works
     param_inspector_nonreadable_param_works
+
+    #Element factory inspector tests
+    element_factory_inspector_works
+    element_factory_inspector_works_additional_metadata
     )
 
 foreach(TEST_CASE ${TEST_CASES})

@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 
     g_assert_true(gst_structure_has_field_typed(factory_data, "Rank", G_TYPE_STRING));
     rank = gst_plugin_feature_get_rank(feature);
-    rank_string = g_strdup_printf("%s (%d)", get_rank_name((gint)rank), rank);
+    rank_string = get_rank_name((gint)rank);
     g_assert_cmpstr(gst_dictionary_get_string(factory_data, "Rank"), ==, rank_string);
     g_free(rank_string);
 

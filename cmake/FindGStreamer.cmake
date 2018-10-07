@@ -11,7 +11,7 @@ find_package(GLib2 REQUIRED)
 message("Looking for GStreamer")
 
 if(MSVC)
-    set(GSTREAMER_ROOT_PATH $ENV{GSTREAMER_1_0_ROOT_X86})
+    set(GSTREAMER_ROOT_PATH ${GLIB2_ROOT})
     if(NOT <STREQUAL:${GSTREAMER_ROOT_PATH},"">)
         message(STATUS "Found root at " ${GSTREAMER_ROOT_PATH})
         

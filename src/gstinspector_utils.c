@@ -104,9 +104,9 @@ gchar *get_rank_name(gint rank)
         }
     }
 
-    return g_strdup_printf("%s %c %d", rank_names[best_match],
+    return g_strdup_printf("%s %c %d (%d)", rank_names[best_match],
                            (rank - ranks[best_match] > 0) ? '+' : '-',
-                           abs(ranks[best_match] - rank));
+                           abs(ranks[best_match] - rank), rank);
 }
 
 GArray *parse_type_hierarchy(GType type)

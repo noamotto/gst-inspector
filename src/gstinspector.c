@@ -548,8 +548,7 @@ static GstStructure *inspect_typefind(GstPluginFeature *feature)
 
     rank = gst_plugin_feature_get_rank(feature);
     factory_dict = gst_structure_new_empty("factory");
-    gst_dictionary_set_string(factory_dict, "Rank",
-                              g_strdup_printf("%s (%d)", get_rank_name((gint)rank), rank));
+    gst_dictionary_set_string(factory_dict, "Rank", get_rank_name((gint)rank));
 
     gst_dictionary_set_static_string(factory_dict, "Name", GST_OBJECT_NAME(factory));
     gst_dictionary_set_sub_dictionary(results, "Factory Details", factory_dict);

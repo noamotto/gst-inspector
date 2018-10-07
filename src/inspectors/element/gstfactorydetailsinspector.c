@@ -16,8 +16,7 @@ void gst_inspector_inspect_factory_details(GstElement *element, GValue *result)
 
     rank = gst_plugin_feature_get_rank(GST_PLUGIN_FEATURE(factory));
 
-    gst_dictionary_set_string(dictionary, "Rank",
-                              g_strdup_printf("%s (%d)\n", get_rank_name((gint)rank), rank));
+    gst_dictionary_set_string(dictionary, "Rank", get_rank_name((gint)rank));
 
     keys = gst_element_factory_get_metadata_keys(factory);
     if (keys != NULL)
