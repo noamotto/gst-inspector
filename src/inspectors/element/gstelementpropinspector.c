@@ -30,4 +30,5 @@ void gst_inspector_inspect_element_properties(GstElement *element, GValue *resul
     }
 
     g_value_take_boxed(result, dictionary);
+    g_free(pspecs);
 }

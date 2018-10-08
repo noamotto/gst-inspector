@@ -43,5 +43,7 @@ int main(int argc, char *argv[])
 
     g_free(type_string);
     g_value_unset(&value);    
+    g_param_spec_unref(object_spec);
+    gst_structure_free(dictionary);
     return 0;
 }

@@ -22,5 +22,7 @@ int main(int argc, char *argv[])
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_TYPE, G_TYPE_STRING));
     g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_TYPE), ==, "Array of GValues");
 
+    gst_structure_free(dictionary);
+    g_param_spec_unref(value_spec);
     return 0;
 }

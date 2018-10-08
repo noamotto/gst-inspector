@@ -37,5 +37,6 @@ int main(int argc, char *argv[])
     test_field_value = gst_dictionary_get_string(inspector_data, TEST_FIELD_NAME);
     g_assert_cmpstr(test_field_value, ==, TEST_FIELD_VALUE);
 
+    gst_structure_free(data);
     return 0;
 }

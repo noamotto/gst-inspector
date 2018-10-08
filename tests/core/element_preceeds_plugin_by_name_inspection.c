@@ -80,5 +80,6 @@ int main(int argc, char *argv[])
     inspector_data = gst_dictionary_get_sub_dictionary(data, ELEMENT_TEST_NAME);
     g_assert_nonnull(inspector_data);
 
+    gst_structure_free(data);
     return 0;
 }

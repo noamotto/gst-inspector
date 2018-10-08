@@ -11,7 +11,7 @@ static void fake_inspector(GstElement *element, GValue *result)
     (void)element;
 
     GstStructure *test = gst_structure_new_empty(TEST_NAME);
-    gst_dictionary_set_string(test, TEST_FIELD_NAME, TEST_FIELD_VALUE);
+    gst_dictionary_set_static_string(test, TEST_FIELD_NAME, TEST_FIELD_VALUE);
     g_value_init(result, GST_TYPE_STRUCTURE);
     g_value_take_boxed(result, test);
 }
@@ -40,5 +40,7 @@ int main(int argc, char *argv[])
     test_field_value = gst_dictionary_get_string(inspector_data, TEST_FIELD_NAME);
     g_assert_cmpstr(test_field_value, ==, TEST_FIELD_VALUE);
 
+    gst_structure_free(data);
+    gst_object_unref(factory);
     return 0;
 }

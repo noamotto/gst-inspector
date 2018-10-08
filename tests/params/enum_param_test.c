@@ -82,5 +82,7 @@ int main(int argc, char *argv[])
     check_options(gst_structure_get_value(dictionary, KEY_OPTIONS));
 
     g_free(type_string);
+    gst_structure_free(dictionary);
+    g_param_spec_unref(enum_spec);
     return 0;
 }

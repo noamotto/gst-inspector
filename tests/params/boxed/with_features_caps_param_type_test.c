@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
                                     "Test param", GST_TYPE_CAPS, G_PARAM_READWRITE);
 
     g_value_init(&value, GST_TYPE_CAPS);
-    gst_value_set_caps(&value, caps);
+    g_value_take_boxed(&value, caps);
 
     gst_type_reader_fill_type(boxed_spec, &value, dictionary);
 
@@ -79,5 +79,8 @@ int main(int argc, char *argv[])
     check_parse(gst_structure_get_value(dictionary, KEY_VALUE));
 
     g_free(type_string);
+    g_param_spec_unref(boxed_spec);
+    g_value_unset(&value);
+    gst_structure_free(dictionary);
     return 0;
 }

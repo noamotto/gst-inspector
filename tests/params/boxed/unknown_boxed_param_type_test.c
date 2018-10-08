@@ -27,5 +27,7 @@ int main(int argc, char *argv[])
     g_assert_false(gst_structure_has_field(dictionary, KEY_VALUE));
 
     g_free(type_string);
+    g_param_spec_unref(boxed_spec);
+    gst_structure_free(dictionary);
     return 0;
 }

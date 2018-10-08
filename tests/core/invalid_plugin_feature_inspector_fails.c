@@ -18,5 +18,7 @@ int main(int argc, char *argv[])
     g_assert_nonnull(test_field_value);
     g_assert_cmpstr(test_field_value, ==, error_message);
 
+    gst_structure_free(data);
+    g_free(error_message);
     return 0;
 }

@@ -37,5 +37,7 @@ int main(int argc, char *argv[])
 
     g_free(range_string);
     g_free(value_string);
+    gst_structure_free(dictionary);
+    g_param_spec_unref(frac_spec);
     return 0;
 }

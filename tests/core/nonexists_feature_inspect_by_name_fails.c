@@ -48,5 +48,7 @@ int main(int argc, char *argv[])
     actual_message = gst_dictionary_get_string(data, DESCRIPTION_KEY);
     g_assert_cmpstr(actual_message, ==, expected_message);
 
+    gst_structure_free(data);
+    g_free(expected_message);
     return 0;
 }

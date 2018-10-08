@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
                                     "Test param", GST_TYPE_STRUCTURE, G_PARAM_READWRITE);
 
     g_value_init(&value, GST_TYPE_STRUCTURE);
-    gst_value_set_structure(&value, structure);
+    g_value_take_boxed(&value, structure);
 
     gst_type_reader_fill_type(boxed_spec, &value, dictionary);
 
@@ -49,5 +49,8 @@ int main(int argc, char *argv[])
     }
 
     g_free(type_string);
+    g_param_spec_unref(boxed_spec);
+    g_value_unset(&value);
+    gst_structure_free(dictionary);
     return 0;
 }

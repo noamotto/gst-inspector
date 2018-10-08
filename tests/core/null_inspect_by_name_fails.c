@@ -15,5 +15,6 @@ int main(int argc, char *argv[])
     error_message = gst_dictionary_get_string(data, DESCRIPTION_KEY);
     g_assert_cmpstr(error_message, ==, ERROR_MESSAGE);
 
+    gst_structure_free(data);
     return 0;
 }
