@@ -11,7 +11,7 @@ static void fake_inspector(GstElement *element, GValue *result)
     (void)element;
 
     GstStructure *test = gst_structure_new_empty(TEST_NAME);
-    gst_dictionary_set_string(test, TEST_FIELD_NAME, TEST_FIELD_VALUE);
+    gst_dictionary_set_static_string(test, TEST_FIELD_NAME, TEST_FIELD_VALUE);
     g_value_init(result, GST_TYPE_STRUCTURE);
     g_value_take_boxed(result, test);
 }

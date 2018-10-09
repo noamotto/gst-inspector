@@ -235,6 +235,19 @@ static GstStructure *create_error_dict(gchar *error_string)
 }
 
 /**
+ *  @brief Creates an error dictionary with given static string, to return as error.
+ * 
+ *  @param error_string Error string to put in the dictionary
+ *  @returns Newly created error dictionary
+ */
+static GstStructure *create_static_error_dict(const gchar *error_string)
+{
+    GstStructure *err = gst_structure_new_empty("Error");
+    gst_dictionary_set_static_string(err, "Error", error_string);
+    return err;
+}
+
+/**
  *  @brief Registers a new element inspector to the library
  *
  *  @param inspector The inspector function to install
@@ -467,13 +480,13 @@ GstStructure *gst_inspector_inspect_element(GstElementFactory *factory)
 
     if (!factory)
     {
-        return create_error_dict("element plugin couldn't be loaded");
+        return create_static_error_dict("element plugin couldn't be loaded");
     }
 
     element = gst_element_factory_create(factory, NULL);
     if (!element)
     {
-        return create_error_dict("couldn't construct element for some reason");
+        return create_static_error_dict("couldn't construct element for some reason");
     }
 
     result = gst_structure_new_empty(GST_OBJECT_NAME(factory));
@@ -541,7 +554,7 @@ static GstStructure *inspect_typefind(GstPluginFeature *feature)
     factory = GST_TYPE_FIND_FACTORY(gst_plugin_feature_load(feature));
     if (!factory)
     {
-        return create_error_dict("typefind plugin couldn't be loaded");
+        return create_static_error_dict("typefind plugin couldn't be loaded");
     }
 
     results = gst_structure_new_empty(GST_OBJECT_NAME(factory));
@@ -598,14 +611,14 @@ static GstStructure *inspect_tracer(GstPluginFeature *feature)
     factory = GST_TRACER_FACTORY(gst_plugin_feature_load(feature));
     if (!factory)
     {
-        return create_error_dict("tracer plugin couldn't be loaded");
+        return create_static_error_dict("tracer plugin couldn't be loaded");
     }
 
     tracer = (GstTracer *)g_object_new(gst_tracer_factory_get_tracer_type(factory), NULL);
     if (!tracer)
     {
         gst_object_unref(factory);
-        return create_error_dict("couldn't construct tracer for some reason");
+        return create_static_error_dict("couldn't construct tracer for some reason");
     }
 
     results = gst_structure_new_empty(GST_OBJECT_NAME(factory));
@@ -691,7 +704,7 @@ GstStructure *gst_inspector_inspect_by_name(const gchar *object_name)
     CHECK_INIT;
 
     g_return_val_if_fail(object_name != NULL,
-                         create_error_dict("Object name cannot be NULL"));
+                         create_static_error_dict("Object name cannot be NULL"));
 
     feature = gst_registry_lookup_feature(gst_registry_get(), object_name);
     if (feature)

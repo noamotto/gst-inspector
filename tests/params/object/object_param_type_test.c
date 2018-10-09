@@ -8,7 +8,7 @@ static void fake_read_function(GObject *object, GstStructure *dictionary)
     GValue key_value = G_VALUE_INIT;
 
     g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, TEST_STRING);
+    g_value_set_static_string(&key_value, TEST_STRING);
     gst_structure_take_value(dictionary, KEY_VALUE, &key_value);
 }
 
