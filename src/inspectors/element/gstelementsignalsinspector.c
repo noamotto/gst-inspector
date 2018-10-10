@@ -77,21 +77,18 @@ void gst_inspector_inspect_element_signals(GstElement *element, GValue *result)
     if (found_signals)
     {
         GSList *iterator = found_signals;
-        GArray *signal_array = g_array_new(FALSE, FALSE, sizeof(GValue));
-        g_array_set_clear_func(signal_array, (GDestroyNotify)g_value_unset);
-        g_value_init(result, G_TYPE_ARRAY);
+        g_value_init(result, GST_TYPE_ARRAY);
 
         while (iterator)
         {
             GSignalQuery *query = (GSignalQuery *)iterator->data;
 
-            g_array_add_subdictionary(signal_array, parse_signal(query));
+            gst_array_append_subdictionary(result, parse_signal(query));
 
             iterator = iterator->next;
         }
 
         g_slist_foreach(found_signals, (GFunc)g_free, NULL);
         g_slist_free(found_signals);
-        g_value_take_boxed(result, signal_array);
     }
 }

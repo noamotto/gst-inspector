@@ -24,14 +24,14 @@ static void parse_uri_protocols(GstElement *element, GstStructure *uri_data)
 
     if (uri_protocols && *uri_protocols)
     {
-        GArray *protocols_list = g_array_new(FALSE, FALSE, sizeof(GValue));
-        g_array_set_clear_func(protocols_list, (GDestroyNotify)g_value_unset);
+        GValue protocols_list = G_VALUE_INIT;
+        g_value_init(&protocols_list, GST_TYPE_ARRAY);
 
         for (; *uri_protocols != NULL; uri_protocols++)
         {
-            g_array_add_static_string(protocols_list, *uri_protocols);
+            gst_array_append_static_string(&protocols_list, *uri_protocols);
         }
-        gst_dictionary_set_array(uri_data, "Supported URI protocols", protocols_list);
+        gst_dictionary_set_array(uri_data, "Supported URI protocols", &protocols_list);
     }
     else
     {

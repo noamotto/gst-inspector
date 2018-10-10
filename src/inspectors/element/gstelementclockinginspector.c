@@ -17,13 +17,11 @@ void gst_inspector_inspect_element_clocking(GstElement *element, GValue *result)
     }
     else
     {
-        GArray *clocking_data = g_array_new(FALSE, FALSE, sizeof(GValue));
-        g_array_set_clear_func(clocking_data, (GDestroyNotify)g_value_unset);
-        g_value_init(result, G_TYPE_ARRAY);
+        g_value_init(result, GST_TYPE_ARRAY);
 
         if (requires_clock)
         {
-            g_array_add_static_string(clocking_data, "element requires a clock\n");
+            gst_array_append_static_string(result, "element requires a clock");
         }
 
         if (provides_clock)
@@ -33,15 +31,15 @@ void gst_inspector_inspect_element_clocking(GstElement *element, GValue *result)
             clock = gst_element_get_clock(element);
             if (clock)
             {
-                g_array_add_string(clocking_data,
-                                   g_strdup_printf("element provides a clock: %s\n",
-                                                   GST_OBJECT_NAME(clock)));
+                gst_array_append_string(result,
+                                        g_strdup_printf("element provides a clock: %s",
+                                                        GST_OBJECT_NAME(clock)));
                 gst_object_unref(clock);
             }
             else
             {
-                g_array_add_static_string(clocking_data,
-                                          "element is supposed to provide a clock but returned NULL");
+                gst_array_append_static_string(result,
+                                               "element is supposed to provide a clock but returned NULL");
             }
         }
     }

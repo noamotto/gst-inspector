@@ -11,18 +11,14 @@ void gst_inspector_inspect_element_children(GstElement *element, GValue *result)
 
         if (children)
         {
-            GArray *children_array = g_array_new(FALSE, FALSE, sizeof(GValue));
-            g_array_set_clear_func(children_array, (GDestroyNotify)g_value_unset);
-            g_value_init(result, G_TYPE_ARRAY);
+            g_value_init(result, GST_TYPE_ARRAY);
 
             while (children)
             {
-                g_array_add_static_string(children_array,
-                                          GST_ELEMENT_NAME(GST_ELEMENT(children->data)));
+                gst_array_append_static_string(result,
+                                               GST_ELEMENT_NAME(GST_ELEMENT(children->data)));
                 children = g_list_next(children);
             }
-
-            g_value_take_boxed(result, children_array);
         }
     }
 }

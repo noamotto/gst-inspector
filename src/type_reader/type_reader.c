@@ -95,47 +95,48 @@ gboolean gst_type_reader_register(GType pspec_type,
 
 static void read_flags(GParamSpec *param, GstStructure *dictionary)
 {
-    GArray *flags_array = g_array_new(FALSE, FALSE, sizeof(GValue));
-    g_array_set_clear_func(flags_array, (GDestroyNotify)g_value_unset);
+    GValue flags_array = G_VALUE_INIT;
+    g_value_init(&flags_array, GST_TYPE_ARRAY);
 
     if (param->flags & G_PARAM_READABLE)
     {
-        g_array_add_static_string(flags_array, "readable");
+        gst_array_append_static_string(&flags_array, "readable");
     }
     if (param->flags & G_PARAM_WRITABLE)
     {
-        g_array_add_static_string(flags_array, "writable");
+        gst_array_append_static_string(&flags_array, "writable");
     }
     if (param->flags & G_PARAM_DEPRECATED)
     {
-        g_array_add_static_string(flags_array, "deprecated");
+        gst_array_append_static_string(&flags_array, "deprecated");
     }
     if (param->flags & GST_PARAM_CONTROLLABLE)
     {
-        g_array_add_static_string(flags_array, "controllable");
+        gst_array_append_static_string(&flags_array, "controllable");
     }
+
     if (param->flags & GST_PARAM_MUTABLE_PLAYING)
     {
-        g_array_add_static_string(flags_array,
-                                  "changeable in NULL, READY, PAUSED or PLAYING state");
+        gst_array_append_static_string(&flags_array,
+                                       "changeable in NULL, READY, PAUSED or PLAYING state");
     }
     else if (param->flags & GST_PARAM_MUTABLE_PAUSED)
     {
-        g_array_add_static_string(flags_array,
-                                  "changeable only in NULL, READY or PAUSED state");
+        gst_array_append_static_string(&flags_array,
+                                       "changeable only in NULL, READY or PAUSED state");
     }
     else if (param->flags & GST_PARAM_MUTABLE_READY)
     {
-        g_array_add_static_string(flags_array,
-                                  "changeable only in NULL or READY state");
+        gst_array_append_static_string(&flags_array,
+                                       "changeable only in NULL or READY state");
     }
     if (param->flags & ~KNOWN_PARAM_FLAGS)
     {
-        g_array_add_string(flags_array,
-                           g_strdup_printf("0x%0x", param->flags & ~KNOWN_PARAM_FLAGS));
+        gst_array_append_static_string(&flags_array,
+                                       g_strdup_printf("0x%0x", param->flags & ~KNOWN_PARAM_FLAGS));
     }
 
-    gst_dictionary_set_array(dictionary, KEY_FLAGS, flags_array);
+    gst_dictionary_set_array(dictionary, KEY_FLAGS, &flags_array);
 }
 
 /**

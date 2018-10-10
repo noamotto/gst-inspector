@@ -37,15 +37,13 @@ static const char *parsed_options[] = {"(0): Value 0          - value0",
 
 static void check_options(const GValue *value)
 {
-    GArray *caps_array = g_value_get_boxed(value);
-
-    for (gsize i = 0; i < caps_array->len; i++)
+    for (guint i = 0; i < gst_value_array_get_size(value); i++)
     {
         const GValue *option_value;
         const gchar *option;
         g_assert_nonnull(parsed_options[i]);
 
-        option_value = &g_array_index(caps_array, const GValue, i);
+        option_value = gst_value_array_get_value(value, i);
         option = g_value_get_string(option_value);
 
         g_assert_cmpstr(option, ==, parsed_options[i]);
@@ -70,16 +68,16 @@ int main(int argc, char *argv[])
     gst_type_reader_fill_type(enum_spec, value, dictionary);
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_NAME, G_TYPE_STRING));
-    g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_NAME), ==, "test: Test param");
+    g_assert_cmpstr(gst_dictionary_get_string(dictionary, KEY_NAME), ==, "test: Test param");
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_TYPE, G_TYPE_STRING));
-    g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_TYPE), ==, type_string);
+    g_assert_cmpstr(gst_dictionary_get_string(dictionary, KEY_TYPE), ==, type_string);
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_VALUE, G_TYPE_STRING));
-    g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_VALUE), ==, default_option);
+    g_assert_cmpstr(gst_dictionary_get_string(dictionary, KEY_VALUE), ==, default_option);
 
-    g_assert_true(gst_structure_has_field_typed(dictionary, KEY_OPTIONS, G_TYPE_ARRAY));
-    check_options(gst_structure_get_value(dictionary, KEY_OPTIONS));
+    g_assert_true(gst_structure_has_field_typed(dictionary, KEY_OPTIONS, GST_TYPE_ARRAY));
+    check_options(gst_dictionary_get_array(dictionary, KEY_OPTIONS));
 
     g_free(type_string);
     gst_structure_free(dictionary);

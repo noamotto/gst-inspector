@@ -2,13 +2,13 @@
 #include "gsttestplugin.h"
 #include "testutils.h"
 
-#define TRACER_NAME   ("testtracer")
-#define TYPE_KEY      ("Type")
-#define TYPE_VALUE    ("A tracer module")
+#define TRACER_NAME ("testtracer")
+#define TYPE_KEY ("Type")
+#define TYPE_VALUE ("A tracer module")
 
 int main(int argc, char *argv[])
 {
-    GArray *hierarchy_arr, *ifaces_arr;
+    GValue hierarchy_arr = G_VALUE_INIT;
     GstPluginFeature *factory;
     GstStructure *data;
 
@@ -25,27 +25,16 @@ int main(int argc, char *argv[])
 
     g_assert_true(gst_structure_has_field_typed(data, "Plugin Details", GST_TYPE_STRUCTURE));
     check_plugin_details(gst_plugin_feature_get_plugin(factory),
-                        gst_dictionary_get_sub_dictionary(data, "Plugin Details"));
+                         gst_dictionary_get_sub_dictionary(data, "Plugin Details"));
 
-    hierarchy_arr = parse_type_hierarchy(gst_tracer_factory_get_tracer_type(
-        GST_TRACER_FACTORY(factory)));
-    g_assert_true(gst_structure_has_field_typed(data, "Type Hierarchy", G_TYPE_ARRAY));
-    compare_arrays(hierarchy_arr, gst_dictionary_get_array(data, "Type Hierarchy"));
-    g_array_free(hierarchy_arr, TRUE);
+    parse_type_hierarchy(gst_tracer_factory_get_tracer_type(GST_TRACER_FACTORY(factory)),
+                         &hierarchy_arr);
+    g_assert_true(gst_structure_has_field_typed(data, "Type Hierarchy", GST_TYPE_ARRAY));
+    g_assert_true(gst_value_compare(&hierarchy_arr,
+                                    gst_dictionary_get_array(data, "Type Hierarchy")) == GST_VALUE_EQUAL);
+    g_value_unset(&hierarchy_arr);
 
-    ifaces_arr = parse_type_interfaces(gst_tracer_factory_get_tracer_type(
-        GST_TRACER_FACTORY(factory)));
-    
-    if (ifaces_arr)
-    {
-        g_assert_true(gst_structure_has_field_typed(data, "Implemented Interfaces", G_TYPE_ARRAY));
-        compare_arrays(ifaces_arr, gst_dictionary_get_array(data, "Implemented Interfaces"));
-        g_array_free(ifaces_arr, TRUE);
-    }
-    else
-    {
-        g_assert_false(gst_structure_has_field(data, "Implemented Interfaces"));
-    }
+    g_assert_false(gst_structure_has_field(data, "Implemented Interfaces"));
 
     gst_object_unref(factory);
     gst_structure_free(data);

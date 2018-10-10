@@ -20,26 +20,19 @@ static gchar *gst_enum_type_reader_find_default(
     return g_strdup_printf("%d, \"%s\"", enum_value, value_nick);
 }
 
-static GArray *gst_enum_type_reader_parse_options(
-    const GEnumValue *values)
+static void gst_enum_type_reader_parse_options(
+    const GEnumValue *values, GValue *result)
 {
-    GArray *options_array = g_array_new(FALSE, TRUE, sizeof(GValue));
-    g_array_set_clear_func(options_array, (GDestroyNotify)g_value_unset);
+    g_value_init(result, GST_TYPE_ARRAY);
 
     for (guint j = 0; NULL != values[j].value_name; j++)
     {
-        GValue option_val = G_VALUE_INIT;
-        gchar *option = g_strdup_printf("(%d): %-16s - %s",
-                                        values[j].value,
-                                        values[j].value_nick,
-                                        values[j].value_name);
-
-        g_value_init(&option_val, G_TYPE_STRING);
-        g_value_take_string(&option_val, option);
-        g_array_append_val(options_array, option_val);
+        gst_array_append_string(result,
+                                g_strdup_printf("(%d): %-16s - %s",
+                                                values[j].value,
+                                                values[j].value_nick,
+                                                values[j].value_name));
     }
-
-    return options_array;
 }
 
 void gst_enum_type_reader_fill_type(
@@ -48,6 +41,7 @@ void gst_enum_type_reader_fill_type(
     GstStructure *dictionary)
 {
     const GEnumValue *values;
+    GValue options = G_VALUE_INIT;
 
     g_return_if_fail(G_IS_PARAM_SPEC_ENUM(pspec));
     g_return_if_fail(G_VALUE_HOLDS_ENUM(value));
@@ -61,5 +55,6 @@ void gst_enum_type_reader_fill_type(
     gst_dictionary_set_string(dictionary, KEY_VALUE,
                               gst_enum_type_reader_find_default(values, value));
 
-    gst_dictionary_set_array(dictionary, KEY_OPTIONS, gst_enum_type_reader_parse_options(values));
+    gst_enum_type_reader_parse_options(values, &options);
+    gst_dictionary_set_array(dictionary, KEY_OPTIONS, &options);
 }

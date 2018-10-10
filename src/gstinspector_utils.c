@@ -4,39 +4,30 @@
 
 #define KEY_FEATURES ("Features")
 
-static gboolean
-print_field(
-    GQuark field_id,
-    const GValue *value,
-    GArray *array)
+gboolean parse_field(GQuark field_id, const GValue *value, GValue *array)
 {
-    GValue key_value = G_VALUE_INIT;
     gchar *str = gst_value_serialize(value);
     gchar *field = g_strdup_printf("%s: %s",
                                    g_quark_to_string(field_id),
                                    str);
 
-    g_value_init(&key_value, G_TYPE_STRING);
-    g_value_take_string(&key_value, field);
-    g_array_append_val(array, key_value);
+    gst_array_append_string(array, field);
 
     g_free(str);
     return TRUE;
 }
 
-GArray *parse_caps(const GstCaps *caps)
+void parse_caps(const GstCaps *caps, GValue *result)
 {
-    GArray *caps_array = g_array_new(FALSE, FALSE, sizeof(GValue));
-    GValue caps_value = G_VALUE_INIT;
-
-    g_array_set_clear_func(caps_array, (GDestroyNotify)g_value_unset);
+    g_value_init(result, GST_TYPE_ARRAY);
 
     for (guint i = 0; i < gst_caps_get_size(caps); i++)
     {
         GstStructure *caps_dict = gst_structure_new_empty("caps_dict");
-        GArray *fields_array = g_array_new(FALSE, TRUE, sizeof(GValue));
+        GValue fields_array = G_VALUE_INIT;
         GstStructure *structure = gst_caps_get_structure(caps, i);
         GstCapsFeatures *features = gst_caps_get_features(caps, i);
+        g_value_init(&fields_array, GST_TYPE_ARRAY);
 
         gst_dictionary_set_static_string(caps_dict, KEY_TYPE, gst_structure_get_name(structure));
 
@@ -48,18 +39,13 @@ GArray *parse_caps(const GstCaps *caps)
                                       gst_caps_features_to_string(features));
         }
         gst_structure_foreach(structure,
-                              (GstStructureForeachFunc)print_field,
-                              fields_array);
-        g_array_set_clear_func(fields_array, (GDestroyNotify)g_value_unset);
+                              (GstStructureForeachFunc)parse_field,
+                              &fields_array);
 
-        gst_dictionary_set_array(caps_dict, "Caps", fields_array);
+        gst_dictionary_set_array(caps_dict, "Caps", &fields_array);
 
-        g_value_init(&caps_value, GST_TYPE_STRUCTURE);
-        g_value_take_boxed(&caps_value, caps_dict);
-        g_array_append_val(caps_array, caps_value);
+        gst_array_append_subdictionary(result, caps_dict);
     }
-
-    return caps_array;
 }
 
 GstStructure *parse_object_property(GObject *object, GParamSpec *pspec)
@@ -109,49 +95,38 @@ gchar *get_rank_name(gint rank)
                            abs(ranks[best_match] - rank), rank);
 }
 
-GArray *parse_type_hierarchy(GType type)
+void parse_type_hierarchy(GType type, GValue *result)
 {
-    GArray *hierarchy = g_array_new(FALSE, FALSE, sizeof(GValue));
-    g_array_set_clear_func(hierarchy, (GDestroyNotify)g_value_unset);
+    g_value_init(result, GST_TYPE_ARRAY);
 
     while (type != 0)
     {
-        GValue hierarchy_node = G_VALUE_INIT;
-        g_value_init(&hierarchy_node, G_TYPE_STRING);
-
-        g_value_set_static_string(&hierarchy_node, g_type_name(type));
-        g_array_prepend_val(hierarchy, hierarchy_node);
+        gst_array_prepend_static_string(result, g_type_name(type));
 
         type = g_type_parent(type);
     }
-
-    return hierarchy;
 }
 
-GArray *parse_type_interfaces(GType type)
+void parse_type_interfaces(GType type, GValue *result)
 {
     guint n_ifaces;
-    GArray *result = NULL;
     GType *ifaces = g_type_interfaces(type, &n_ifaces);
 
     if (ifaces)
     {
         if (n_ifaces)
         {
-            result = g_array_new(FALSE, FALSE, sizeof(GValue));
-            g_array_set_clear_func(result, (GDestroyNotify)g_value_unset);
+            g_value_init(result, GST_TYPE_ARRAY);
 
             GType *iface = ifaces;
             while (*iface)
             {
-                g_array_add_static_string(result, g_type_name(*iface));
+                gst_array_append_static_string(result, g_type_name(*iface));
                 iface++;
             }
         }
         g_free(ifaces);
     }
-
-    return result;
 }
 
 gboolean gtype_needs_ptr_marker(GType type)
@@ -172,8 +147,8 @@ gboolean gtype_needs_ptr_marker(GType type)
 GstStructure *parse_signal(GSignalQuery *query)
 {
     GstStructure *signal_dict = gst_structure_new_empty("signal");
-    GArray *params_array = g_array_new(FALSE, FALSE, sizeof(GValue));
-    g_array_set_clear_func(params_array, (GDestroyNotify)g_value_unset);
+    GValue params_array = G_VALUE_INIT;
+    g_value_init(&params_array, GST_TYPE_ARRAY);
 
     gst_dictionary_set_string(signal_dict, "Signal name", g_strdup(query->signal_name));
 
@@ -181,19 +156,19 @@ GstStructure *parse_signal(GSignalQuery *query)
                               g_strdup_printf("%s%s", g_type_name(query->return_type),
                                               gtype_needs_ptr_marker(query->return_type) ? " *" : ""));
 
-    g_array_add_string(params_array, g_strdup_printf("%s* object", g_type_name(query->itype)));
+    gst_array_append_string(&params_array, g_strdup_printf("%s* object", g_type_name(query->itype)));
 
     for (guint i = 0; i < query->n_params; i++)
     {
-        g_array_add_string(params_array,
-                           g_strdup_printf("%s%s arg%d", g_type_name(query->param_types[i]),
-                                           gtype_needs_ptr_marker(query->param_types[i]) ? "*" : "",
-                                           i));
+        gst_array_append_string(&params_array,
+                                g_strdup_printf("%s%s arg%d", g_type_name(query->param_types[i]),
+                                                gtype_needs_ptr_marker(query->param_types[i]) ? "*" : "",
+                                                i));
     }
 
-    g_array_add_static_string(params_array, "gpointer user_data");
+    gst_array_append_static_string(&params_array, "gpointer user_data");
 
-    gst_dictionary_set_array(signal_dict, "Signal parameters", params_array);
+    gst_dictionary_set_array(signal_dict, "Signal parameters", &params_array);
 
     return signal_dict;
 }

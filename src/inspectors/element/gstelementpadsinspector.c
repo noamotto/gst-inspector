@@ -29,7 +29,9 @@ static GstStructure *parse_pad(GstPad *pad)
     caps = gst_pad_get_current_caps(pad);
     if (caps)
     {
-        gst_dictionary_set_array(pad_dict, "Capabilities", parse_caps(caps));
+        GValue caps_arr = G_VALUE_INIT;
+        parse_caps(caps, &caps_arr);
+        gst_dictionary_set_array(pad_dict, "Capabilities", &caps_arr);
 
         gst_caps_unref(caps);
     }
@@ -48,20 +50,14 @@ void gst_inspector_inspect_element_pads(GstElement *element, GValue *result)
     }
     else
     {
-        const GList *pads;
+        const GList *pads = element->pads;
 
-        GArray *pads_array = g_array_new(FALSE, FALSE, sizeof(GValue));
-        g_array_set_clear_func(pads_array, (GDestroyNotify)g_value_unset);
-        g_value_init(result, G_TYPE_ARRAY);
-
-        pads = element->pads;
+        g_value_init(result, GST_TYPE_ARRAY);
 
         while (pads)
         {
-            g_array_add_subdictionary(pads_array, parse_pad(GST_PAD(pads->data)));
+            gst_array_append_subdictionary(result, parse_pad(GST_PAD(pads->data)));
             pads = g_list_next(pads);
         }
-
-        g_value_take_boxed(result, pads_array);
     }
 }

@@ -2,62 +2,125 @@
  *  @file gstdictionary.cpp
  *  @brief Utilities For GstInspector's dictionaries
  */
+#include <string.h>
 #include "gstdictionary.h"
 
-/**
- *  @brief Adds a static string into an array
- *
- *  The static counterpart of g_array_add_string. It assumes the string is 
- *  static and does not copy it for effeciency.
- *
- *  @param array Array to add to
- *  @param string A string to add. The function assumes string is static, and does
- *  not take ownership
- *  @returns The array
- */
-GArray *g_array_add_static_string(GArray *array, const gchar *string)
+static inline void
+gst_array_prepend_value(GValue *array, GValue *prepend_value)
 {
-    GValue val = G_VALUE_INIT;
-    g_value_init(&val, G_TYPE_STRING);
-    g_value_set_static_string(&val, string);
-
-    return g_array_append_val(array, val);
+    // Kinda dirty hack, but currently there is no API function handling that
+    g_array_prepend_val((GArray *)array->data[0].v_pointer, prepend_value);
+    memset(prepend_value, 0, sizeof(GValue));
 }
 
 /**
- *  @brief Adds a static string into an array
+ *  @brief Appends a static string into an array
  *
- *  The function adds a GValue holding a given string to a GArray, allowing simpler API 
+ *  The function takes the given string as is, so static strings should not be 
+ *  passed to it
  *
- *  @param array Array to add to
- *  @param string A string to add. The function takes ownership on the string
- *  @returns The array
+ *  @param array Array to append to, as a GValue of type GST_TYPE_ARRAY
+ *  @param string A string to append. The function takes ownership on the string
  */
-GArray *g_array_add_string(GArray *array, gchar *string)
+void gst_array_append_string(GValue *array, gchar *string)
 {
     GValue val = G_VALUE_INIT;
     g_value_init(&val, G_TYPE_STRING);
     g_value_take_string(&val, string);
 
-    return g_array_append_val(array, val);
+    gst_value_array_append_and_take_value(array, &val);
 }
 
 /**
- *  @brief Adds a subdictionary into an array
+ *  @brief Appends a static string into an array
  *
- *  The function adds a GValue holding a given dictionary to a GArray, allowing simpler API 
+ *  Should be used for static strings
  *
- *  @param array Array to add to
- *  @param dictionary A sub-dictionary to add. The function takes ownership on the sub-dictionary
- *  @returns The array
+ *  @param array Array to append to, as a GValue of type GST_TYPE_ARRAY
+ *  @param string A string to append. The function assumes string is static, and does
+ *  not take ownership
  */
-GArray *g_array_add_subdictionary(GArray *array, GstStructure *dictionary)
+void gst_array_append_static_string(GValue *array, const gchar *string)
+{
+    GValue val = G_VALUE_INIT;
+    g_value_init(&val, G_TYPE_STRING);
+    g_value_set_static_string(&val, string);
+
+    gst_value_array_append_and_take_value(array, &val);
+}
+
+/**
+ *  @brief Appends a subdictionary into an array
+ *
+ *  @param array Array to append to, as a GValue of type GST_TYPE_ARRAY
+ *  @param dictionary A sub-dictionary to append. The function takes 
+ *  ownership on the sub-dictionary
+ */
+void gst_array_append_subdictionary(GValue *array, GstStructure *dictionary)
 {
     GValue val = G_VALUE_INIT;
     g_value_init(&val, GST_TYPE_STRUCTURE);
     g_value_take_boxed(&val, dictionary);
 
-    return g_array_append_val(array, val);
+    gst_value_array_append_and_take_value(array, &val);
+}
+
+/**
+ *  @brief Prepends a static string into an array
+ *
+ *  The function takes the given string as is, so static strings should not be 
+ *  passed to it
+ *
+ *  @param array Array to prepend to, as a GValue of type GST_TYPE_ARRAY
+ *  @param string A string to prepend. The function takes ownership on the string
+ */
+void gst_array_prepend_string(GValue *array, gchar *string)
+{
+    GValue val = G_VALUE_INIT;
+
+    g_return_if_fail(G_VALUE_HOLDS_STRING(gst_value_array_get_value(array, 0)));
+    g_value_init(&val, G_TYPE_STRING);
+    g_value_take_string(&val, string);
+
+    gst_array_prepend_value(array, &val);
+}
+
+/**
+ *  @brief Prepends a static string into an array
+ *
+ *  Should be used for static strings
+ *
+ *  @param array Array to prepend to, as a GValue of type GST_TYPE_ARRAY
+ *  @param string A string to prepend. The function assumes string is static, and does
+ *  not take ownership
+ */
+void gst_array_prepend_static_string(GValue *array, const gchar *string)
+{
+    GValue val = G_VALUE_INIT;
+
+    g_return_if_fail(G_VALUE_HOLDS_STRING(gst_value_array_get_value(array, 0)));
+    g_value_init(&val, G_TYPE_STRING);
+    g_value_set_static_string(&val, string);
+
+    gst_value_array_append_and_take_value(array, &val);
+}
+
+/**
+ *  @brief Prepends a subdictionary into an array
+ *
+ *  @param array Array to prepend to, as a GValue of type GST_TYPE_ARRAY
+ *  @param dictionary A sub-dictionary to prepend. The function takes 
+ *  ownership on the sub-dictionary
+ */
+void gst_array_prepend_subdictionary(GValue *array, GstStructure *dictionary)
+{
+    GValue val = G_VALUE_INIT;
+
+    g_return_if_fail(GST_VALUE_HOLDS_STRUCTURE(gst_value_array_get_value(array, 0)));
+    g_value_init(&val, GST_TYPE_STRUCTURE);
+    g_value_take_boxed(&val, dictionary);
+
+    gst_value_array_append_and_take_value(array, &val);
 }
 
 /**
@@ -116,19 +179,16 @@ void gst_dictionary_set_static_string(GstStructure *dictionary, const gchar *fie
  *
  *  @param dictionary A GstStructure dictionary
  *  @param field_name The field name to set
- *  @param array An array to set. The function takes ownership on the array
+ *  @param array An array to set, in the form of a GValue holding a GST_TYPE_ARRAY.
+ *  The function takes ownership on the array
  */
-void gst_dictionary_set_array(GstStructure *dictionary, const gchar *field_name, GArray *array)
+void gst_dictionary_set_array(GstStructure *dictionary, const gchar *field_name, GValue *array)
 {
-    GValue val = G_VALUE_INIT;
-
     g_return_if_fail(GST_IS_STRUCTURE(dictionary));
-    g_return_if_fail(NULL != array);
+    g_return_if_fail(GST_VALUE_HOLDS_ARRAY(array));
     g_return_if_fail(NULL != field_name);
 
-    g_value_init(&val, G_TYPE_ARRAY);
-    g_value_take_boxed(&val, array);
-    gst_structure_take_value(dictionary, field_name, &val);
+    gst_structure_take_value(dictionary, field_name, array);
 }
 
 /**
@@ -176,7 +236,7 @@ void gst_dictionary_set_value(GstStructure *dictionary, const gchar *field_name,
     g_return_if_fail(G_IS_VALUE(value));
 
     if (G_VALUE_HOLDS(value, G_TYPE_STRING) ||
-        G_VALUE_HOLDS(value, G_TYPE_ARRAY) ||
+        G_VALUE_HOLDS(value, GST_TYPE_ARRAY) ||
         G_VALUE_HOLDS(value, GST_TYPE_STRUCTURE))
     {
         gst_structure_take_value(dictionary, field_name, value);
@@ -194,10 +254,10 @@ void gst_dictionary_set_value(GstStructure *dictionary, const gchar *field_name,
  *  @param dictionary A GstStructure dictionary
  *  @param field_name The name of the field to retrieve
  *  
- *  @returns The array field in the dictionary, or NULL if the given field does
- *  not exist or isn't an array.
+ *  @returns The array field in the dictionary, as a GValue holding a GST_TYPE_ARRAY,
+ *  or NULL if the given field does not exist or isn't an array.
  */
-GArray *gst_dictionary_get_array(GstStructure *dictionary, const gchar *field_name)
+const GValue *gst_dictionary_get_array(const GstStructure *dictionary, const gchar *field_name)
 {
     const GValue *val;
 
@@ -205,11 +265,11 @@ GArray *gst_dictionary_get_array(GstStructure *dictionary, const gchar *field_na
     g_return_val_if_fail(NULL != field_name, NULL);
 
     val = gst_structure_get_value(dictionary, field_name);
-    if (!val || G_TYPE_ARRAY != val->g_type)
+    if (!GST_VALUE_HOLDS_ARRAY(val))
     {
         return NULL;
     }
-    return g_value_get_boxed(val);
+    return val;
 }
 
 /**
@@ -221,7 +281,7 @@ GArray *gst_dictionary_get_array(GstStructure *dictionary, const gchar *field_na
     @returns The sub-dictionary field in the dictionary, or NULL if the given 
     field does not exist or isn't a sub-dictionary (GstStructure).
 */
-GstStructure *gst_dictionary_get_sub_dictionary(GstStructure *dictionary, const gchar *field_name)
+GstStructure *gst_dictionary_get_sub_dictionary(const GstStructure *dictionary, const gchar *field_name)
 {
     const GValue *val;
 
@@ -229,7 +289,7 @@ GstStructure *gst_dictionary_get_sub_dictionary(GstStructure *dictionary, const 
     g_return_val_if_fail(NULL != field_name, NULL);
 
     val = gst_structure_get_value(dictionary, field_name);
-    if (!val || GST_TYPE_STRUCTURE != val->g_type)
+    if (!GST_VALUE_HOLDS_STRUCTURE(val))
     {
         return NULL;
     }

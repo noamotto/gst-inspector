@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     GstStructure *dictionary;
     gchar *type_string = NULL;
     GstStructure *structure = NULL;
-    GArray *fields_array = NULL;
+    const GValue *fields_array;
 
     gst_init(&argc, &argv);
 
@@ -24,14 +24,14 @@ int main(int argc, char *argv[])
     gst_type_reader_fill_type(boxed_spec, &value, dictionary);
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_NAME, G_TYPE_STRING));
-    g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_NAME), ==, "test: Test param");
+    g_assert_cmpstr(gst_dictionary_get_string(dictionary, KEY_NAME), ==, "test: Test param");
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_TYPE, G_TYPE_STRING));
-    g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_TYPE), ==, type_string);
+    g_assert_cmpstr(gst_dictionary_get_string(dictionary, KEY_TYPE), ==, type_string);
 
-    g_assert_true(gst_structure_has_field_typed(dictionary, KEY_VALUE, G_TYPE_ARRAY));
-    fields_array = g_value_get_boxed(gst_structure_get_value(dictionary, KEY_VALUE));
-    g_assert_cmpuint(fields_array->len, ==, 0);
+    g_assert_true(gst_structure_has_field_typed(dictionary, KEY_VALUE, GST_TYPE_ARRAY));
+    fields_array = gst_dictionary_get_array(dictionary, KEY_VALUE);
+    g_assert_cmpuint(gst_value_array_get_size(fields_array), ==, 0);
 
     g_free(type_string);
     g_param_spec_unref(boxed_spec);

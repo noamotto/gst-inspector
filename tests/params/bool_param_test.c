@@ -16,13 +16,13 @@ int main(int argc, char *argv[])
     gst_type_reader_fill_type(bool_spec, value, dictionary);
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_NAME, G_TYPE_STRING));
-    g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_NAME), ==, "test: Test param");
+    g_assert_cmpstr(gst_dictionary_get_string(dictionary, KEY_NAME), ==, "test: Test param");
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_TYPE, G_TYPE_STRING));
-    g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_TYPE), ==, "Boolean");
+    g_assert_cmpstr(gst_dictionary_get_string(dictionary, KEY_TYPE), ==, "Boolean");
 
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_VALUE, G_TYPE_STRING));
-    g_assert_cmpstr(gst_structure_get_string(dictionary, KEY_VALUE), ==, "true");
+    g_assert_cmpstr(gst_dictionary_get_string(dictionary, KEY_VALUE), ==, "true");
 
     gst_structure_free(dictionary);
     g_param_spec_unref(bool_spec);

@@ -570,22 +570,25 @@ static GstStructure *inspect_typefind(GstPluginFeature *feature)
     caps = gst_type_find_factory_get_caps(factory);
     if (caps)
     {
-        gst_dictionary_set_array(results, "Caps", parse_caps(caps));
+        GValue caps_arr = G_VALUE_INIT;
+        parse_caps(caps, &caps_arr);
+
+        gst_dictionary_set_array(results, "Caps", &caps_arr);
     }
     extensions = gst_type_find_factory_get_extensions(factory);
     if (extensions && *extensions)
     {
-        GArray *extensions_arr;
+        GValue extensions_arr = G_VALUE_INIT;
         guint i = 0;
 
-        G_VALUE_ARRAY_NEW(extensions_arr);
+        g_value_init(&extensions_arr, GST_TYPE_ARRAY);
 
         while (extensions[i])
         {
-            g_array_add_static_string(extensions_arr, extensions[i]);
+            gst_array_append_static_string(&extensions_arr, extensions[i]);
             i++;
         }
-        gst_dictionary_set_array(results, "Extensions", extensions_arr);
+        gst_dictionary_set_array(results, "Extensions", &extensions_arr);
     }
 
     plugin = gst_plugin_feature_get_plugin(GST_PLUGIN_FEATURE(factory));
@@ -607,7 +610,8 @@ static GstStructure *inspect_tracer(GstPluginFeature *feature)
     GstTracerFactory *factory;
     GstTracer *tracer;
     GstPlugin *plugin;
-    GArray *tracer_ifaces;
+    GValue tracer_ifaces = G_VALUE_INIT;
+    GValue tracer_hierarchy = G_VALUE_INIT;
 
     factory = GST_TRACER_FACTORY(gst_plugin_feature_load(feature));
     if (!factory)
@@ -635,14 +639,14 @@ static GstStructure *inspect_tracer(GstPluginFeature *feature)
         gst_object_unref(plugin);
     }
 
-    gst_dictionary_set_array(results, "Type Hierarchy",
-                             parse_type_hierarchy(G_OBJECT_TYPE(tracer)));
+    parse_type_hierarchy(G_OBJECT_TYPE(tracer), &tracer_hierarchy);
+    gst_dictionary_set_array(results, "Type Hierarchy", &tracer_hierarchy);
 
-    tracer_ifaces = parse_type_interfaces(G_OBJECT_TYPE(tracer));
-    if (tracer_ifaces)
+    parse_type_interfaces(G_OBJECT_TYPE(tracer), &tracer_ifaces);
+    if (G_IS_VALUE(&tracer_ifaces))
     {
         gst_dictionary_set_array(results, "Implemented Interfaces",
-                                 tracer_ifaces);
+                                 &tracer_ifaces);
     }
 
     // TODO: Inspect registered hooks

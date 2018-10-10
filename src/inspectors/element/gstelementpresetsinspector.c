@@ -11,16 +11,13 @@ void gst_inspector_inspect_element_presets(GstElement *element, GValue *result)
 
         if (presets && *presets)
         {
-            GArray *presets_array = g_array_new(FALSE, FALSE, sizeof(GValue));
-            g_array_set_clear_func(presets_array, (GDestroyNotify)g_value_unset);
-            g_value_init(result, G_TYPE_ARRAY);
+            g_value_init(result, GST_TYPE_ARRAY);
 
             for (gchar **preset = presets; *preset; preset++)
             {
-                g_array_add_string(presets_array, g_strdup(*preset));
+                gst_array_append_string(result, g_strdup(*preset));
             }
 
-            g_value_take_boxed(result, presets_array);
             g_strfreev(presets);
         }
     }

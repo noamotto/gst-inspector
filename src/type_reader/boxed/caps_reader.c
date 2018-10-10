@@ -22,6 +22,9 @@ void gst_caps_content_reader_parse(GValue *boxed,
     }
     else
     {
-        gst_dictionary_set_array(dictionary, KEY_VALUE, parse_caps(caps));
+        GValue caps_arr = G_VALUE_INIT;
+        parse_caps(caps, &caps_arr);
+
+        gst_dictionary_set_array(dictionary, KEY_VALUE, &caps_arr);
     }
 }

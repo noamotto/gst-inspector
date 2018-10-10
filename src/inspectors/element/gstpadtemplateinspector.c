@@ -91,9 +91,7 @@ void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result)
     }
     else
     {
-        GArray *templ_array = g_array_new(FALSE, FALSE, sizeof(GValue));
-        g_array_set_clear_func(templ_array, (GDestroyNotify)g_value_unset);
-        g_value_init(result, G_TYPE_ARRAY);
+        g_value_init(result, GST_TYPE_ARRAY);
         
         pads = gst_element_factory_get_static_pad_templates(factory);
         while (pads)
@@ -111,17 +109,17 @@ void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result)
             if (padtemplate->static_caps.string)
             {
                 GstCaps *caps = gst_static_caps_get(&padtemplate->static_caps);
+                GValue caps_arr = G_VALUE_INIT;
+                parse_caps(caps, &caps_arr);
 
-                gst_dictionary_set_array(template_dict, "Capabilities", parse_caps(caps));
+                gst_dictionary_set_array(template_dict, "Capabilities", &caps_arr);
 
                 gst_caps_unref(caps);
             }
 
             parse_pad_template(element, padtemplate, template_dict);
 
-            g_array_add_subdictionary(templ_array, template_dict);
+            gst_array_append_subdictionary(result, template_dict);
         }
-
-        g_value_take_boxed(result, templ_array);
     }
 }

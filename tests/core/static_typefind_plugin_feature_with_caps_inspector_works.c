@@ -1,8 +1,14 @@
 #include "gstinspector.h"
-#include "gsttestplugin.h"
 #include "testutils.h"
 
 #define TYPEFIND_NAME ("testtypefind")
+
+static GstStaticCaps caps_templ = GST_STATIC_CAPS("video/x-raw, width=320, height=240");
+
+static void fake_typefind(GstTypeFind *find)
+{
+    (void)find;
+}
 
 int main(int argc, char *argv[])
 {
@@ -10,9 +16,14 @@ int main(int argc, char *argv[])
     GstStructure *data, *factory_data;
     guint rank;
     gchar *rank_string;
+    GstCaps *caps;
+    GValue caps_arr = G_VALUE_INIT;
 
     gst_init(&argc, &argv);
-    GST_PLUGIN_STATIC_REGISTER(testplugin);
+
+    caps = gst_static_caps_get(&caps_templ);
+    gst_type_find_register(NULL, "testtypefind", GST_RANK_NONE,
+                           (GstTypeFindFunction)fake_typefind, NULL, caps, NULL, NULL);
 
     feature = gst_registry_find_feature(gst_registry_get(), TYPEFIND_NAME,
                                         GST_TYPE_TYPE_FIND_FACTORY);
@@ -32,15 +43,17 @@ int main(int argc, char *argv[])
     g_assert_cmpstr(gst_dictionary_get_string(factory_data, "Rank"), ==, rank_string);
     g_free(rank_string);
 
-    g_assert_false(gst_structure_has_field(factory_data, "Caps"));
+    parse_caps(caps, &caps_arr);
+    g_assert_true(gst_structure_has_field_typed(data, "Caps", GST_TYPE_ARRAY));
+    g_assert_true(gst_value_compare(&caps_arr, gst_dictionary_get_array(data, "Caps")) == GST_VALUE_EQUAL);
+    g_value_unset(&caps_arr);
 
     g_assert_false(gst_structure_has_field(factory_data, "Extensions"));
 
-    g_assert_true(gst_structure_has_field_typed(data, "Plugin Details", GST_TYPE_STRUCTURE));
-    check_plugin_details(gst_plugin_feature_get_plugin(feature),
-                         gst_dictionary_get_sub_dictionary(data, "Plugin Details"));
+    g_assert_false(gst_structure_has_field(data, "Plugin Details"));
 
     gst_object_unref(feature);
+    gst_caps_unref(caps);
     gst_structure_free(data);
 
     return 0;

@@ -1,8 +1,12 @@
 #include "gstinspector.h"
-#include "gsttestplugin.h"
 #include "testutils.h"
 
 #define TYPEFIND_NAME ("testtypefind")
+
+static void fake_typefind(GstTypeFind *find)
+{
+    (void)find;
+}
 
 int main(int argc, char *argv[])
 {
@@ -12,7 +16,9 @@ int main(int argc, char *argv[])
     gchar *rank_string;
 
     gst_init(&argc, &argv);
-    GST_PLUGIN_STATIC_REGISTER(testplugin);
+
+    gst_type_find_register(NULL, "testtypefind", GST_RANK_NONE,
+                           (GstTypeFindFunction)fake_typefind, NULL, NULL, NULL, NULL);
 
     feature = gst_registry_find_feature(gst_registry_get(), TYPEFIND_NAME,
                                         GST_TYPE_TYPE_FIND_FACTORY);
@@ -36,9 +42,7 @@ int main(int argc, char *argv[])
 
     g_assert_false(gst_structure_has_field(factory_data, "Extensions"));
 
-    g_assert_true(gst_structure_has_field_typed(data, "Plugin Details", GST_TYPE_STRUCTURE));
-    check_plugin_details(gst_plugin_feature_get_plugin(feature),
-                         gst_dictionary_get_sub_dictionary(data, "Plugin Details"));
+    g_assert_false(gst_structure_has_field(data, "Plugin Details"));
 
     gst_object_unref(feature);
     gst_structure_free(data);

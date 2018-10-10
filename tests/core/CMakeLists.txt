@@ -23,8 +23,13 @@ set(TEST_CASES
     # Plugin feature inspection tests
     invalid_plugin_feature_inspector_fails
     element_plugin_feature_inspector_works
-    typefind_plugin_feature_inspector_works
     tracer_plugin_feature_inspector_works
+    
+    # Typefind tests
+    typefind_plugin_feature_inspector_works
+    static_typefind_plugin_feature_inspector_works
+    static_typefind_plugin_feature_with_caps_inspector_works
+    static_typefind_plugin_feature_with_caps_extensions_inspector_works
 
     # By name inspection tests
     element_inspect_by_name_works
