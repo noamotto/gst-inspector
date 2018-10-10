@@ -9,7 +9,7 @@ static inline void
 gst_array_prepend_value(GValue *array, GValue *prepend_value)
 {
     // Kinda dirty hack, but currently there is no API function handling that
-    g_array_prepend_val((GArray *)array->data[0].v_pointer, prepend_value);
+    g_array_prepend_vals((GArray *)array->data[0].v_pointer, prepend_value, 1);
     memset(prepend_value, 0, sizeof(GValue));
 }
 
@@ -78,7 +78,8 @@ void gst_array_prepend_string(GValue *array, gchar *string)
 {
     GValue val = G_VALUE_INIT;
 
-    g_return_if_fail(G_VALUE_HOLDS_STRING(gst_value_array_get_value(array, 0)));
+    g_return_if_fail(gst_value_array_get_size(array) == 0 ||
+                     G_VALUE_HOLDS_STRING(gst_value_array_get_value(array, 0)));
     g_value_init(&val, G_TYPE_STRING);
     g_value_take_string(&val, string);
 
@@ -98,11 +99,12 @@ void gst_array_prepend_static_string(GValue *array, const gchar *string)
 {
     GValue val = G_VALUE_INIT;
 
-    g_return_if_fail(G_VALUE_HOLDS_STRING(gst_value_array_get_value(array, 0)));
+    g_return_if_fail(gst_value_array_get_size(array) == 0 ||
+                     G_VALUE_HOLDS_STRING(gst_value_array_get_value(array, 0)));
     g_value_init(&val, G_TYPE_STRING);
     g_value_set_static_string(&val, string);
 
-    gst_value_array_append_and_take_value(array, &val);
+    gst_array_prepend_value(array, &val);
 }
 
 /**
@@ -116,11 +118,12 @@ void gst_array_prepend_subdictionary(GValue *array, GstStructure *dictionary)
 {
     GValue val = G_VALUE_INIT;
 
-    g_return_if_fail(GST_VALUE_HOLDS_STRUCTURE(gst_value_array_get_value(array, 0)));
+    g_return_if_fail(gst_value_array_get_size(array) == 0 ||
+                     GST_VALUE_HOLDS_STRUCTURE(gst_value_array_get_value(array, 0)));
     g_value_init(&val, GST_TYPE_STRUCTURE);
     g_value_take_boxed(&val, dictionary);
 
-    gst_value_array_append_and_take_value(array, &val);
+    gst_array_prepend_value(array, &val);
 }
 
 /**

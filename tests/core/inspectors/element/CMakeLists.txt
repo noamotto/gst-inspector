@@ -13,6 +13,12 @@ set(TEST_CASES
     #Element plugin inspector tests
     element_plugin_inspector_works
     static_element_plugin_inspector_does_nothing
+
+    #Element hierarchy inspector test
+    element_hierarchy_inspector_works
+
+    #Element interfaces inspector tests
+    element_interface_inspector_no_ifaces_does_nothing
     )
 
 foreach(TEST_CASE ${TEST_CASES})
