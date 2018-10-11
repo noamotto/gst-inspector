@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     g_assert_true(gst_value_compare(&hierarchy_arr, &result) == GST_VALUE_EQUAL);
 
     g_value_unset(&hierarchy_arr);
+    g_value_unset(&result);
     gst_object_unref(element);
 
     return 0;
