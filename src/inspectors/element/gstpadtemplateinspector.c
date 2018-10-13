@@ -58,7 +58,7 @@ static void parse_pad_template_props(GstElement *element,
             pad_klass = g_type_class_ref(pad_type);
             gst_dictionary_set_static_string(template_dict, KEY_TYPE, g_type_name(pad_type));
 
-            pspecs = g_object_class_list_properties(G_OBJECT_GET_CLASS(G_OBJECT(pad_klass)),
+            pspecs = g_object_class_list_properties(G_OBJECT_CLASS(pad_klass),
                                                     &n_properties);
 
             for (guint i = 0; i < n_properties; i++)

@@ -26,6 +26,7 @@ set(TEST_CASES
     element_pad_templates_inspector_always
     element_pad_templates_inspector_sometimes
     element_pad_templates_inspector_request
+    element_pad_templates_inspector_props
     )
 
 foreach(TEST_CASE ${TEST_CASES})

@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
             gst_value_get_structure(gst_value_array_get_value(&result, i));
         check_pad_template(&templates[i], pad_data);
 
-        g_assert_false(gst_structure_has_field(pad_data, "Pad Data"));
+        g_assert_false(gst_structure_has_field(pad_data, "Pad Properties"));
     }
 
     g_value_unset(&result);
