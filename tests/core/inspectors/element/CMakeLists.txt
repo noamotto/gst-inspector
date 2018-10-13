@@ -27,6 +27,12 @@ set(TEST_CASES
     element_pad_templates_inspector_sometimes
     element_pad_templates_inspector_request
     element_pad_templates_inspector_props
+
+    #Element clocking inspector tests
+    element_clocking_inspector_no_clocking
+    element_clocking_inspector_requires
+    element_clocking_inspector_requires_and_provides
+    element_clocking_inspector_requires_and_provides_null
     )
 
 foreach(TEST_CASE ${TEST_CASES})
