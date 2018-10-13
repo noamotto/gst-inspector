@@ -38,9 +38,9 @@ static void parse_availability(GstStaticPadTemplate *padtemplate, GstStructure *
     }
 }
 
-static void parse_pad_template(GstElement *element,
-                               GstStaticPadTemplate *padtemplate,
-                               GstStructure *template_dict)
+static void parse_pad_template_props(GstElement *element,
+                                     GstStaticPadTemplate *padtemplate,
+                                     GstStructure *template_dict)
 {
     GstPadTemplate *tmpl = gst_element_class_get_pad_template(GST_ELEMENT_GET_CLASS(element),
                                                               padtemplate->name_template);
@@ -92,7 +92,7 @@ void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result)
     else
     {
         g_value_init(result, GST_TYPE_ARRAY);
-        
+
         pads = gst_element_factory_get_static_pad_templates(factory);
         while (pads)
         {
@@ -101,7 +101,8 @@ void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result)
 
             pads = g_list_next(pads);
 
-            gst_dictionary_set_static_string(template_dict, KEY_NAME, padtemplate->name_template);
+            gst_dictionary_set_static_string(template_dict, KEY_NAME,
+                                             padtemplate->name_template);
 
             parse_direction(padtemplate, template_dict);
             parse_availability(padtemplate, template_dict);
@@ -117,7 +118,7 @@ void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result)
                 gst_caps_unref(caps);
             }
 
-            parse_pad_template(element, padtemplate, template_dict);
+            parse_pad_template_props(element, padtemplate, template_dict);
 
             gst_array_append_subdictionary(result, template_dict);
         }

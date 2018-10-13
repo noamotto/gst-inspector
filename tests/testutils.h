@@ -187,3 +187,64 @@ static void parse_type_interfaces(GType type, GValue *result)
         g_free(ifaces);
     }
 }
+
+static void check_pad_template(GstStaticPadTemplate *template,
+                                  const GstStructure *data)
+{
+    GValue expected_caps = G_VALUE_INIT;
+
+    g_assert_true(gst_structure_has_field_typed(data, "Name", G_TYPE_STRING));
+    g_assert_cmpstr(gst_dictionary_get_string(data, "Name"), ==, template->name_template);
+
+    g_assert_true(gst_structure_has_field_typed(data, "Direction", G_TYPE_STRING));
+    switch (template->direction)
+    {
+    case GST_PAD_SRC:
+    {
+        g_assert_cmpstr(gst_dictionary_get_string(data, "Direction"), ==, "SRC");
+        break;
+    }
+    case GST_PAD_SINK:
+    {
+        g_assert_cmpstr(gst_dictionary_get_string(data, "Direction"), ==, "SINK");
+        break;
+    }
+    case GST_PAD_UNKNOWN:
+    default:
+    {
+        g_assert_cmpstr(gst_dictionary_get_string(data, "Direction"), ==, "UNKNOWN");
+        break;
+    }
+    }
+
+    g_assert_true(gst_structure_has_field_typed(data, "Availability", G_TYPE_STRING));
+    switch (template->presence)
+    {
+    case GST_PAD_ALWAYS:
+    {
+        g_assert_cmpstr(gst_dictionary_get_string(data, "Availability"), ==, "Always");
+        break;
+    }
+    case GST_PAD_SOMETIMES:
+    {
+        g_assert_cmpstr(gst_dictionary_get_string(data, "Availability"), ==, "Sometimes");
+        break;
+    }
+    case GST_PAD_REQUEST:
+    {
+        g_assert_cmpstr(gst_dictionary_get_string(data, "Availability"), ==, "On request");
+        break;
+    }
+    default:
+    {
+        g_assert_cmpstr(gst_dictionary_get_string(data, "Availability"), ==, "UNKNOWN");
+        break;
+    }
+    }
+
+    g_assert_true(gst_structure_has_field_typed(data, "Capabilities", GST_TYPE_ARRAY));
+    parse_caps(gst_static_pad_template_get_caps(template), &expected_caps);
+    g_assert_true(gst_value_compare(gst_dictionary_get_array(data, "Capabilities"),
+                                    &expected_caps) == GST_VALUE_EQUAL);
+    g_value_unset(&expected_caps);
+}

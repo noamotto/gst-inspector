@@ -19,6 +19,13 @@ set(TEST_CASES
 
     #Element interfaces inspector tests
     element_interface_inspector_no_ifaces_does_nothing
+    element_interface_inspector_works
+
+    #Element pad templates inspector tests
+    element_pad_templates_inspector_no_templs
+    element_pad_templates_inspector_always
+    element_pad_templates_inspector_sometimes
+    element_pad_templates_inspector_request
     )
 
 foreach(TEST_CASE ${TEST_CASES})
