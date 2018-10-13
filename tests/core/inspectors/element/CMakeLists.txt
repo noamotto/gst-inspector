@@ -48,6 +48,16 @@ set(TEST_CASES
     element_pads_inspector_pads_no_caps
     element_pads_inspector_pads_caps_no_template
     element_pads_inspector_pads_caps_template
+
+    #Element signals inspctor tests
+    element_signals_inspector_no_signals
+    element_signals_inspector_only_actions
+    element_signals_inspector_no_args_no_retval
+    
+    #Element actionss inspctor tests
+    element_actions_inspector_no_actions
+    element_actions_inspector_only_signals
+    element_actions_inspector_no_args_no_retval
     )
 
 foreach(TEST_CASE ${TEST_CASES})
