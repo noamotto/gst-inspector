@@ -34,7 +34,7 @@ set(TEST_CASES
     element_clocking_inspector_requires_and_provides
     element_clocking_inspector_requires_and_provides_null
 
-    #Element URI capabilities tests
+    #Element URI capabilities inspector tests
     element_uri_inspector_no_uri
     element_uri_inspector_src_no_protocols
     element_uri_inspector_src_with_protocols
@@ -42,6 +42,12 @@ set(TEST_CASES
     element_uri_inspector_sink_with_protocols
     element_uri_inspector_unknown_no_protocols
     element_uri_inspector_unknown_with_protocols
+
+    #Element pads inspector tests
+    element_pads_inspector_no_pads
+    element_pads_inspector_pads_no_caps
+    element_pads_inspector_pads_caps_no_template
+    element_pads_inspector_pads_caps_template
     )
 
 foreach(TEST_CASE ${TEST_CASES})
