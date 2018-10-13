@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     expected_pad = gst_value_get_structure(gst_value_array_get_value(&result, 0));
     g_assert_true(gst_structure_has_field_typed(expected_pad, "Type", G_TYPE_STRING));
     g_assert_cmpstr(gst_dictionary_get_string(expected_pad, "Type"), ==, "SRC");
-    g_assert_true(gst_structure_has_field(expected_pad, "Pad Template", G_TYPE_STRING));
+    g_assert_true(gst_structure_has_field_typed(expected_pad, "Pad Template", G_TYPE_STRING));
     g_assert_cmpstr(gst_dictionary_get_string(expected_pad, "Pad Template"),
                     ==, src_factory.name_template);
 
