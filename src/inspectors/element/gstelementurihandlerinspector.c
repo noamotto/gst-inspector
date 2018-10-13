@@ -3,11 +3,13 @@
 
 static void parse_uri_type(GstElement *element, GstStructure *uri_data)
 {
-    if (gst_uri_handler_get_uri_type(GST_URI_HANDLER(element)) == GST_URI_SRC)
+    GstURIType type = gst_uri_handler_get_uri_type(GST_URI_HANDLER(element));
+
+    if (type == GST_URI_SRC)
     {
         gst_dictionary_set_static_string(uri_data, "URI handler type", "source");
     }
-    else if (gst_uri_handler_get_uri_type(GST_URI_HANDLER(element)) == GST_URI_SINK)
+    else if (type == GST_URI_SINK)
     {
         gst_dictionary_set_static_string(uri_data, "URI handler type", "sink");
     }
@@ -52,6 +54,7 @@ void gst_inspector_inspect_element_uri_handler(GstElement *element, GValue *resu
 
         parse_uri_type(element, uri_data);
         parse_uri_protocols(element, uri_data);
+        g_value_take_boxed(result, uri_data);
     }
     else
     {

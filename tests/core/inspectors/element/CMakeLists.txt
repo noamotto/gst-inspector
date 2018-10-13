@@ -33,6 +33,15 @@ set(TEST_CASES
     element_clocking_inspector_requires
     element_clocking_inspector_requires_and_provides
     element_clocking_inspector_requires_and_provides_null
+
+    #Element URI capabilities tests
+    element_uri_inspector_no_uri
+    element_uri_inspector_src_no_protocols
+    element_uri_inspector_src_with_protocols
+    element_uri_inspector_sink_no_protocols
+    element_uri_inspector_sink_with_protocols
+    element_uri_inspector_unknown_no_protocols
+    element_uri_inspector_unknown_with_protocols
     )
 
 foreach(TEST_CASE ${TEST_CASES})
