@@ -52,12 +52,15 @@ set(TEST_CASES
     #Element signals inspctor tests
     element_signals_inspector_no_signals
     element_signals_inspector_only_actions
-    element_signals_inspector_no_args_no_retval
+    element_signals_inspector_no_args
+    element_signals_inspector_args
+    element_signals_inspector_sometimes_pad
     
-    #Element actionss inspctor tests
+    #Element actions inspctor tests
     element_actions_inspector_no_actions
     element_actions_inspector_only_signals
-    element_actions_inspector_no_args_no_retval
+    element_actions_inspector_no_args
+    element_actions_inspector_args
     )
 
 foreach(TEST_CASE ${TEST_CASES})
