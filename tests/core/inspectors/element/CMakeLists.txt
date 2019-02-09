@@ -61,6 +61,17 @@ set(TEST_CASES
     element_actions_inspector_only_signals
     element_actions_inspector_no_args
     element_actions_inspector_args
+
+    #Element children inspctor tests
+    element_children_inspector_no_bin
+    element_children_inspector_no_children
+    element_children_inspector_works
+
+    #Element preset inspctor tests
+    element_preset_inspector_not_preset
+    element_preset_inspector_null_preset
+    element_preset_inspector_empty_list
+    element_preset_inspector_full_list
     )
 
 foreach(TEST_CASE ${TEST_CASES})
