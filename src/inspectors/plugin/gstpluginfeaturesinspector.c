@@ -32,7 +32,6 @@ static void parse_typefind(GstPluginFeature *feature, InspectedPluginFeatures *f
             g_string_append_printf(typefind_str, "%s%s", i > 0 ? ", " : "", extensions[i]);
             i++;
         }
-        g_print("\n");
     }
     else
     {
@@ -112,6 +111,7 @@ void gst_inspector_inspect_plugin_features(GstPlugin *plugin, GValue *result)
     GList *features;
     InspectedPluginFeatures *inspected_features =
         (InspectedPluginFeatures *)g_new0(InspectedPluginFeatures, 1);
+    inspected_features->plugin = plugin;
 
     features = gst_registry_get_feature_list_by_plugin(gst_registry_get(),
                                                        gst_plugin_get_name(plugin));

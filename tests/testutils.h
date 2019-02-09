@@ -1,6 +1,19 @@
 #include <math.h>
 #include "gstinspectors.h"
 
+static GValue *string_to_array(gint length, gchar **array)
+{
+    GValue *result = g_malloc0(sizeof(GValue));
+    g_value_init(result, GST_TYPE_ARRAY);
+
+    for (int i = 0; i < length; i++)
+    {
+        gst_array_append_static_string(result, array[i]);
+    }
+
+    return result;
+}
+
 static gboolean parse_field(GQuark field_id, const GValue *value, GValue *array)
 {
     gchar *str = gst_value_serialize(value);

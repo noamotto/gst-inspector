@@ -12,6 +12,10 @@ set(TEST_CASES
     plugin_details_inspector_works_no_release_date
     plugin_details_inspector_works_release_date
     plugin_details_inspector_works_release_date_time
+
+    # Plugin features inspector tests
+    plugin_features_inspector_works_no_features
+    plugin_features_inspector_works_full_features
     )
 
 foreach(TEST_CASE ${TEST_CASES})
