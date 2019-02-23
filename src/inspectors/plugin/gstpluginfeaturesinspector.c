@@ -88,7 +88,8 @@ static void parse_feature(GstPluginFeature *feature, InspectedPluginFeatures *fe
 
         gst_array_append_string(&features->tracers_array,
                                 g_strdup_printf("%s (%s)", gst_object_get_name(GST_OBJECT(feature)),
-                                                g_type_name(G_OBJECT_TYPE(feature))));
+                                                g_type_name(gst_tracer_factory_get_tracer_type(
+                                                    GST_TRACER_FACTORY_CAST(feature)))));
     }
     else if (feature)
     {
