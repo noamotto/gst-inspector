@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
     element = gst_element_factory_make(FACTORY_NAME, NULL);
     gst_inspector_inspect_element_hierarchy(element, &result);
 
-    g_assert_true(GST_VALUE_HOLDS_ARRAY(&result));
-    g_value_init(&hierarchy_arr, GST_TYPE_ARRAY);
+    g_assert_true(GST_VALUE_HOLDS_LIST(&result));
+    g_value_init(&hierarchy_arr, GST_TYPE_LIST);
     gst_array_append_static_string(&hierarchy_arr, "GObject");
     gst_array_append_static_string(&hierarchy_arr, "GInitiallyUnowned");
     gst_array_append_static_string(&hierarchy_arr, "GstObject");

@@ -77,7 +77,7 @@ void gst_inspector_inspect_element_signals(GstElement *element, GValue *result)
     if (found_signals)
     {
         GSList *iterator = found_signals;
-        g_value_init(result, GST_TYPE_ARRAY);
+        g_value_init(result, GST_TYPE_LIST);
 
         while (iterator)
         {

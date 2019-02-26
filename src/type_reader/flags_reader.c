@@ -45,7 +45,7 @@ static void gst_flags_type_reader_parse_options(const GFlagsClass *flags_class,
                                                 GValue *result)
 {
     GFlagsValue *values = flags_class->values;
-    g_value_init(result, GST_TYPE_ARRAY);
+    g_value_init(result, GST_TYPE_LIST);
 
     for (guint i = 0; i < flags_class->n_values; i++)
     {

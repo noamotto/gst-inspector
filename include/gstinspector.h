@@ -59,6 +59,10 @@ GST_INSPECTOR_API GstStructure *gst_inspector_inspect_plugin(GstPlugin *plugin);
 GST_INSPECTOR_API GstStructure *gst_inspector_inspect_plugin_feature(GstPluginFeature *feature);
 GST_INSPECTOR_API GstStructure *gst_inspector_inspect_by_name(const gchar *object_name);
 
+// Utilities
+GST_INSPECTOR_API GValue *gst_inspector_get_installed_features();
+GST_INSPECTOR_API GValue *gst_inspector_get_installed_features();
+
 G_END_DECLS
 
 #endif //GST_INSPECTOR_H

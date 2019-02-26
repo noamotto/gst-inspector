@@ -27,7 +27,7 @@ static void parse_uri_protocols(GstElement *element, GstStructure *uri_data)
     if (uri_protocols && *uri_protocols)
     {
         GValue protocols_list = G_VALUE_INIT;
-        g_value_init(&protocols_list, GST_TYPE_ARRAY);
+        g_value_init(&protocols_list, GST_TYPE_LIST);
 
         for (; *uri_protocols != NULL; uri_protocols++)
         {

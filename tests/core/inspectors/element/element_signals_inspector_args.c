@@ -61,8 +61,8 @@ static void check_signal(const GstStructure *expected_signal,
                     ==, expected_rettype);
 
     g_assert_true(gst_structure_has_field_typed(expected_signal, "Signal parameters",
-                                                GST_TYPE_ARRAY));
-    g_value_init(&expected_args, GST_TYPE_ARRAY);
+                                                GST_TYPE_LIST));
+    g_value_init(&expected_args, GST_TYPE_LIST);
     gst_array_append_static_string(&expected_args, "GstTestElement* object");
     for (int i = 0; i < expected_n_params; i++)
     {
@@ -80,9 +80,9 @@ int main(int argc, char *argv[])
 {
     GstElement *element;
     GValue result = G_VALUE_INIT;
-    const gchar * args0[2] = {"gint arg0", "gpointer arg1"};
-    const gchar * args1[2] = {"gboolean arg0", "GArray* arg1"};
-    const gchar * args2[2] = {"gfloat arg0", "GstBuffer* arg1"};
+    const gchar *args0[2] = {"gint arg0", "gpointer arg1"};
+    const gchar *args1[2] = {"gboolean arg0", "GArray* arg1"};
+    const gchar *args2[2] = {"gfloat arg0", "GstBuffer* arg1"};
 
     gst_init(&argc, &argv);
     gst_element_register(NULL, FACTORY_NAME, GST_RANK_NONE, GST_TYPE_TEST_ELEMENT);
@@ -90,11 +90,14 @@ int main(int argc, char *argv[])
     element = gst_element_factory_make(FACTORY_NAME, NULL);
     gst_inspector_inspect_element_signals(element, &result);
 
-    g_assert_true(GST_VALUE_HOLDS_ARRAY(&result));
-    g_assert_cmpuint(gst_value_array_get_size(&result), ==, 3);
-    check_signal(gst_value_get_structure(gst_value_array_get_value(&result, 0)), "no-retval", g_type_name(G_TYPE_NONE), 2, args0);
-    check_signal(gst_value_get_structure(gst_value_array_get_value(&result, 1)), "no-ptr", "gint", 2, args1);
-    check_signal(gst_value_get_structure(gst_value_array_get_value(&result, 2)), "ptr", "GstElement *", 2, args2);
+    g_assert_true(GST_VALUE_HOLDS_LIST(&result));
+    g_assert_cmpuint(gst_array_get_size(&result), ==, 3);
+    check_signal(gst_value_get_structure(gst_array_get_value(&result, 0)),
+                 "no-retval", g_type_name(G_TYPE_NONE), 2, args0);
+    check_signal(gst_value_get_structure(gst_array_get_value(&result, 1)),
+                 "no-ptr", "gint", 2, args1);
+    check_signal(gst_value_get_structure(gst_array_get_value(&result, 2)),
+                 "ptr", "GstElement *", 2, args2);
 
     g_value_unset(&result);
     gst_object_unref(element);

@@ -59,8 +59,8 @@ static void check_signal(const GstStructure *expected_signal,
                     ==, expected_rettype);
 
     g_assert_true(gst_structure_has_field_typed(expected_signal, "Signal parameters",
-                                                GST_TYPE_ARRAY));
-    g_value_init(&expected_args, GST_TYPE_ARRAY);
+                                                GST_TYPE_LIST));
+    g_value_init(&expected_args, GST_TYPE_LIST);
     gst_array_append_static_string(&expected_args, "GstElement* object");
     for (int i = 0; i < expected_n_params; i++)
     {
@@ -89,13 +89,13 @@ int main(int argc, char *argv[])
     element = gst_element_factory_make(FACTORY_NAME, NULL);
     gst_inspector_inspect_element_signals(element, &result);
 
-    g_assert_true(GST_VALUE_HOLDS_ARRAY(&result));
-    g_assert_cmpuint(gst_value_array_get_size(&result), ==, 3);
-    check_signal(gst_value_get_structure(gst_value_array_get_value(&result, 0)),
+    g_assert_true(GST_VALUE_HOLDS_LIST(&result));
+    g_assert_cmpuint(gst_array_get_size(&result), ==, 3);
+    check_signal(gst_value_get_structure(gst_array_get_value(&result, 0)),
                  "pad-added", g_type_name(G_TYPE_NONE), 1, args0);
-    check_signal(gst_value_get_structure(gst_value_array_get_value(&result, 1)),
+    check_signal(gst_value_get_structure(gst_array_get_value(&result, 1)),
                  "pad-removed", g_type_name(G_TYPE_NONE), 1, args1);
-    check_signal(gst_value_get_structure(gst_value_array_get_value(&result, 2)),
+    check_signal(gst_value_get_structure(gst_array_get_value(&result, 2)),
                  "no-more-pads", g_type_name(G_TYPE_NONE), 0, NULL);
 
     g_value_unset(&result);

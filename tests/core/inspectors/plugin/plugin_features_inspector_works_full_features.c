@@ -159,22 +159,22 @@ int main(int argc, char *argv[])
     g_assert_true(gst_structure_has_field_typed(data, "Total features", G_TYPE_STRING));
     g_assert_cmpstr(gst_dictionary_get_string(data, "Total features"), ==, "5");
 
-    g_assert_true(gst_structure_has_field_typed(data, "Elements", GST_TYPE_ARRAY));
+    g_assert_true(gst_structure_has_field_typed(data, "Elements", GST_TYPE_LIST));
     elements = gst_dictionary_get_array(data, "Elements");
     expected_elements = string_to_array(1, element_list);
     g_assert_true(gst_value_compare(expected_elements, elements) == GST_VALUE_EQUAL);
 
-    g_assert_true(gst_structure_has_field_typed(data, "Typefinders", GST_TYPE_ARRAY));
+    g_assert_true(gst_structure_has_field_typed(data, "Typefinders", GST_TYPE_LIST));
     typefinds = gst_dictionary_get_array(data, "Typefinders");
     expected_typefinds = string_to_array(2, typefinds_list);
     g_assert_true(gst_value_compare(expected_typefinds, typefinds) == GST_VALUE_EQUAL);
 
-    g_assert_true(gst_structure_has_field_typed(data, "Tracers", GST_TYPE_ARRAY));
+    g_assert_true(gst_structure_has_field_typed(data, "Tracers", GST_TYPE_LIST));
     tracers = gst_dictionary_get_array(data, "Tracers");
     expected_tracers = string_to_array(1, tracers_list);
     g_assert_true(gst_value_compare(expected_tracers, tracers) == GST_VALUE_EQUAL);
 
-    g_assert_true(gst_structure_has_field_typed(data, "Device providers", GST_TYPE_ARRAY));
+    g_assert_true(gst_structure_has_field_typed(data, "Device providers", GST_TYPE_LIST));
     providers = gst_dictionary_get_array(data, "Device providers");
     expected_providers = string_to_array(1, providers_list);
     g_print("%s\n", g_strdup_value_contents(providers));

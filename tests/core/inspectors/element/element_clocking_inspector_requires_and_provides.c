@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     element = gst_element_factory_make(FACTORY_NAME, NULL);
     gst_inspector_inspect_element_clocking(element, &result);
 
-    g_value_init(&expected, GST_TYPE_ARRAY);
+    g_value_init(&expected, GST_TYPE_LIST);
     clock = gst_element_get_clock(element);
     gst_array_append_static_string(&expected, "element requires a clock");
     gst_array_append_string(&expected, g_strdup_printf("element provides a clock: %s",

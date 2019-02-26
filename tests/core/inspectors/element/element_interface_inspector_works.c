@@ -84,9 +84,9 @@ int main(int argc, char *argv[])
     element = gst_element_factory_make(FACTORY_NAME, NULL);
     gst_inspector_inspect_element_interfaces(element, &result);
 
-    g_assert_true(GST_VALUE_HOLDS_ARRAY(&result));
+    g_assert_true(GST_VALUE_HOLDS_LIST(&result));
 
-    g_value_init(&expected_ifaces, GST_TYPE_ARRAY);
+    g_value_init(&expected_ifaces, GST_TYPE_LIST);
     gst_array_append_static_string(&expected_ifaces, "GstIface1");
     gst_array_append_static_string(&expected_ifaces, "GstIface2");
     g_assert_true(gst_value_compare(&expected_ifaces, &result) == GST_VALUE_EQUAL);

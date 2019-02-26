@@ -40,7 +40,7 @@ static void parse_typefind(GstPluginFeature *feature, InspectedPluginFeatures *f
 
     if (G_UNLIKELY(!G_IS_VALUE(&features->typefinds_array)))
     {
-        g_value_init(&features->typefinds_array, GST_TYPE_ARRAY);
+        g_value_init(&features->typefinds_array, GST_TYPE_LIST);
     }
 
     gst_array_append_string(&features->typefinds_array, g_string_free(typefind_str, FALSE));
@@ -54,7 +54,7 @@ static void parse_feature(GstPluginFeature *feature, InspectedPluginFeatures *fe
 
         if (G_UNLIKELY(!G_IS_VALUE(&features->elements_array)))
         {
-            g_value_init(&features->elements_array, GST_TYPE_ARRAY);
+            g_value_init(&features->elements_array, GST_TYPE_LIST);
         }
         gst_array_append_string(&features->elements_array,
                                 g_strdup_printf("%s: %s", GST_OBJECT_NAME(factory),
@@ -71,7 +71,7 @@ static void parse_feature(GstPluginFeature *feature, InspectedPluginFeatures *fe
 
         if (G_UNLIKELY(!G_IS_VALUE(&features->devproviders_array)))
         {
-            g_value_init(&features->devproviders_array, GST_TYPE_ARRAY);
+            g_value_init(&features->devproviders_array, GST_TYPE_LIST);
         }
 
         gst_array_append_string(&features->devproviders_array,
@@ -83,7 +83,7 @@ static void parse_feature(GstPluginFeature *feature, InspectedPluginFeatures *fe
     {
         if (G_UNLIKELY(!G_IS_VALUE(&features->tracers_array)))
         {
-            g_value_init(&features->tracers_array, GST_TYPE_ARRAY);
+            g_value_init(&features->tracers_array, GST_TYPE_LIST);
         }
 
         gst_array_append_string(&features->tracers_array,
@@ -95,7 +95,7 @@ static void parse_feature(GstPluginFeature *feature, InspectedPluginFeatures *fe
     {
         if (G_UNLIKELY(!G_IS_VALUE(&features->others_array)))
         {
-            g_value_init(&features->others_array, GST_TYPE_ARRAY);
+            g_value_init(&features->others_array, GST_TYPE_LIST);
         }
 
         gst_array_append_string(&features->others_array,

@@ -11,7 +11,7 @@ void gst_inspector_inspect_element_presets(GstElement *element, GValue *result)
 
         if (presets && *presets)
         {
-            g_value_init(result, GST_TYPE_ARRAY);
+            g_value_init(result, GST_TYPE_LIST);
 
             for (gchar **preset = presets; *preset; preset++)
             {

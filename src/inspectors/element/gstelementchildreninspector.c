@@ -11,7 +11,7 @@ void gst_inspector_inspect_element_children(GstElement *element, GValue *result)
 
         if (children)
         {
-            g_value_init(result, GST_TYPE_ARRAY);
+            g_value_init(result, GST_TYPE_LIST);
 
             while (children)
             {

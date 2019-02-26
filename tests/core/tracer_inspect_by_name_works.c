@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
     parse_type_hierarchy(gst_tracer_factory_get_tracer_type(GST_TRACER_FACTORY(factory)),
                          &hierarchy_arr);
-    g_assert_true(gst_structure_has_field_typed(data, "Type Hierarchy", GST_TYPE_ARRAY));
+    g_assert_true(gst_structure_has_field_typed(data, "Type Hierarchy", GST_TYPE_LIST));
     g_assert_true(gst_value_compare(&hierarchy_arr,
                                     gst_dictionary_get_array(data, "Type Hierarchy")) == GST_VALUE_EQUAL);
     g_value_unset(&hierarchy_arr);

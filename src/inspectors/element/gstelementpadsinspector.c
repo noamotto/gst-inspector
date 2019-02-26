@@ -52,7 +52,7 @@ void gst_inspector_inspect_element_pads(GstElement *element, GValue *result)
     {
         const GList *pads = element->pads;
 
-        g_value_init(result, GST_TYPE_ARRAY);
+        g_value_init(result, GST_TYPE_LIST);
 
         while (pads)
         {

@@ -37,11 +37,11 @@ int main(int argc, char *argv[])
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_TYPE, G_TYPE_STRING));
     g_assert_cmpstr(gst_dictionary_get_string(dictionary, KEY_TYPE), ==, type_string);
 
-    g_assert_true(gst_structure_has_field_typed(dictionary, KEY_VALUE, GST_TYPE_ARRAY));
+    g_assert_true(gst_structure_has_field_typed(dictionary, KEY_VALUE, GST_TYPE_LIST));
     fields_array = gst_dictionary_get_array(dictionary, KEY_VALUE);
-    for (guint i = 0; i < gst_value_array_get_size(fields_array); i++)
+    for (guint i = 0; i < gst_array_get_size(fields_array); i++)
     {
-        const GValue *field_value = gst_value_array_get_value(fields_array, i);
+        const GValue *field_value = gst_array_get_value(fields_array, i);
 
         g_assert_true(g_type_is_a(field_value->g_type, G_TYPE_STRING));
 

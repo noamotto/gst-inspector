@@ -581,7 +581,7 @@ static GstStructure *inspect_typefind(GstPluginFeature *feature)
         GValue extensions_arr = G_VALUE_INIT;
         guint i = 0;
 
-        g_value_init(&extensions_arr, GST_TYPE_ARRAY);
+        g_value_init(&extensions_arr, GST_TYPE_LIST);
 
         while (extensions[i])
         {

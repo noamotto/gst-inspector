@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
     g_assert_cmpstr(gst_dictionary_get_string(uri_data, "URI handler type"),
                     ==, "unknown");
 
-    g_value_init(&expected_protocols, GST_TYPE_ARRAY);
+    g_value_init(&expected_protocols, GST_TYPE_LIST);
     gst_array_append_static_string(&expected_protocols, "a");
     gst_array_append_static_string(&expected_protocols, "b");
     gst_array_append_static_string(&expected_protocols, "c");

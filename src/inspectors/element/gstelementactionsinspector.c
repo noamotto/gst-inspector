@@ -50,7 +50,7 @@ void gst_inspector_inspect_element_actions(GstElement *element, GValue *result)
     if (found_actions)
     {
         GSList *iterator = found_actions;
-        g_value_init(result, GST_TYPE_ARRAY);
+        g_value_init(result, GST_TYPE_LIST);
 
         while (iterator)
         {

@@ -120,10 +120,10 @@ int main(int argc, char *argv[])
     element = gst_element_factory_make(FACTORY_NAME, NULL);
     gst_inspector_inspect_pad_templates(element, &result);
 
-    g_assert_true(GST_VALUE_HOLDS_ARRAY(&result));
-    g_assert_true(gst_value_array_get_size(&result) == 1);
+    g_assert_true(GST_VALUE_HOLDS_LIST(&result));
+    g_assert_true(gst_array_get_size(&result) == 1);
 
-    pad_data = gst_value_get_structure(gst_value_array_get_value(&result, 0));
+    pad_data = gst_value_get_structure(gst_array_get_value(&result, 0));
     check_pad_template(&template, pad_data);
 
     g_assert_true(gst_structure_has_field_typed(pad_data, "Pad Properties",

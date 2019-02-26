@@ -19,7 +19,7 @@ gboolean parse_field(GQuark field_id, const GValue *value, GValue *array)
 
 void parse_caps(const GstCaps *caps, GValue *result)
 {
-    g_value_init(result, GST_TYPE_ARRAY);
+    g_value_init(result, GST_TYPE_LIST);
 
     for (guint i = 0; i < gst_caps_get_size(caps); i++)
     {
@@ -27,7 +27,7 @@ void parse_caps(const GstCaps *caps, GValue *result)
         GValue fields_array = G_VALUE_INIT;
         GstStructure *structure = gst_caps_get_structure(caps, i);
         GstCapsFeatures *features = gst_caps_get_features(caps, i);
-        g_value_init(&fields_array, GST_TYPE_ARRAY);
+        g_value_init(&fields_array, GST_TYPE_LIST);
 
         gst_dictionary_set_static_string(caps_dict, KEY_TYPE, gst_structure_get_name(structure));
 
@@ -97,7 +97,7 @@ gchar *get_rank_name(gint rank)
 
 void parse_type_hierarchy(GType type, GValue *result)
 {
-    g_value_init(result, GST_TYPE_ARRAY);
+    g_value_init(result, GST_TYPE_LIST);
 
     while (type != 0)
     {
@@ -116,7 +116,7 @@ void parse_type_interfaces(GType type, GValue *result)
     {
         if (n_ifaces)
         {
-            g_value_init(result, GST_TYPE_ARRAY);
+            g_value_init(result, GST_TYPE_LIST);
 
             GType *iface = ifaces;
             while (*iface)
@@ -148,7 +148,7 @@ GstStructure *parse_signal(GSignalQuery *query)
 {
     GstStructure *signal_dict = gst_structure_new_empty("signal");
     GValue params_array = G_VALUE_INIT;
-    g_value_init(&params_array, GST_TYPE_ARRAY);
+    g_value_init(&params_array, GST_TYPE_LIST);
 
     gst_dictionary_set_string(signal_dict, "Signal name", g_strdup(query->signal_name));
 

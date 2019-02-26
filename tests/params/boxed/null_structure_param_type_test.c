@@ -29,9 +29,9 @@ int main(int argc, char *argv[])
     g_assert_true(gst_structure_has_field_typed(dictionary, KEY_TYPE, G_TYPE_STRING));
     g_assert_cmpstr(gst_dictionary_get_string(dictionary, KEY_TYPE), ==, type_string);
 
-    g_assert_true(gst_structure_has_field_typed(dictionary, KEY_VALUE, GST_TYPE_ARRAY));
+    g_assert_true(gst_structure_has_field_typed(dictionary, KEY_VALUE, GST_TYPE_LIST));
     fields_array = gst_dictionary_get_array(dictionary, KEY_VALUE);
-    g_assert_cmpuint(gst_value_array_get_size(fields_array), ==, 0);
+    g_assert_cmpuint(gst_array_get_size(fields_array), ==, 0);
 
     g_free(type_string);
     g_param_spec_unref(boxed_spec);

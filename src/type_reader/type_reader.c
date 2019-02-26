@@ -96,7 +96,7 @@ gboolean gst_type_reader_register(GType pspec_type,
 static void read_flags(GParamSpec *param, GstStructure *dictionary)
 {
     GValue flags_array = G_VALUE_INIT;
-    g_value_init(&flags_array, GST_TYPE_ARRAY);
+    g_value_init(&flags_array, GST_TYPE_LIST);
 
     if (param->flags & G_PARAM_READABLE)
     {

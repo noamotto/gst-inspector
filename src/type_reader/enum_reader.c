@@ -23,7 +23,7 @@ static gchar *gst_enum_type_reader_find_default(
 static void gst_enum_type_reader_parse_options(
     const GEnumValue *values, GValue *result)
 {
-    g_value_init(result, GST_TYPE_ARRAY);
+    g_value_init(result, GST_TYPE_LIST);
 
     for (guint j = 0; NULL != values[j].value_name; j++)
     {

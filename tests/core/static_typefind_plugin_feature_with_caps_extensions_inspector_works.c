@@ -45,15 +45,15 @@ int main(int argc, char *argv[])
     g_free(rank_string);
 
     parse_caps(caps, &caps_arr);
-    g_assert_true(gst_structure_has_field_typed(data, "Caps", GST_TYPE_ARRAY));
+    g_assert_true(gst_structure_has_field_typed(data, "Caps", GST_TYPE_LIST));
     g_assert_true(gst_value_compare(&caps_arr, gst_dictionary_get_array(data, "Caps")) == GST_VALUE_EQUAL);
     g_value_unset(&caps_arr);
 
-    g_value_init(&extensions_arr, GST_TYPE_ARRAY);
+    g_value_init(&extensions_arr, GST_TYPE_LIST);
     gst_array_append_static_string(&extensions_arr, "a");
     gst_array_append_static_string(&extensions_arr, "b");
     gst_array_append_static_string(&extensions_arr, "c");
-    g_assert_true(gst_structure_has_field_typed(data, "Extensions", GST_TYPE_ARRAY));
+    g_assert_true(gst_structure_has_field_typed(data, "Extensions", GST_TYPE_LIST));
     g_assert_true(gst_value_compare(&extensions_arr, gst_dictionary_get_array(data, "Extensions")) == GST_VALUE_EQUAL);
     g_value_unset(&extensions_arr);
 

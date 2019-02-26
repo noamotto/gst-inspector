@@ -9,7 +9,7 @@ void gst_structure_content_reader_parse(GValue *boxed,
     g_return_if_fail(GST_VALUE_HOLDS_STRUCTURE(boxed));
 
     structure = gst_value_get_structure(boxed);
-    g_value_init(&fields_array, GST_TYPE_ARRAY);
+    g_value_init(&fields_array, GST_TYPE_LIST);
 
     if (structure)
     {

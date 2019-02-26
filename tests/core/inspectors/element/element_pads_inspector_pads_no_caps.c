@@ -53,21 +53,21 @@ int main(int argc, char *argv[])
     element = gst_element_factory_make(FACTORY_NAME, NULL);
     gst_inspector_inspect_element_pads(element, &result);
 
-    g_assert_cmpint(gst_value_array_get_size(&result), ==, 3);
+    g_assert_cmpint(gst_array_get_size(&result), ==, 3);
 
-    expected_pad = gst_value_get_structure(gst_value_array_get_value(&result, 0));
+    expected_pad = gst_value_get_structure(gst_array_get_value(&result, 0));
     g_assert_true(gst_structure_has_field_typed(expected_pad, "Type", G_TYPE_STRING));
     g_assert_cmpstr(gst_dictionary_get_string(expected_pad, "Type"), ==, "SRC");
     g_assert_false(gst_structure_has_field(expected_pad, "Pad Template"));
     g_assert_false(gst_structure_has_field(expected_pad, "Capabilities"));
 
-    expected_pad = gst_value_get_structure(gst_value_array_get_value(&result, 1));
+    expected_pad = gst_value_get_structure(gst_array_get_value(&result, 1));
     g_assert_true(gst_structure_has_field_typed(expected_pad, "Type", G_TYPE_STRING));
     g_assert_cmpstr(gst_dictionary_get_string(expected_pad, "Type"), ==, "SINK");
     g_assert_false(gst_structure_has_field(expected_pad, "Pad Template"));
     g_assert_false(gst_structure_has_field(expected_pad, "Capabilities"));
 
-    expected_pad = gst_value_get_structure(gst_value_array_get_value(&result, 2));
+    expected_pad = gst_value_get_structure(gst_array_get_value(&result, 2));
     g_assert_true(gst_structure_has_field_typed(expected_pad, "Type", G_TYPE_STRING));
     g_assert_cmpstr(gst_dictionary_get_string(expected_pad, "Type"), ==, "UNKNOWN");
     g_assert_false(gst_structure_has_field(expected_pad, "Pad Template"));

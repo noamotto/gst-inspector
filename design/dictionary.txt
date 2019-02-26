@@ -11,7 +11,7 @@ and a const pointer to it should be returned. Again, it is the dictionary's resp
 the sub-directory.
 
 Array should be an array of entries of the same type. Array should be a GValue of type 
-GST_TYPE_ARRAY, and should hold GValue, and can hold any of the available data types, 
+GST_TYPE_LIST, and should hold GValue, and can hold any of the available data types, 
 meaning strings, arrays and sub-dictionaries. Types can be distinguished by the GType 
 of the first GValue in the array.
 

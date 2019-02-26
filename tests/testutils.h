@@ -4,7 +4,7 @@
 static GValue *string_to_array(gint length, gchar **array)
 {
     GValue *result = g_malloc0(sizeof(GValue));
-    g_value_init(result, GST_TYPE_ARRAY);
+    g_value_init(result, GST_TYPE_LIST);
 
     for (int i = 0; i < length; i++)
     {
@@ -29,7 +29,7 @@ static gboolean parse_field(GQuark field_id, const GValue *value, GValue *array)
 
 static void parse_caps(const GstCaps *caps, GValue *result)
 {
-    g_value_init(result, GST_TYPE_ARRAY);
+    g_value_init(result, GST_TYPE_LIST);
 
     for (guint i = 0; i < gst_caps_get_size(caps); i++)
     {
@@ -37,7 +37,7 @@ static void parse_caps(const GstCaps *caps, GValue *result)
         GValue fields_array = G_VALUE_INIT;
         GstStructure *structure = gst_caps_get_structure(caps, i);
         GstCapsFeatures *features = gst_caps_get_features(caps, i);
-        g_value_init(&fields_array, GST_TYPE_ARRAY);
+        g_value_init(&fields_array, GST_TYPE_LIST);
 
         gst_dictionary_set_static_string(caps_dict, KEY_TYPE, gst_structure_get_name(structure));
 
@@ -169,7 +169,7 @@ static gchar *get_rank_name(gint rank)
 
 static void parse_type_hierarchy(GType type, GValue *result)
 {
-    g_value_init(result, GST_TYPE_ARRAY);
+    g_value_init(result, GST_TYPE_LIST);
 
     while (type != 0)
     {
@@ -188,7 +188,7 @@ static void parse_type_interfaces(GType type, GValue *result)
     {
         if (n_ifaces)
         {
-            g_value_init(result, GST_TYPE_ARRAY);
+            g_value_init(result, GST_TYPE_LIST);
 
             GType *iface = ifaces;
             while (*iface)
@@ -255,7 +255,7 @@ static void check_pad_template(GstStaticPadTemplate *template,
     }
     }
 
-    g_assert_true(gst_structure_has_field_typed(data, "Capabilities", GST_TYPE_ARRAY));
+    g_assert_true(gst_structure_has_field_typed(data, "Capabilities", GST_TYPE_LIST));
     parse_caps(gst_static_pad_template_get_caps(template), &expected_caps);
     g_assert_true(gst_value_compare(gst_dictionary_get_array(data, "Capabilities"),
                                     &expected_caps) == GST_VALUE_EQUAL);

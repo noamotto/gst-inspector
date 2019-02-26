@@ -55,12 +55,12 @@ int main(int argc, char *argv[])
     element = gst_element_factory_make(FACTORY_NAME, NULL);
     gst_inspector_inspect_pad_templates(element, &result);
 
-    g_assert_true(GST_VALUE_HOLDS_ARRAY(&result));
+    g_assert_true(GST_VALUE_HOLDS_LIST(&result));
 
-    for (guint i = 0; i < gst_value_array_get_size(&result); i++)
+    for (guint i = 0; i < gst_array_get_size(&result); i++)
     {
         const GstStructure *pad_data =
-            gst_value_get_structure(gst_value_array_get_value(&result, i));
+            gst_value_get_structure(gst_array_get_value(&result, i));
         check_pad_template(&templates[i], pad_data);
 
         g_assert_false(gst_structure_has_field(pad_data, "Pad Properties"));

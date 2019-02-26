@@ -91,7 +91,7 @@ void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result)
     }
     else
     {
-        g_value_init(result, GST_TYPE_ARRAY);
+        g_value_init(result, GST_TYPE_LIST);
 
         pads = gst_element_factory_get_static_pad_templates(factory);
         while (pads)

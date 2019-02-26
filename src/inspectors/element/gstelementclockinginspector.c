@@ -17,7 +17,7 @@ void gst_inspector_inspect_element_clocking(GstElement *element, GValue *result)
     }
     else
     {
-        g_value_init(result, GST_TYPE_ARRAY);
+        g_value_init(result, GST_TYPE_LIST);
 
         if (requires_clock)
         {

@@ -74,9 +74,9 @@ int main(int argc, char *argv[])
                     ==, "sink");
 
     g_assert_true(gst_structure_has_field_typed(uri_data, "Supported URI protocols",
-                                                GST_TYPE_ARRAY));
+                                                GST_TYPE_LIST));
 
-    g_value_init(&expected_protocols, GST_TYPE_ARRAY);
+    g_value_init(&expected_protocols, GST_TYPE_LIST);
     gst_array_append_static_string(&expected_protocols, "a");
     gst_array_append_static_string(&expected_protocols, "b");
     gst_array_append_static_string(&expected_protocols, "c");

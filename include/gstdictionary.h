@@ -31,6 +31,10 @@ GST_INSPECTOR_API void gst_array_prepend_string(GValue *array,
 GST_INSPECTOR_API void gst_array_prepend_subdictionary(GValue *array,
                                                        GstStructure *dictionary);
 
+GST_INSPECTOR_API guint gst_array_get_size(GValue *array);
+
+GST_INSPECTOR_API const GValue *gst_array_get_value(GValue *array, guint index);
+
 // Getters
 GST_INSPECTOR_API void gst_dictionary_set_string(GstStructure *dictionary,
                                                  const gchar *field_name,
