@@ -87,7 +87,7 @@ static void parse_feature(GstPluginFeature *feature, InspectedPluginFeatures *fe
         }
 
         gst_array_append_string(&features->tracers_array,
-                                g_strdup_printf("%s (%s)", gst_object_get_name(GST_OBJECT(feature)),
+                                g_strdup_printf("%s (%s)", GST_OBJECT_NAME(feature),
                                                 g_type_name(gst_tracer_factory_get_tracer_type(
                                                     GST_TRACER_FACTORY_CAST(feature)))));
     }
@@ -99,7 +99,7 @@ static void parse_feature(GstPluginFeature *feature, InspectedPluginFeatures *fe
         }
 
         gst_array_append_string(&features->others_array,
-                                g_strdup_printf("%s (%s)", gst_object_get_name(GST_OBJECT(feature)),
+                                g_strdup_printf("%s (%s)", GST_OBJECT_NAME(feature),
                                                 g_type_name(G_OBJECT_TYPE(feature))));
     }
 
@@ -150,4 +150,5 @@ void gst_inspector_inspect_plugin_features(GstPlugin *plugin, GValue *result)
     }
 
     g_value_take_boxed(result, dictionary);
+    g_free(inspected_features);
 }

@@ -67,8 +67,6 @@ static void check_signal(const GstStructure *expected_signal,
         gst_array_append_static_string(&expected_args, expected_params[i]);
     }
     gst_array_append_static_string(&expected_args, "gpointer user_data");
-    g_print("%s\n", g_strdup_value_contents(gst_dictionary_get_array(expected_signal, "Signal parameters")));
-    g_print("%s\n", g_strdup_value_contents(&expected_args));
     g_assert_true(gst_value_compare(
                       gst_dictionary_get_array(expected_signal, "Signal parameters"),
                       &expected_args) == GST_VALUE_EQUAL);

@@ -21,10 +21,10 @@ GType gst_test_element_get_type(void);
 
 G_DEFINE_TYPE(GstTestElement, gst_test_element, GST_TYPE_ELEMENT)
 
-static void gst_test_element_finalize(GstTestElement *self) 
+static void gst_test_element_dispose(GstTestElement *self) 
 {
     gst_element_remove_pad(GST_ELEMENT(self), pad);
-    G_OBJECT_CLASS(gst_test_element_parent_class)->finalize(G_OBJECT(self));
+    G_OBJECT_CLASS(gst_test_element_parent_class)->dispose(G_OBJECT(self));
 }
 
 void gst_test_element_class_init(GstTestElementClass *klass)
@@ -35,7 +35,7 @@ void gst_test_element_class_init(GstTestElementClass *klass)
                                           "Test Element",
                                           "Noam Ottolenghi");
     
-    G_OBJECT_CLASS(klass)->finalize = (GObjectFinalizeFunc)gst_test_element_finalize;
+    G_OBJECT_CLASS(klass)->dispose = (GObjectFinalizeFunc)gst_test_element_dispose;
 }
 
 void gst_test_element_init(GstTestElement *self)

@@ -177,8 +177,6 @@ int main(int argc, char *argv[])
     g_assert_true(gst_structure_has_field_typed(data, "Device providers", GST_TYPE_LIST));
     providers = gst_dictionary_get_array(data, "Device providers");
     expected_providers = string_to_array(1, providers_list);
-    g_print("%s\n", g_strdup_value_contents(providers));
-    g_print("%s\n", g_strdup_value_contents(expected_providers));
     g_assert_true(gst_value_compare(expected_providers, providers) == GST_VALUE_EQUAL);
 
     g_value_unset(expected_providers);
