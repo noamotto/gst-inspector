@@ -67,6 +67,7 @@ static void parse_pad_template_props(GstElement *element,
                                                   parse_object_property(NULL, pspecs[i]));
             }
             g_type_class_unref(pad_klass);
+	    g_free(pspecs);
 
             gst_dictionary_set_sub_dictionary(template_dict, "Pad Properties", params_dict);
         }
@@ -77,12 +78,10 @@ void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result)
 {
     const GList *pads;
     GstElementFactory *factory;
-    GstStructure *dictionary;
 
     g_return_if_fail(GST_IS_ELEMENT(element));
     factory = gst_element_get_factory(element);
 
-    dictionary = gst_structure_new_empty("padtamplates");
 
     if (gst_element_factory_get_num_pad_templates(factory) == 0)
     {
