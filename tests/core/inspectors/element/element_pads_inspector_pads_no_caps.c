@@ -2,6 +2,7 @@
 #include "testutils.h"
 
 #define FACTORY_NAME ("testelement")
+static GstPad *src, *sink, *unknown;
 
 typedef struct _GstTestElement
 {
@@ -18,6 +19,14 @@ GType gst_test_element_get_type(void);
 
 G_DEFINE_TYPE(GstTestElement, gst_test_element, GST_TYPE_ELEMENT)
 
+static void gst_test_element_finalize(GstTestElement *self) 
+{
+    gst_element_remove_pad(GST_ELEMENT(self), src);
+    gst_element_remove_pad(GST_ELEMENT(self), sink);
+    gst_element_remove_pad(GST_ELEMENT(self), unknown);
+    G_OBJECT_CLASS(gst_test_element_parent_class)->finalize(G_OBJECT(self));
+}
+
 void gst_test_element_class_init(GstTestElementClass *klass)
 {
     gst_element_class_set_static_metadata(GST_ELEMENT_CLASS(klass),
@@ -29,16 +38,15 @@ void gst_test_element_class_init(GstTestElementClass *klass)
 
 void gst_test_element_init(GstTestElement *self)
 {
-    GstPad *unknown_pad;
-    gst_element_add_pad(GST_ELEMENT(self),
-                        gst_pad_new("src", GST_PAD_SRC));
+    src = gst_pad_new("src", GST_PAD_SRC);
+    gst_element_add_pad(GST_ELEMENT(self), src);
 
-    gst_element_add_pad(GST_ELEMENT(self),
-                        gst_pad_new("sink", GST_PAD_SINK));
+    sink = gst_pad_new("sink", GST_PAD_SINK);
+    gst_element_add_pad(GST_ELEMENT(self), sink);
 
-    unknown_pad = gst_pad_new("unknown", GST_PAD_SRC);
-    gst_element_add_pad(GST_ELEMENT(self), unknown_pad);
-    GST_PAD_DIRECTION(unknown_pad) = GST_PAD_UNKNOWN;
+    unknown = gst_pad_new("unknown", GST_PAD_SRC);
+    gst_element_add_pad(GST_ELEMENT(self), unknown);
+    GST_PAD_DIRECTION(unknown) = GST_PAD_UNKNOWN;
 }
 
 int main(int argc, char *argv[])
