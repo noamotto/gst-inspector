@@ -28,5 +28,7 @@ int main(int argc, char *argv[])
 
     gst_structure_free(dictionary);
     g_param_spec_unref(fake_spec);
+    gst_deinit();
+
     return 0;
 }

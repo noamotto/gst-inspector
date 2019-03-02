@@ -13,5 +13,7 @@ int main(int argc, char *argv[])
     gst_inspector_clear_plugin_inspectors();
     g_assert_false(gst_inspector_remove_plugin_inspector("test"));
 
+    gst_deinit();
+
     return 0;
 }

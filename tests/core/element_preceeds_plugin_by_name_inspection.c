@@ -81,5 +81,7 @@ int main(int argc, char *argv[])
     g_assert_nonnull(inspector_data);
 
     gst_structure_free(data);
+    gst_deinit();
+
     return 0;
 }

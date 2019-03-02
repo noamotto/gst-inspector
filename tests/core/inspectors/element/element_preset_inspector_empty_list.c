@@ -63,5 +63,7 @@ int main(int argc, char *argv[])
     g_assert_false(G_IS_VALUE(&result));
 
     gst_object_unref(element);
+    gst_deinit();
+
     return 0;
 }

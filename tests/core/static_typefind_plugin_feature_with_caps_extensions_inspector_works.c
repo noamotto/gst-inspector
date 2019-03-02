@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
     gst_object_unref(feature);
     gst_caps_unref(caps);
     gst_structure_free(data);
+    gst_deinit();
 
     return 0;
 }

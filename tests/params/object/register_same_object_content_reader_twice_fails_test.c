@@ -19,5 +19,7 @@ int main(int argc, char *argv[])
     g_assert_true(gst_object_content_reader_register(G_TYPE_FAKE_OBJECT, fake_read_function));
     g_assert_false(gst_object_content_reader_register(G_TYPE_FAKE_OBJECT, fake_read_function));
 
+    gst_deinit();
+
     return 0;
 }

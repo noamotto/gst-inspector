@@ -189,6 +189,7 @@ int main(int argc, char *argv[])
     g_free(expected_elements);
     g_value_unset(&result);
     gst_object_unref(plugin);
+    gst_deinit();
 
     return 0;
 }

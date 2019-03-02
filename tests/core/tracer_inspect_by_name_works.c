@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
 
     gst_object_unref(factory);
     gst_structure_free(data);
+    gst_deinit();
 
     return 0;
 }

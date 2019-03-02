@@ -42,5 +42,7 @@ int main(int argc, char *argv[])
 
     gst_structure_free(data);
     gst_object_unref(factory);
+    gst_deinit();
+
     return 0;
 }

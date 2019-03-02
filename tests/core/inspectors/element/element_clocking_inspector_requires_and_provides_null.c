@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     g_value_unset(&expected);
     g_value_unset(&result);
     gst_object_unref(element);
+    gst_deinit();
 
     return 0;
 }

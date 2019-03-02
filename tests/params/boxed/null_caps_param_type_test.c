@@ -35,5 +35,7 @@ int main(int argc, char *argv[])
     g_param_spec_unref(boxed_spec);
     g_value_unset(&value);
     gst_structure_free(dictionary);
+    gst_deinit();
+
     return 0;
 }

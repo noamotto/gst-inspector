@@ -38,5 +38,7 @@ int main(int argc, char *argv[])
     g_assert_cmpstr(test_field_value, ==, TEST_FIELD_VALUE);
 
     gst_structure_free(data);
+    gst_deinit();
+
     return 0;
 }

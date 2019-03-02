@@ -39,5 +39,7 @@ int main(int argc, char *argv[])
 
     g_free(expected_message);
     gst_structure_free(data);
+    gst_deinit();
+
     return 0;
 }

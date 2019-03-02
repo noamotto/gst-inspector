@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     }
 
     g_free(names);
+    gst_deinit();
 
     return 0;
 }

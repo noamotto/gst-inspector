@@ -16,5 +16,7 @@ int main(int argc, char *argv[])
     g_assert_cmpstr(error_message, ==, ERROR_MESSAGE);
 
     gst_structure_free(data);
+    gst_deinit();
+
     return 0;
 }

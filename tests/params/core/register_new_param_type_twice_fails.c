@@ -18,5 +18,7 @@ int main(int argc, char *argv[])
     g_assert_true(gst_type_reader_register(G_TYPE_PARAM_FAKE, fake_read_function));
     g_assert_false(gst_type_reader_register(G_TYPE_PARAM_FAKE, fake_read_function));
 
+    gst_deinit();
+
     return 0;
 }

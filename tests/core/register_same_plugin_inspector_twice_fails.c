@@ -14,5 +14,7 @@ int main(int argc, char *argv[])
     g_assert_true(gst_inspector_register_plugin_inspector(fake_inspector, "test", "test", 0));
     g_assert_false(gst_inspector_register_plugin_inspector(fake_inspector, "test", "test", 0));
 
+    gst_deinit();
+
     return 0;
 }

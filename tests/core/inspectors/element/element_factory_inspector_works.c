@@ -79,6 +79,7 @@ int main(int argc, char *argv[])
                                                    GST_ELEMENT_METADATA_AUTHOR));
     g_value_unset(&result);
     gst_object_unref(element);
+    gst_deinit();
 
     return 0;
 }
