@@ -3,7 +3,7 @@
 static gint tabs = 0;
 
 void print_usage(void);
-void print_field(const gchar *field);
+void print_field(const gchar *name, const GValue *field);
 void print_array(const GValue *array);
 void print_dictionary(const GstStructure *dictionary);
 
