@@ -31,7 +31,7 @@ typedef void (*GstElementInspectFunc)(GstElement *element, GValue *result);
  *  hold either a string, an array or a dictionary with the inspected data,
  *  or stay uninitialized if the inspection failed.
  */
-typedef void(*GstPluginInspectFunc)(GstPlugin *plugin, GValue *result);
+typedef void (*GstPluginInspectFunc)(GstPlugin *plugin, GValue *result);
 
 // Element inspection
 GST_INSPECTOR_API gboolean
@@ -60,8 +60,12 @@ GST_INSPECTOR_API GstStructure *gst_inspector_inspect_plugin_feature(GstPluginFe
 GST_INSPECTOR_API GstStructure *gst_inspector_inspect_by_name(const gchar *object_name);
 
 // Utilities
-GST_INSPECTOR_API GValue *gst_inspector_get_installed_features();
-GST_INSPECTOR_API GValue *gst_inspector_get_installed_features();
+GST_INSPECTOR_API void gst_inspector_get_installed_plugins(GstPluginFlags flags,
+                                                           const gchar *version,
+                                                           GValue *list);
+GST_INSPECTOR_API void gst_inspector_get_installed_features(GstPluginFlags flags,
+                                                            const gchar *version,
+                                                            GValue *list);
 
 G_END_DECLS
 

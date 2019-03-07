@@ -31,11 +31,11 @@ GST_INSPECTOR_API void gst_array_prepend_string(GValue *array,
 GST_INSPECTOR_API void gst_array_prepend_subdictionary(GValue *array,
                                                        GstStructure *dictionary);
 
-GST_INSPECTOR_API guint gst_array_get_size(GValue *array);
+GST_INSPECTOR_API guint gst_array_get_size(const GValue *array);
 
-GST_INSPECTOR_API const GValue *gst_array_get_value(GValue *array, guint index);
+GST_INSPECTOR_API const GValue *gst_array_get_value(const GValue *array, guint index);
 
-// Getters
+// Setters
 GST_INSPECTOR_API void gst_dictionary_set_string(GstStructure *dictionary,
                                                  const gchar *field_name,
                                                  gchar *string);
@@ -56,12 +56,19 @@ GST_INSPECTOR_API void gst_dictionary_set_value(GstStructure *dictionary,
                                                 const gchar *field_name,
                                                 GValue *value);
 
-// Setters
+// Getters
 #define gst_dictionary_get_string gst_structure_get_string
 GST_INSPECTOR_API const GValue *gst_dictionary_get_array(const GstStructure *dictionary,
                                                          const gchar *field_name);
 GST_INSPECTOR_API GstStructure *gst_dictionary_get_sub_dictionary(const GstStructure *dictionary,
                                                                   const gchar *field_name);
+
+GST_INSPECTOR_API gint gst_dictionary_get_size(const GstStructure *dictionary);
+
+GST_INSPECTOR_API const GValue *gst_dictionary_get_value(const GstStructure *dictionary,
+                                                         const gchar *field_name);
+GST_INSPECTOR_API const gchar *gst_dictionary_get_nth_name(const GstStructure *dictionary,
+                                                           guint index);
 
 G_END_DECLS
 

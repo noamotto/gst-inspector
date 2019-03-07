@@ -121,12 +121,12 @@ void gst_array_prepend_subdictionary(GValue *array, GstStructure *dictionary)
     g_value_unset(&val);
 }
 
-guint gst_array_get_size(GValue *array)
+guint gst_array_get_size(const GValue *array)
 {
     return gst_value_list_get_size(array);
 }
 
-const GValue *gst_array_get_value(GValue *array, guint index)
+const GValue *gst_array_get_value(const GValue *array, guint index)
 {
     return gst_value_list_get_value(array, index);
 }
@@ -302,4 +302,49 @@ GstStructure *gst_dictionary_get_sub_dictionary(const GstStructure *dictionary, 
         return NULL;
     }
     return g_value_get_boxed(val);
+}
+
+/**
+ *  @brief Retrieves a dictionary's size.
+ * 
+ *  A helper for generic implementations. 
+ * 
+ *  @param dictionary A dictionary
+ * 
+ *  @returns The dictionary's size
+ */
+gint gst_dictionary_get_size(const GstStructure *dictionary)
+{
+    return gst_structure_n_fields(dictionary);
+}
+
+/**
+ *  @brief Retrieves a dictionary's field name by index.
+ * 
+ *  A helper for generic implementations. 
+ * 
+ *  @param dictionary A dictionary
+ *  @param index A field index
+ * 
+ *  @returns The requested field's name
+ */
+const gchar *gst_dictionary_get_nth_name(const GstStructure *dictionary, guint index)
+{
+    return gst_structure_nth_field_name(dictionary, index);
+}
+
+/**
+ *  @brief Retrieves a dictionary's field by name.
+ * 
+ *  A helper for generic implementations. 
+ * 
+ *  @param dictionary A dictionary
+ *  @param field_name A field name
+ * 
+ *  @returns The requested field
+ */
+const GValue *gst_dictionary_get_value(const GstStructure *dictionary,
+                                       const gchar *field_name)
+{
+    return gst_structure_get_value(dictionary, field_name);
 }

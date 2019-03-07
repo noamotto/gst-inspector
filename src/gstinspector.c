@@ -6,6 +6,8 @@
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
+#include <stdio.h>
+
 /**
  *  @brief Basic node struct for inspector nodes
  */
@@ -726,4 +728,130 @@ GstStructure *gst_inspector_inspect_by_name(const gchar *object_name)
 
     return create_error_dict(g_strdup_printf("Could not find object named %s",
                                              object_name));
+}
+
+/**
+ *  @brief Retrieves a list of installed plugins
+ * 
+ *  @param flags Plugin flags to look for. If not 0, only plugins matching the
+ *      given flags will be returned.
+ *  @param version Minimal plugin version to look for
+ *  @param list GValue initialized with GST_TYPE_LIST, to be filled with the 
+ *      list of found plugins
+ */
+void gst_inspector_get_installed_plugins(GstPluginFlags flags,
+                                         const gchar *version,
+                                         GValue *list)
+{
+    GList *plugin_list, *plugin_iter;
+    guint minver_maj, minver_min, minver_micro;
+    guint ver_maj, ver_min, ver_micro;
+
+    g_return_if_fail(GST_VALUE_HOLDS_LIST(list));
+
+    minver_maj = minver_min = minver_micro = 0;
+
+    if (version)
+    {
+        if (sscanf(version, "%u.%u.%u", &minver_maj, &minver_min, &minver_micro) < 2)
+        {
+            g_critical("Cannot parse passed version string. Ignoring version check");
+            minver_maj = minver_min = minver_micro = 0;
+        }
+    }
+
+    plugin_list = gst_registry_get_plugin_list(gst_registry_get());
+
+    for (plugin_iter = plugin_list; plugin_iter != NULL; plugin_iter = plugin_iter->next)
+    {
+        GstPlugin *plugin = plugin_iter->data;
+
+        if (sscanf(gst_plugin_get_version(plugin), "%u.%u.%u", &ver_maj,
+                   &ver_min, &ver_micro) < 2)
+        {
+            g_critical("Cannot parse plugin %s version. Ignoring version check",
+                       gst_plugin_get_name(plugin));
+            ver_maj = minver_maj;
+            ver_min = minver_min;
+            ver_micro = minver_micro;
+        }
+
+        if ((flags == 0 && !GST_OBJECT_FLAG_IS_SET(plugin, GST_PLUGIN_FLAG_BLACKLISTED)) ||
+            (flags != 0 && GST_OBJECT_FLAG_IS_SET(plugin, (guint)flags)))
+        {
+            if (ver_maj > minver_maj ||
+                (ver_maj == minver_maj && ver_min > minver_min) ||
+                (ver_maj == minver_maj && ver_min == minver_min && ver_micro >= minver_micro))
+            {
+                gst_array_append_static_string(list, gst_plugin_get_name(plugin));
+            }
+        }
+    }
+
+    gst_plugin_list_free(plugin_list);
+}
+
+/**
+ *  @brief Retrieves a list of installed features
+ * 
+ *  @param flags Plugin flags to look for. If not 0, only features in 
+ *      plugins matching the given flags will be returned.
+ *  @param version Minimal feature version to look for 
+ *  @param list GValue initialized with GST_TYPE_LIST, to be filled with the 
+ *      list of found features
+ */
+void gst_inspector_get_installed_features(GstPluginFlags flags,
+                                          const gchar *version,
+                                          GValue *list)
+{
+    GList *plugin_list, *plugin_iter;
+    guint minver_maj, minver_min, minver_micro;
+
+    g_return_if_fail(GST_VALUE_HOLDS_LIST(list));
+
+    minver_maj = minver_min = minver_micro = 0;
+
+    if (version)
+    {
+        if (sscanf(version, "%u.%u.%u", &minver_maj, &minver_min, &minver_micro) < 2)
+        {
+            g_critical("Cannot parse passed version string. Ignoring version check");
+            minver_maj = minver_min = minver_micro = 0;
+        }
+    }
+
+    plugin_list = gst_registry_get_plugin_list(gst_registry_get());
+
+    for (plugin_iter = plugin_list; plugin_iter != NULL;
+         plugin_iter = plugin_iter->next)
+    {
+        GstPlugin *plugin = plugin_iter->data;
+
+        if ((flags == 0 && !GST_OBJECT_FLAG_IS_SET(plugin, GST_PLUGIN_FLAG_BLACKLISTED)) ||
+            (flags != 0 && GST_OBJECT_FLAG_IS_SET(plugin, (guint)flags)))
+        {
+            GList *feature_list, *feature_iter;
+            feature_list = gst_registry_get_feature_list_by_plugin(
+                gst_registry_get(),
+                gst_plugin_get_name(plugin));
+
+            for (feature_iter = feature_list; feature_iter != NULL;
+                 feature_iter = feature_iter->next)
+            {
+                if (gst_plugin_feature_check_version(feature_iter->data,
+                                                     minver_maj,
+                                                     minver_min,
+                                                     minver_micro))
+                {
+                    gst_array_append_static_string(
+                        list,
+                        gst_plugin_feature_get_name(feature_iter->data));
+                }
+            }
+
+            gst_plugin_feature_list_free(feature_list);
+        }
+    }
+
+    gst_plugin_list_free(plugin_list);
 }
