@@ -3,15 +3,9 @@
 
 static gint tabs = 0;
 
-void print_usage(void);
-void print_field(const gchar *field);
+void print_field(const gchar *name, const GValue *field);
 void print_array(const GValue *array);
 void print_dictionary(const GstStructure *dictionary);
-
-void print_usage()
-{
-    g_print("Usage: simple_listing <plugin|feature>");
-}
 
 void print_field(const gchar *name, const GValue *field)
 {
@@ -95,7 +89,7 @@ int main(int argc, char *argv[])
 
     GValue plugin_list = G_VALUE_INIT;
     GValue feature_list = G_VALUE_INIT;
-    GstPluginFlags flags = 0;
+    GstPluginFlags flags = (GstPluginFlags)0;
 
 #ifndef GST_DISABLE_OPTION_PARSING
     GOptionEntry options[] = {
@@ -142,13 +136,17 @@ int main(int argc, char *argv[])
     gst_inspector_get_installed_plugins(flags, min_version, &plugin_list);
     g_print("Plugins:\n");
     g_print("============\n\n");
+    ++tabs;
     print_array(&plugin_list);
+    --tabs;
     g_print("\n\n");
 
     gst_inspector_get_installed_features(flags, min_version, &feature_list);
     g_print("Features:\n");
     g_print("============\n\n");
+    ++tabs;
     print_array(&feature_list);
+    --tabs;
     
     g_value_unset(&plugin_list);
     g_value_unset(&feature_list);
