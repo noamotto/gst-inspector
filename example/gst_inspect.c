@@ -32,7 +32,7 @@ static void pretty_print(const gchar *format, ...)
     va_end(args);
 }
 
-static void print_field(const gchar *name, const GValue *field)
+void print_field(const gchar *name, const GValue *field)
 {
     if (name != NULL)
     {
@@ -44,7 +44,7 @@ static void print_field(const gchar *name, const GValue *field)
     }
 }
 
-static void print_array(const GValue *array)
+void print_array(const GValue *array)
 {
     guint length = gst_array_get_size(array);
 
@@ -76,7 +76,7 @@ static void print_array(const GValue *array)
     }
 }
 
-static void print_dictionary(const GstStructure *dictionary)
+void print_dictionary(const GstStructure *dictionary)
 {
     gint length = gst_dictionary_get_size(dictionary);
 
