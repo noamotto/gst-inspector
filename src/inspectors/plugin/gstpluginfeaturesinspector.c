@@ -1,3 +1,7 @@
+/**
+ *  @file gstpluginfeaturesinspector.c
+ *  @brief Plugin features inspector implementation
+ */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
@@ -21,8 +25,7 @@ static void parse_typefind(GstPluginFeature *feature, InspectedPluginFeatures *f
     factory = GST_TYPE_FIND_FACTORY(feature);
     extensions = gst_type_find_factory_get_extensions(factory);
 
-    g_string_printf(typefind_str, "%s: %s: ", gst_plugin_get_name(features->plugin),
-                    gst_plugin_feature_get_name(feature));
+    g_string_printf(typefind_str, "%s: ", gst_plugin_feature_get_name(feature));
     if (extensions)
     {
         guint i = 0;
@@ -106,6 +109,29 @@ static void parse_feature(GstPluginFeature *feature, InspectedPluginFeatures *fe
     features->num_features++;
 }
 
+/**
+ *  @brief Inspects plugin features
+ * 
+ *  Inspects the features of a single plugin, as a list of the different types of features.
+ * 
+ *  @param plugin Plugin to inspect
+ *  @param result The inspected data
+ * 
+ *  @parblock
+ *  The inspected data is divided to these fields:
+ *  - <b>Total features</b> - Total number of features in the plugin, as string (for convenience)
+ *  - <b>Elements</b> - List of elements in the plugin, in the format of 
+ *      <tt>[element_name]: [element_description]</tt>
+ *  - <b>Typefinders</b> - List of typefinders in the plugin, in the format of 
+ *      <tt>[typefinder_name]: [extensions]</tt>
+ *  - <b>Device providers</b> - List of device providers in the plugin, in the format of 
+ *      <tt>[device_provider_name]: [device_provider_description]</tt>
+ *  - <b>Tracers</b> - List of tracers in the plugin, in the format of 
+ *      <tt>[tracer_name] ([tracer_type])</tt>
+ *  - <b>Other objects</b> - List of other feature objects in the plugin, in the format of 
+ *      <tt>[object_name] ([object_type])</tt>
+ *  @endparblock
+ */
 void gst_inspector_inspect_plugin_features(GstPlugin *plugin, GValue *result)
 {
     GstStructure *dictionary;

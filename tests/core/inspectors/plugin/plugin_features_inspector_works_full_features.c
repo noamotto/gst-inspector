@@ -133,8 +133,8 @@ void gst_plugin_testplugin_register(void)
 #define PLUGIN_NAME ("testplugin")
 
 static gchar *element_list[] = {"testelement: testelement"};
-static gchar *typefinds_list[] = {"testplugin: testtypefind: no extensions",
-                                  "testplugin: testtypefind2: a, b, c, d"};
+static gchar *typefinds_list[] = {"testtypefind: no extensions",
+                                  "testtypefind2: a, b, c, d"};
 static gchar *tracers_list[] = {"testtracer (GstTestTracer)"};
 static gchar *providers_list[] = {"testprovider: testprovider"};
 

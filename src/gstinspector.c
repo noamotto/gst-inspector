@@ -69,40 +69,67 @@ static void _gst_inspector_init()
     {
         element_inspectors = g_slice_new0(InspectorList);
         gst_inspector_register_element_inspector(gst_inspector_inspect_factory_details,
-                                                 "factorydetails", "Factory Details", -1);
+                                                 GST_INSPECTOR_FACTORY_DETAILS_NAME, 
+                                                 GST_INSPECTOR_FACTORY_DETAILS_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_plugin,
-                                                 "elementplugin", "Plugin Details", -1);
+                                                 GST_INSPECTOR_PLUGIN_NAME, 
+                                                 GST_INSPECTOR_PLUGIN_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_hierarchy,
-                                                 "hierarchy", "Type Hierarchy", -1);
+                                                 GST_INSPECTOR_HIERARCHY_NAME,
+                                                 GST_INSPECTOR_HIERARCHY_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_interfaces,
-                                                 "interfaces", "Implemented Interfaces", -1);
+                                                 GST_INSPECTOR_INTERFACES_NAME,
+                                                 GST_INSPECTOR_INTERFACES_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_pad_templates,
-                                                 "padtemplates", "Pad Templates", -1);
+                                                 GST_INSPECTOR_PAD_TEMPLATES_NAME,
+                                                 GST_INSPECTOR_PAD_TEMPLATES_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_clocking,
-                                                 "clocking", "Clocking Interaction", -1);
+                                                 GST_INSPECTOR_CLOCKING_NAME,
+                                                 GST_INSPECTOR_CLOCKING_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_uri_handler,
-                                                 "urihandler", "URI handling capabilities", -1);
+                                                 GST_INSPECTOR_URI_HANDLER_NAME,
+                                                 GST_INSPECTOR_URI_HANDLER_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_pads,
-                                                 "pads", "Pads", -1);
+                                                 GST_INSPECTOR_PADS_NAME,
+                                                 GST_INSPECTOR_PADS_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_properties,
-                                                 "params", "Element Properties", -1);
+                                                 GST_INSPECTOR_PROPERTIES_NAME,
+                                                 GST_INSPECTOR_PROPERTIES_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_signals,
-                                                 "signals", "Element Signals", -1);
+                                                 GST_INSPECTOR_SIGNALS_NAME,
+                                                 GST_INSPECTOR_SIGNALS_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_actions,
-                                                 "actions", "Element Actions", -1);
+                                                 GST_INSPECTOR_ACTIONS_NAME,
+                                                 GST_INSPECTOR_ACTIONS_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_children,
-                                                 "children", "Children", -1);
+                                                 GST_INSPECTOR_CHILDREN_NAME,
+                                                 GST_INSPECTOR_CHILDREN_LONGNAME, -1);
+
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_presets,
-                                                 "presets", "Presets", -1);
+                                                 GST_INSPECTOR_PRESETS_NAME,
+                                                 GST_INSPECTOR_PRESETS_LONGNAME, -1);
     }
 
     if (!plugin_inspectors)
     {
         plugin_inspectors = g_slice_new0(InspectorList);
         gst_inspector_register_plugin_inspector(gst_inspector_inspect_plugin_details,
-                                                "plugindetails", "Plugin Details", -1);
+                                                GST_INSPECTOR_PLUGIN_DETAILS_NAME,
+                                                GST_INSPECTOR_PLUGIN_DETAILS_LONGNAME, -1);
         gst_inspector_register_plugin_inspector(gst_inspector_inspect_plugin_features,
-                                                "pluginfeatures", "Plugin Features", -1);
+                                                GST_INSPECTOR_PLUGIN_FEATURES_NAME,
+                                                GST_INSPECTOR_PLUGIN_FEATURES_LONGNAME, -1);
     }
 
     is_inited = TRUE;

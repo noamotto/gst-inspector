@@ -1,5 +1,5 @@
 /**
- *  @file gstdictionary.cpp
+ *  @file gstdictionary.c
  *  @brief Utilities For GstInspector's dictionaries
  */
 #include <string.h>
