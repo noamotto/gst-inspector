@@ -15,8 +15,8 @@ void gst_inspector_inspect_element_children(GstElement *element, GValue *result)
 
             while (children)
             {
-                gst_array_append_static_string(result,
-                                               GST_ELEMENT_NAME(GST_ELEMENT(children->data)));
+                gst_array_append_string(result,
+                                        g_strdup(GST_ELEMENT_NAME(GST_ELEMENT(children->data))));
                 children = g_list_next(children);
             }
         }

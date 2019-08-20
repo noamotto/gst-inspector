@@ -23,7 +23,8 @@ static GstStructure *parse_pad(GstPad *pad)
 
     if (pad->padtemplate)
     {
-        gst_dictionary_set_static_string(pad_dict, "Pad Template", pad->padtemplate->name_template);
+        gst_dictionary_set_string(pad_dict, "Pad Template",
+                                  g_strdup(pad->padtemplate->name_template));
     }
 
     caps = gst_pad_get_current_caps(pad);
@@ -50,7 +51,7 @@ void gst_inspector_inspect_element_pads(GstElement *element, GValue *result)
     }
     else
     {
-        const GList *pads = element->pads;
+        GList *pads = element->pads;
 
         g_value_init(result, GST_TYPE_LIST);
 

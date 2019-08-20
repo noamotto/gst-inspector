@@ -19,7 +19,7 @@ static void pretty_print(const gchar *format, ...)
 
     if (print_name)
     {
-        g_print("%s", print_name);
+        g_print("%s: ", print_name);
     }
 
     for (gint i = 0; i < tabs; i++)
@@ -95,6 +95,7 @@ void print_dictionary(const GstStructure *dictionary)
             ++tabs;
             print_array(field);
             --tabs;
+            pretty_print("\n");
         }
         else
         {
@@ -102,8 +103,8 @@ void print_dictionary(const GstStructure *dictionary)
             ++tabs;
             print_dictionary(gst_value_get_structure(field));
             --tabs;
+            pretty_print("\n");
         }
-        pretty_print("\n");
     }
 }
 
@@ -202,7 +203,7 @@ static guint print_plugin_features(const GstStructure *plugin, const gchar *type
     return 0;
 }
 
-static void print_element_list()
+static void print_feature_list()
 {
     GValue plugin_list = G_VALUE_INIT;
     guint len;
@@ -292,6 +293,32 @@ static void print_element_list()
 
 static void print_all_elements()
 {
+    GstStructure *features = gst_inspector_get_installed_features_grouped((GstPluginFlags)0, NULL);
+    const GValue *elements = gst_dictionary_get_array(features, "elements");
+    guint len = gst_array_get_size(elements);
+
+    for (guint i = 0; i < len; ++i)
+    {
+        const gchar *element = g_value_get_string(gst_array_get_value(elements, i));
+        GstStructure *inspected_data = gst_inspector_inspect_by_name(element);
+
+        print_name = element;
+        print_dictionary(inspected_data);
+
+        gst_structure_free(inspected_data);
+    }
+
+    print_name = NULL;
+}
+
+static void inspect_plugin(GstPlugin *plugin)
+{
+    GstStructure *inspected_data = gst_inspector_inspect_plugin(plugin);
+
+    print_dictionary(inspected_data);
+
+    gst_structure_free(inspected_data);
+    gst_object_unref(plugin);
 }
 
 int main(int argc, char *argv[])
@@ -389,89 +416,77 @@ int main(int argc, char *argv[])
         }
         else
         {
-            print_element_list();
+            print_feature_list();
         }
     }
     else
     {
-        // /* else we try to get a factory */
-        // GstElementFactory *factory;
-        // GstPlugin *plugin;
-        // const char *arg = argv[argc - 1];
-        // int retval;
+        /* else we try to get a factory */
+        GstPlugin *plugin;
+        const char *arg = argv[argc - 1];
+        int retval;
 
-        // if (!plugin_name)
-        // {
-        //     factory = gst_element_factory_find(arg);
+        if (!plugin_name)
+        {
+            GstPluginFeature *feature = gst_registry_find_feature(gst_registry_get(), arg, GST_TYPE_PLUGIN_FEATURE);
 
-        //     /* if there's a factory, print out the info */
-        //     if (factory)
-        //     {
-        //         retval = print_element_info(factory, print_all);
-        //         gst_object_unref(factory);
-        //     }
-        //     else
-        //     {
-        //         retval = print_element_features(arg);
-        //     }
-        // }
-        // else
-        // {
-        //     retval = -1;
-        // }
+            if (feature)
+            {
+                GstStructure *inspected_data = gst_inspector_inspect_plugin_feature(feature);
 
-        // /* otherwise check if it's a plugin */
-        // if (retval)
-        // {
-        //     plugin = gst_registry_find_plugin(gst_registry_get(), arg);
+                print_dictionary(inspected_data);
 
-        //     /* if there is such a plugin, print out info */
-        //     if (plugin)
-        //     {
-        //         if (print_aii)
-        //         {
-        //             print_plugin_automatic_install_info(plugin);
-        //         }
-        //         else
-        //         {
-        //             print_plugin_info(plugin);
-        //             print_plugin_features(plugin);
-        //         }
-        //     }
-        //     else
-        //     {
-        //         GError *error = NULL;
+                gst_structure_free(inspected_data);
+                gst_object_unref(feature);
 
-        //         if (g_file_test(arg, G_FILE_TEST_EXISTS))
-        //         {
-        //             plugin = gst_plugin_load_file(arg, &error);
+                retval = 0;
+            }
+            else
+            {
+                retval = -1;
+            }
+        }
+        else
+        {
+            retval = -1;
+        }
 
-        //             if (plugin)
-        //             {
-        //                 if (print_aii)
-        //                 {
-        //                     print_plugin_automatic_install_info(plugin);
-        //                 }
-        //                 else
-        //                 {
-        //                     print_plugin_info(plugin);
-        //                     print_plugin_features(plugin);
-        //                 }
-        //             }
-        //             else
-        //             {
-        //                 g_printerr(_("Could not load plugin file: %s\n"), error->message);
-        //                 g_clear_error(&error);
-        //                 return -1;
-        //             }
-        //         }
-        //         else
-        //         {
-        //             g_printerr(_("No such element or plugin '%s'\n"), arg);
-        //             return -1;
-        //         }
-        //     }
-        // }
+        /* otherwise check if it's a plugin */
+        if (retval)
+        {
+            plugin = gst_registry_find_plugin(gst_registry_get(), arg);
+
+            /* if there is such a plugin, print out info */
+            if (plugin)
+            {
+                inspect_plugin(plugin);
+            }
+            else
+            {
+                GError *error = NULL;
+
+                if (g_file_test(arg, G_FILE_TEST_EXISTS))
+                {
+                    plugin = gst_plugin_load_file(arg, &error);
+
+                    if (plugin)
+                    {
+                        inspect_plugin(plugin);
+                    }
+                    else
+                    {
+                        g_printerr("Could not load plugin file: %s\n", error->message);
+                        g_clear_error(&error);
+                        return -1;
+                    }
+                }
+                else
+                {
+                    g_printerr("No such element or plugin '%s'\n", arg);
+                    return -1;
+                }
+            }
+        }
     }
 
     return 0;

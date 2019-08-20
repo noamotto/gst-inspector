@@ -60,12 +60,17 @@ GST_INSPECTOR_API GstStructure *gst_inspector_inspect_plugin_feature(GstPluginFe
 GST_INSPECTOR_API GstStructure *gst_inspector_inspect_by_name(const gchar *object_name);
 
 // Utilities
-GST_INSPECTOR_API void gst_inspector_get_installed_plugins(GstPluginFlags flags,
-                                                           const gchar *version,
-                                                           GValue *list);
-GST_INSPECTOR_API void gst_inspector_get_installed_features(GstPluginFlags flags,
-                                                            const gchar *version,
-                                                            GValue *list);
+GST_INSPECTOR_API
+void gst_inspector_get_installed_plugins(GstPluginFlags flags,
+                                         const gchar *version,
+                                         GValue *list);
+GST_INSPECTOR_API
+void gst_inspector_get_installed_features(GstPluginFlags flags,
+                                          const gchar *version,
+                                          GValue *list);
+GST_INSPECTOR_API
+GstStructure *gst_inspector_get_installed_features_grouped(GstPluginFlags flags,
+                                                           const gchar *version);
 
 G_END_DECLS
 

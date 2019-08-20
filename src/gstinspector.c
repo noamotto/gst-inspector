@@ -69,11 +69,11 @@ static void _gst_inspector_init()
     {
         element_inspectors = g_slice_new0(InspectorList);
         gst_inspector_register_element_inspector(gst_inspector_inspect_factory_details,
-                                                 GST_INSPECTOR_FACTORY_DETAILS_NAME, 
+                                                 GST_INSPECTOR_FACTORY_DETAILS_NAME,
                                                  GST_INSPECTOR_FACTORY_DETAILS_LONGNAME, -1);
 
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_plugin,
-                                                 GST_INSPECTOR_PLUGIN_NAME, 
+                                                 GST_INSPECTOR_PLUGIN_NAME,
                                                  GST_INSPECTOR_PLUGIN_LONGNAME, -1);
 
         gst_inspector_register_element_inspector(gst_inspector_inspect_element_hierarchy,
@@ -776,14 +776,18 @@ void gst_inspector_get_installed_plugins(GstPluginFlags flags,
 
     g_return_if_fail(GST_VALUE_HOLDS_LIST(list));
 
-    minver_maj = minver_min = minver_micro = 0;
+    minver_maj = GST_VERSION_MAJOR;
+    minver_min = GST_VERSION_MINOR;
+    minver_micro = GST_VERSION_MICRO;
 
     if (version)
     {
         if (sscanf(version, "%u.%u.%u", &minver_maj, &minver_min, &minver_micro) < 2)
         {
             g_critical("Cannot parse passed version string. Ignoring version check");
-            minver_maj = minver_min = minver_micro = 0;
+            minver_maj = GST_VERSION_MAJOR;
+            minver_min = GST_VERSION_MINOR;
+            minver_micro = GST_VERSION_MICRO;
         }
     }
 
@@ -836,14 +840,18 @@ void gst_inspector_get_installed_features(GstPluginFlags flags,
 
     g_return_if_fail(GST_VALUE_HOLDS_LIST(list));
 
-    minver_maj = minver_min = minver_micro = 0;
+    minver_maj = GST_VERSION_MAJOR;
+    minver_min = GST_VERSION_MINOR;
+    minver_micro = GST_VERSION_MICRO;
 
     if (version)
     {
         if (sscanf(version, "%u.%u.%u", &minver_maj, &minver_min, &minver_micro) < 2)
         {
             g_critical("Cannot parse passed version string. Ignoring version check");
-            minver_maj = minver_min = minver_micro = 0;
+            minver_maj = GST_VERSION_MAJOR;
+            minver_min = GST_VERSION_MINOR;
+            minver_micro = GST_VERSION_MICRO;
         }
     }
 
@@ -881,4 +889,123 @@ void gst_inspector_get_installed_features(GstPluginFlags flags,
     }
 
     gst_plugin_list_free(plugin_list);
+}
+
+/**
+ *  @brief Retrieves a dictionary of lists of installed features, one for each type
+ * 
+ *  @param flags Plugin flags to look for. If not 0, only features in 
+ *      plugins matching the given flags will be returned.
+ *  @param version Minimal feature version to look for
+ * 
+ *  @returns A dictionary holding lists of feature names. Free after use
+ * 
+ *  The dictionary's structure will be as follows:
+ *  - @b elements - List of names of installed elements
+ *  - @b typefinders - List of names of installed typefind functions
+ *  - @b device-providers - List of names of installed device providers
+ *  - @b tracers - List of names of installed tracers
+ *  - @b others - List of names of installed features which are not one of the above
+ */
+GstStructure *gst_inspector_get_installed_features_grouped(GstPluginFlags flags,
+                                                           const gchar *version)
+{
+    GstStructure *result = gst_structure_new_empty("features");
+    GList *plugin_list, *plugin_iter;
+    GValue elements_list = G_VALUE_INIT;
+    GValue typefinders_list = G_VALUE_INIT;
+    GValue devices_list = G_VALUE_INIT;
+    GValue tracers_list = G_VALUE_INIT;
+    GValue others_list = G_VALUE_INIT;
+    guint minver_maj, minver_min, minver_micro;
+
+    minver_maj = GST_VERSION_MAJOR;
+    minver_min = GST_VERSION_MINOR;
+    minver_micro = GST_VERSION_MICRO;
+
+    g_value_init(&elements_list, GST_TYPE_LIST);
+    g_value_init(&typefinders_list, GST_TYPE_LIST);
+    g_value_init(&devices_list, GST_TYPE_LIST);
+    g_value_init(&tracers_list, GST_TYPE_LIST);
+    g_value_init(&others_list, GST_TYPE_LIST);
+
+    if (version)
+    {
+        if (sscanf(version, "%u.%u.%u", &minver_maj, &minver_min, &minver_micro) < 2)
+        {
+            g_critical("Cannot parse passed version string. Ignoring version check");
+            minver_maj = GST_VERSION_MAJOR;
+            minver_min = GST_VERSION_MINOR;
+            minver_micro = GST_VERSION_MICRO;
+        }
+    }
+
+    plugin_list = gst_registry_get_plugin_list(gst_registry_get());
+
+    for (plugin_iter = plugin_list; plugin_iter != NULL;
+         plugin_iter = plugin_iter->next)
+    {
+        GstPlugin *plugin = plugin_iter->data;
+
+        if ((flags == 0 && !GST_OBJECT_FLAG_IS_SET(plugin, GST_PLUGIN_FLAG_BLACKLISTED)) ||
+            (flags != 0 && GST_OBJECT_FLAG_IS_SET(plugin, (guint)flags)))
+        {
+            GList *feature_list, *feature_iter;
+            feature_list = gst_registry_get_feature_list_by_plugin(
+                gst_registry_get(),
+                gst_plugin_get_name(plugin));
+
+            for (feature_iter = feature_list; feature_iter != NULL;
+                 feature_iter = feature_iter->next)
+            {
+                if (gst_plugin_feature_check_version(feature_iter->data,
+                                                     minver_maj,
+                                                     minver_min,
+                                                     minver_micro))
+                {
+                    if (GST_IS_ELEMENT_FACTORY(feature_iter->data))
+                    {
+                        gst_array_append_static_string(
+                            &elements_list,
+                            gst_plugin_feature_get_name(feature_iter->data));
+                    }
+                    else if (GST_IS_TYPE_FIND_FACTORY(feature_iter->data))
+                    {
+                        gst_array_append_static_string(
+                            &typefinders_list,
+                            gst_plugin_feature_get_name(feature_iter->data));
+                    }
+                    else if (GST_IS_DEVICE_PROVIDER_FACTORY(feature_iter->data))
+                    {
+                        gst_array_append_static_string(
+                            &devices_list,
+                            gst_plugin_feature_get_name(feature_iter->data));
+                    }
+                    else if (GST_IS_TRACER_FACTORY(feature_iter->data))
+                    {
+                        gst_array_append_static_string(
+                            &tracers_list,
+                            gst_plugin_feature_get_name(feature_iter->data));
+                    }
+                    else
+                    {
+                        gst_array_append_static_string(
+                            &others_list,
+                            gst_plugin_feature_get_name(feature_iter->data));
+                    }
+                }
+            }
+
+            gst_plugin_feature_list_free(feature_list);
+        }
+    }
+
+    gst_dictionary_set_array(result, "elements", &elements_list);
+    gst_dictionary_set_array(result, "typefinders", &typefinders_list);
+    gst_dictionary_set_array(result, "device-providers", &devices_list);
+    gst_dictionary_set_array(result, "tracers", &tracers_list);
+    gst_dictionary_set_array(result, "others", &others_list);
+
+    gst_plugin_list_free(plugin_list);
+    return result;
 }
