@@ -1,3 +1,7 @@
+/**
+ *  @file gstpadtemplateinspector.c
+ *  @brief Element pad templates inspector implementation
+ */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 #include "type_reader/type_reader.h"
@@ -67,13 +71,41 @@ static void parse_pad_template_props(GstElement *element,
                                                   parse_object_property(NULL, pspecs[i]));
             }
             g_type_class_unref(pad_klass);
-	    g_free(pspecs);
+            g_free(pspecs);
 
             gst_dictionary_set_sub_dictionary(template_dict, "Pad Properties", params_dict);
         }
     }
 }
 
+/**
+ *  @brief Inspects element pad templates
+ * 
+ *  Inspects the pad templates of a single element
+ * 
+ *  @param element Element to inspect
+ *  @param result 
+ *  @parblock
+ *  The inspected data
+ * 
+ *  The inspected data is an array of pad templates, if found. Each pad consists of these
+ *  fields:
+ *  - <b>Name</b> - Pad Template's name
+ *  - <b>Direction</b> - Pad Template's direction (SRC/SINK/UNKNOWN)
+ *  - <b>Availability</b> - Pad Template's availability type (Always/Sometimes/etc.)
+ *  - <b>Capabilities</b> - Pad Template's caps. Caps are parsed as an array, where 
+ *      each entry consists of these fields:
+ *      - <b>Type</b> - Caps type. For example <tt>video/x-raw</tt>
+ *      - <b>Features</b> - Optional, if caps have caps features. A string with the 
+ *      caps features.
+ *      - <b>Caps</b> - The caps fields, as a dictionary of field name and value
+ *  - <b>Pad Properties</b> - Pad Template's additional properties, if assigned. 
+ *      See gst_inspector_inspect_element_properties() for a description of how 
+ *      properties are parsed.
+ * 
+ *  If no pad templates were found inspected data will contain the string "none"
+ *  @endparblock
+ */
 void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result)
 {
     const GList *pads;
@@ -81,7 +113,6 @@ void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result)
 
     g_return_if_fail(GST_IS_ELEMENT(element));
     factory = gst_element_get_factory(element);
-
 
     if (gst_element_factory_get_num_pad_templates(factory) == 0)
     {

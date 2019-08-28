@@ -61,6 +61,8 @@ static GstStructure *parse_pad(GstPad *pad)
  *  - <b>Pad Template</b> - Pad template's name
  *  - <b>Capabilities</b> - Pad's current caps, if assigned. See 
  *      gst_inspector_inspect_pad_templates() for caps structure.
+ * 
+ *  If no pads were found inspected data will contain the string "none"
  *  @endparblock
  */
 void gst_inspector_inspect_element_pads(GstElement *element, GValue *result)

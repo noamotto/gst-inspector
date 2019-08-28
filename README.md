@@ -1,9 +1,3 @@
-### Stability:
-- Travis (linux-gcc): [![Travis](https://travis-ci.org/noamotto/gst-inspector.svg?branch=master)](https://travis-ci.org/noamotto/gst-inspector)
-
-Test coverage: [![Coverage Status](https://coveralls.io/repos/github/noamotto/gst-inspector/badge.svg?branch=master)](https://coveralls.io/github/noamotto/gst-inspector?branch=master)
-
-
 # gst-inspector
 
 ## Motivation
@@ -39,3 +33,8 @@ The project consists of 2 phases
 2. **Code binding via SWIG** - This is mainly made to create a convenient environment for developing tools rapidly.
 
 Right now the engine is in development and testing.
+
+### Stability:
+- Travis (linux-gcc): [![Travis](https://travis-ci.org/noamotto/gst-inspector.svg?branch=master)](https://travis-ci.org/noamotto/gst-inspector)
+
+Test coverage: [![Coverage Status](https://coveralls.io/repos/github/noamotto/gst-inspector/badge.svg?branch=master)](https://coveralls.io/github/noamotto/gst-inspector?branch=master)
