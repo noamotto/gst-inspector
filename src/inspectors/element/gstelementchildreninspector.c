@@ -1,6 +1,24 @@
+/**
+ *  @file gstelementchildreninspector.c
+ *  @brief Element children inspector implementation
+ */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
+/**
+ *  @brief Inspects element children
+ * 
+ *  Inspects the children of a single element
+ * 
+ *  @param element Element to inspect
+ *  @param result 
+ *  @parblock
+ *  The inspected data
+ * 
+ *  The inspected data is an array of children elements' names, if the inspected 
+ *  element is a GstBin. 
+ *  @endparblock
+ */
 void gst_inspector_inspect_element_children(GstElement *element, GValue *result)
 {
     g_return_if_fail(GST_IS_ELEMENT(element));

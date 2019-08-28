@@ -5,15 +5,18 @@
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
+/**
+ *  @brief Structure collecting parsed features. Passed to a plugin's 
+ *      feature lisr foreach function.
+ */
 typedef struct _InspectedPluginFeatures
 {
-    GstPlugin *plugin;
-    GValue elements_array;
-    GValue typefinds_array;
-    GValue tracers_array;
-    GValue devproviders_array;
-    GValue others_array;
-    guint num_features;
+    GstPlugin *plugin;          /**< Plugin to parse */
+    GValue elements_array;      /**< Plugin to parse */
+    GValue typefinds_array;     /**< Parsed typefinders */
+    GValue tracers_array;       /**< Parsed tracers */
+    GValue devproviders_array;  /**< Parsed device providers */
+    GValue others_array;        /**< Other parsed features (other meaning non of the above) */
 } InspectedPluginFeatures;
 
 static void parse_typefind(GstPluginFeature *feature, InspectedPluginFeatures *features)
@@ -105,8 +108,6 @@ static void parse_feature(GstPluginFeature *feature, InspectedPluginFeatures *fe
                                 g_strdup_printf("%s (%s)", GST_OBJECT_NAME(feature),
                                                 g_type_name(G_OBJECT_TYPE(feature))));
     }
-
-    features->num_features++;
 }
 
 /**
@@ -115,10 +116,11 @@ static void parse_feature(GstPluginFeature *feature, InspectedPluginFeatures *fe
  *  Inspects the features of a single plugin, as a list of the different types of features.
  * 
  *  @param plugin Plugin to inspect
- *  @param result The inspected data
- * 
+ *  @param result 
  *  @parblock
- *  The inspected data is divided to these fields:
+ *  The inspected data
+ * 
+ *  The inspected data consists of these fields:
  *  - <b>Total features</b> - Total number of features in the plugin, as string (for convenience)
  *  - <b>Elements</b> - List of elements in the plugin, in the format of 
  *      <tt>[element_name]: [element_description]</tt>
@@ -148,10 +150,10 @@ void gst_inspector_inspect_plugin_features(GstPlugin *plugin, GValue *result)
 
     g_list_foreach(features, (GFunc)parse_feature, inspected_features);
 
-    gst_plugin_feature_list_free(features);
-
     gst_dictionary_set_string(dictionary, "Total features",
-                              g_strdup_printf("%u", inspected_features->num_features));
+                              g_strdup_printf("%u", g_list_length(features)));
+
+    gst_plugin_feature_list_free(features);
 
     if (G_IS_VALUE(&inspected_features->elements_array))
     {

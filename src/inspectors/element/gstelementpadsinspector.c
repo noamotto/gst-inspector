@@ -1,3 +1,7 @@
+/**
+ *  @file gstelementpadsinspector.c
+ *  @brief Element pads inspector implementation
+ */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
@@ -40,6 +44,25 @@ static GstStructure *parse_pad(GstPad *pad)
     return pad_dict;
 }
 
+/**
+ *  @brief Inspects element pads
+ * 
+ *  Inspects the pads of a single element
+ * 
+ *  @param element Element to inspect
+ *  @param result 
+ *  @parblock
+ *  The inspected data
+ * 
+ *  The inspected data is an array of pads, if found. Each pad consists of these
+ *  fields:
+ *  - <b>Name</b> - Pad's name
+ *  - <b>Type</b> - Pad's type (SRC/SINK/UNKNOWN)
+ *  - <b>Pad Template</b> - Pad template's name
+ *  - <b>Capabilities</b> - Pad's current caps, if assigned. See 
+ *      gst_inspector_inspect_pad_templates() for caps structure.
+ *  @endparblock
+ */
 void gst_inspector_inspect_element_pads(GstElement *element, GValue *result)
 {
     g_return_if_fail(GST_IS_ELEMENT(element));

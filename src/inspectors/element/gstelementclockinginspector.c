@@ -1,6 +1,32 @@
+/**
+ *  @file gstelementclockinginspector.c
+ *  @brief Element clocking capabilities inspector implementation
+ */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
+/**
+ *  @brief Inspects element clocking capabilities
+ * 
+ *  Inspects the clocking capabilities of a single element
+ * 
+ *  @param element Element to inspect
+ *  @param result 
+ *  @parblock
+ *  The inspected data
+ * 
+ *  The inspected data depends on the element's clocking capabilities:
+ *  - If the element does not require a clock nor provides one, a string 
+ *      is returned informing about it.
+ *  - Otherwise, an array is returned:
+ *  -- If the element requires a clock then a string informing so is present
+ *      in the result.
+ *  -- If the element provides a clock then a string informing so is present
+ *      in the result.
+ *  -- If the element says it provides a clock but returns NULL on gst_element_get_clock() 
+ *      then a string informing so is present in the result.
+ *  @endparblock
+ */
 void gst_inspector_inspect_element_clocking(GstElement *element, GValue *result)
 {
     gboolean requires_clock, provides_clock;

@@ -1,3 +1,7 @@
+/**
+ *  @file gstelementactionsinspector.c
+ *  @brief Element actions inspector implementation
+ */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
@@ -39,6 +43,23 @@ static GSList *populate_object_actions(GstElement *element, GSList *found_action
     return found_actions;
 }
 
+/**
+ *  @brief Inspects element action signals
+ * 
+ *  Inspects the action signals of a single element
+ * 
+ *  @param element Element to inspect
+ *  @param result 
+ *  @parblock
+ *  The inspected data
+ * 
+ *  The inspected data is an array of signals, if found. Each signal consists of
+ *  these fields:
+ *  - <b>Signal name</b> - Name of signal
+ *  - <b>Return type</b> - Signal function's return type
+ *  - <b>Signal parameters</b> - Signal function's parameters
+ *  @endparblock
+ */
 void gst_inspector_inspect_element_actions(GstElement *element, GValue *result)
 {
     g_return_if_fail(GST_IS_ELEMENT(element));

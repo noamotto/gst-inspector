@@ -22,7 +22,7 @@ typedef struct _InspectorNode
  */
 typedef struct _ElementInspectorNode
 {
-    InspectorNode node;
+    InspectorNode node;              /**< Common node fields */
 
     GstElementInspectFunc inspector; /**< Inspector function */
 } ElementInspectorNode;
@@ -32,7 +32,7 @@ typedef struct _ElementInspectorNode
  */
 typedef struct _PluginInspectorNode
 {
-    InspectorNode node;
+    InspectorNode node;              /**< Common node fields */
 
     GstPluginInspectFunc inspector; /**< Inspector function */
 } PluginInspectorNode;
@@ -281,8 +281,10 @@ static GstStructure *create_static_error_dict(const gchar *error_string)
  *
  *  @param inspector The inspector function to install
  *  @param name Name of the inspector. Used as ID and should be unique for
- *  the inspector. The name is expected to be static, and is expected to stay
- *  valid until the end of the program's lifetime.
+ *  the inspector. Expected to be static
+ *  @param longname Long name for the inspector. Used as the name of the dictionary
+ *  holding the inspected results, as a short description of the inspection result
+ *  the inspector. Expected to be static.
  *  @param position Position to insert the inspector to in the list.
  *  Negative numbers or numbers bigger than the list's length append the
  *  inspector to the end of the list.
@@ -377,7 +379,10 @@ gchar **gst_inspector_get_installed_element_inspectors()
  *
  *  @param inspector The inspector function to install
  *  @param name Name of the inspector. Used as ID and should be unique for
- *  the inspector
+ *  the inspector. Expected to be static
+ *  @param longname Long name for the inspector. Used as the name of the dictionary
+ *  holding the inspected results, as a short description of the inspection result
+ *  the inspector.
  *  @param position Position to insert the inspector to in the list.
  *  Negative numbers or numbers bigger than the list's length append the
  *  inspector to the end of the list.
