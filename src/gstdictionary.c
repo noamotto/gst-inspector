@@ -121,11 +121,26 @@ void gst_array_prepend_subdictionary(GValue *array, GstStructure *dictionary)
     g_value_unset(&val);
 }
 
+/**
+ *  @brief Retrieves an array's size.
+ * 
+ *  @param array An array
+ * 
+ *  @returns The array's size
+ */
 guint gst_array_get_size(const GValue *array)
 {
     return gst_value_list_get_size(array);
 }
 
+/**
+ *  @brief Retrieves an array's entry by index
+ * 
+ *  @param array An array
+ *  @param index Index to retrieve
+ * 
+ *  @returns The retrieved entry as GValue
+ */
 const GValue *gst_array_get_value(const GValue *array, guint index)
 {
     return gst_value_list_get_value(array, index);

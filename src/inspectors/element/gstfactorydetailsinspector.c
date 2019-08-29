@@ -1,6 +1,29 @@
+/**
+ *  @file gstfactorydetailsinspector.c
+ *  @brief Element factory details inspector implementation
+ */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
+/**
+ *  @brief Inspects an element's factory details
+ * 
+ *  Inspects the factory details of a single element
+ * 
+ *  @param element Element to inspect
+ *  @param result 
+ *  @parblock
+ *  The inspected data
+ * 
+ *  The inspected data consists of the following fields:
+ *  - <b>Rank</b> - The element's rank, for autoplugging to choose the most 
+ *      appropriate element
+ *  - Additional metadata field, where the metadata key serves as the field key,
+ *      and the metadata value serves as the field's value. For example:
+ *      - <b>Long-name</b> - The element's long name
+ *      - <b>Description</b> - Short description of the element
+ *  @endparblock
+ */
 void gst_inspector_inspect_factory_details(GstElement *element, GValue *result)
 {
     GstStructure *dictionary;

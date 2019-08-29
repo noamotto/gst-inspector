@@ -1,3 +1,7 @@
+/**
+ *  @file gstelementurihandlerinspector.c
+ *  @brief Element URI handler inspector implementation
+ */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
@@ -41,6 +45,26 @@ static void parse_uri_protocols(GstElement *element, GstStructure *uri_data)
     }
 }
 
+/**
+ *  @brief Inspects URI handling capabilities
+ * 
+ *  Inspects the URI handling capabilities of a single element
+ * 
+ *  @param element Element to inspect
+ *  @param result 
+ *  @parblock
+ *  The inspected data
+ * 
+ *  If the element implements GstUriHandler, then the inspected data consists of
+ *      these fields:
+ *  - <b>URI handler type</b> - The URI handler type (source/sink)
+ *  - <b>Supported URI protocols</b> - Array of names of supported URI protocols,
+ *      if found. Otherwise the string "none"
+ * 
+ *  Otherwise, the inspected data is a string informing that the element has no 
+ *      URI capabilities.
+ *  @endparblock
+ */
 void gst_inspector_inspect_element_uri_handler(GstElement *element, GValue *result)
 {
     g_return_if_fail(GST_IS_ELEMENT(element));

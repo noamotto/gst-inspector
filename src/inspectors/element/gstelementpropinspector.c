@@ -1,3 +1,7 @@
+/**
+ *  @file gstelementpropinspector.c
+ *  @brief Element properties inspector implementation
+ */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 #include "type_reader/type_reader.h"
@@ -7,6 +11,25 @@ static gint cmp_pspecs(GParamSpec **p1, GParamSpec **p2)
     return g_strcmp0(g_param_spec_get_name(*p1), g_param_spec_get_name(*p2));
 }
 
+/**
+ *  @brief Inspects element's presets
+ * 
+ *  Inspects the preset names of a single element
+ * 
+ *  @param element Element to inspect
+ *  @param result 
+ *  @parblock
+ *  The inspected data
+ * 
+ *  The inspected data is an array of the parse element properties. Each property 
+ *      consists of these fields:
+ *  - <b>Name</b> - The property name and blurb, in the format 
+ *      <tt>[name]: [blurb]</tt>
+ *  - <b>Flags</b> - Array of strings describing the property's flags
+ *  - Additional fields depending on the property type. Refer to the respective type 
+ *      reader for those fields
+ *  @endparblock
+ */
 void gst_inspector_inspect_element_properties(GstElement *element, GValue *result)
 {
     GstStructure *dictionary;
