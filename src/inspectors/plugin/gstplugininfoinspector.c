@@ -1,6 +1,33 @@
+/**
+ *  @file gstplugininfoinspector.c
+ *  @brief Plugin information inspector implementation
+ */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
+/**
+ *  @brief Inspects plugin information
+ * 
+ *  Inspects the information about a single plugin
+ * 
+ *  @param plugin Plugin to inspect
+ *  @param result 
+ *  @parblock
+ *  The inspected data
+ * 
+ *  The inspected data consists of these fields:
+ *  - <b>Name</b> - Plugin's name
+ *  - <b>Description</b> - Plugin's description
+ *  - <b>Filename</b> - Path to where the plugin's file resides
+ *  - <b>Version</b> - Plugin's version
+ *  - <b>License</b> - Plugin's license
+ *  - <b>Source module</b> - Source module the plugin belongs to
+ *  - <b>Source release date</b> - Release date of plugin's source module, if 
+ *      available
+ *  - <b>Binary package</b> - Shipped package the plugin belongs to
+ *  - <b>Origin URL</b> - URL to the plugin's provider
+ *  @endparblock
+ */
 void gst_inspector_inspect_plugin_details(GstPlugin *plugin, GValue *result)
 {
     GstStructure *dictionary;

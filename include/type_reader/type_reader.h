@@ -1,3 +1,10 @@
+/**
+ *  Type Readers
+ * 
+ *  The type reader API's purpose is to allow one to register new type readers,
+ *  functions that parse properties with specific value, and parse a single 
+ *  property using the type readers.
+ */
 #ifndef TYPE_READER_H
 #define TYPE_READER_H
 

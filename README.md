@@ -1,5 +1,7 @@
 # gst-inspector
 
+Documentation can be found here: [![Codedocs](https://codedocs.xyz/noamotto/gst-inspector.svg)](https://codedocs.xyz/noamotto/gst-inspector/)
+
 ## Motivation
 
 While working with GStreamer's library I had to implement additional types and interfaces, and I encountered two problems working with the current gst-inspect program:

@@ -1,3 +1,8 @@
+/**
+ *  @file type_reader.c
+ *  @brief Type reader core API implementation
+ */
+
 #include "type_reader/type_reader_priv.h"
 
 #define KNOWN_PARAM_FLAGS                                       \
@@ -33,7 +38,7 @@ static void gst_default_reader_fill_type(GParamSpec *pspec,
  *  Should be called internally and only once. It will handle registring all the built-in types,
  *  as well as registring any built-in content parser
  */
-void _gst_init_type_readers(void)
+static void _gst_init_type_readers(void)
 {
     reader_map = g_hash_table_new(g_direct_hash, g_direct_equal);
 
