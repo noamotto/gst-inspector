@@ -1,9 +1,13 @@
-/**
- *  @file gstelementsignalsinspector.c
- *  @brief Element non-action signals inspector implementation
+/*
+ *  Element non-action signals inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 static GSList *populate_sometimes_template_signals(GstElement *element,
                                                    GSList *found_signals)
@@ -110,3 +114,5 @@ void gst_inspector_inspect_element_signals(GstElement *element, GValue *result)
         g_slist_free(found_signals);
     }
 }
+
+/** @}*/

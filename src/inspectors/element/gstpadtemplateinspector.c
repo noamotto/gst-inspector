@@ -1,10 +1,14 @@
-/**
- *  @file gstpadtemplateinspector.c
- *  @brief Element pad templates inspector implementation
+/*
+ *  Element pad templates inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 #include "type_reader/type_reader.h"
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 static void parse_direction(GstStaticPadTemplate *padtemplate, GstStructure *template_dict)
 {
@@ -154,3 +158,5 @@ void gst_inspector_inspect_pad_templates(GstElement *element, GValue *result)
         }
     }
 }
+
+/** @}*/

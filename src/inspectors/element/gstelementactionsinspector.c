@@ -1,9 +1,13 @@
-/**
- *  @file gstelementactionsinspector.c
- *  @brief Element actions inspector implementation
+/*
+ *  Element actions inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 static GSList *populate_object_actions(GstElement *element, GSList *found_actions)
 {
@@ -86,3 +90,5 @@ void gst_inspector_inspect_element_actions(GstElement *element, GValue *result)
         g_slist_free(found_actions);
     }
 }
+
+/** @}*/

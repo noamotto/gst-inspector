@@ -1,9 +1,13 @@
-/**
- *  @file gstplugininfoinspector.c
- *  @brief Plugin information inspector implementation
+/*
+ *  Plugin information inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup plugin-inspectors 
+ *  @{ 
+ */
 
 /**
  *  @brief Inspects plugin information
@@ -76,3 +80,5 @@ void gst_inspector_inspect_plugin_details(GstPlugin *plugin, GValue *result)
 
     g_value_take_boxed(result, dictionary);
 }
+
+/** @}*/

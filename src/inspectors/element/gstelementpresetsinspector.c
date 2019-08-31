@@ -1,9 +1,13 @@
-/**
- *  @file gstelementpresetsinspector.c
- *  @brief Element preset inspector implementation
+/*
+ *  Element preset inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 /**
  *  @brief Inspects element's presets
@@ -42,3 +46,5 @@ void gst_inspector_inspect_element_presets(GstElement *element, GValue *result)
         }
     }
 }
+
+/** @}*/

@@ -1,6 +1,5 @@
-/**
- *  @file gstelementpadsinspector.c
- *  @brief Element pads inspector implementation
+/*
+ *  Element pads inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
@@ -43,6 +42,11 @@ static GstStructure *parse_pad(GstPad *pad)
 
     return pad_dict;
 }
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 /**
  *  @brief Inspects element pads
@@ -87,3 +91,5 @@ void gst_inspector_inspect_element_pads(GstElement *element, GValue *result)
         }
     }
 }
+
+/** @}*/

@@ -1,9 +1,13 @@
-/**
- *  @file gstelementinterfacesinspector.c
- *  @brief Element interfaces inspector implementation
+/*
+ *  Element interfaces inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 /**
  *  @brief Inspects element implemented interfaces
@@ -25,3 +29,5 @@ void gst_inspector_inspect_element_interfaces(GstElement *element, GValue *resul
 
     parse_type_interfaces(G_OBJECT_TYPE(element), result);
 }
+
+/** @}*/

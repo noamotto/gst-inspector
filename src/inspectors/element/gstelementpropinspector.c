@@ -1,6 +1,5 @@
-/**
- *  @file gstelementpropinspector.c
- *  @brief Element properties inspector implementation
+/*
+ *  Element properties inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
@@ -10,6 +9,11 @@ static gint cmp_pspecs(GParamSpec **p1, GParamSpec **p2)
 {
     return g_strcmp0(g_param_spec_get_name(*p1), g_param_spec_get_name(*p2));
 }
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 /**
  *  @brief Inspects element's presets
@@ -55,3 +59,5 @@ void gst_inspector_inspect_element_properties(GstElement *element, GValue *resul
     g_value_take_boxed(result, dictionary);
     g_free(pspecs);
 }
+
+/** @} */

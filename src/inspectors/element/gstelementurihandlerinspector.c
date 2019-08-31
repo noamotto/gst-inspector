@@ -1,9 +1,13 @@
-/**
- *  @file gstelementurihandlerinspector.c
- *  @brief Element URI handler inspector implementation
+/*
+ *  Element URI handler inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 static void parse_uri_type(GstElement *element, GstStructure *uri_data)
 {
@@ -86,3 +90,5 @@ void gst_inspector_inspect_element_uri_handler(GstElement *element, GValue *resu
         g_value_set_static_string(result, "Element has no URI handling capabilities.");
     }
 }
+
+/** @}*/

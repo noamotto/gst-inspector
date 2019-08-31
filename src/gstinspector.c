@@ -1,12 +1,50 @@
 /**
- *  @file gstinspector.c
- *  @brief Core API implementation
+ *  @defgroup inspectors Inspectors API
+ *  The inspectors API is the core of the GstInspector library. It consists of 
+ *  core API and implemented stock inspectors.
+ * 
+ *  @{
+ * 
+ *  @defgroup inspectors-core Core inspectors API
+ *  The inspectors core API allows one to modify the list of registered inspectors
+ *  for elements and plugins, and to inspect a plugin or a plugin feature, yielding 
+ *  a structure with parsed data. The inspectors are stored in a list, and are 
+ *  executed in the ordered they are sorted.
+ * 
+ *  Use gst_inspector_register_element_inspector() to register new element 
+ *  inspectors, and gst_inspector_remove_element_inspector() to remove an 
+ *  existing on from the list. To retrieve a list with the installed element inspector
+ *  names, call gst_inspector_get_installed_element_inspectors().
+ * 
+ *  To inspect an element, one should use gst_inspector_inspect_element().
+ * 
+ *  Similar functions exist for plugin inspectors, substituting "element" with "plugin".
+ * 
+ *  More generic inspection methods are also implemented as part of this API. 
+ *  To inspect a generic plugin feature one should call 
+ *  gst_inspector_inspect_plugin_feature(). A more convenient wrapper to these 
+ *  functions is gst_inspector_inspect_by_name(), which recieves a name and
+ *  inspects the plugin or feature with that name.
+ * 
+ *  @defgroup element-inspectors Element inspectors
+ *  This is a list of the stock element inspectors provided with the library. 
+ *  They are registered by default.
+ * 
+ *  @defgroup plugin-inspectors Plugin inspectors
+ *  This is a list of the stock plugin inspectors provided with the library. 
+ *  They are registered by default.
+ *  @}
  */
 
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
 
 #include <stdio.h>
+
+/**
+ *  @addtogroup inspectors-core
+ *  @{
+ */
 
 /**
  *  @brief Basic node struct for inspector nodes
@@ -1014,3 +1052,5 @@ GstStructure *gst_inspector_get_installed_features_grouped(GstPluginFlags flags,
     gst_plugin_list_free(plugin_list);
     return result;
 }
+
+/** @}*/

@@ -1,6 +1,5 @@
 /***********************************************************************/
-/*                Implementation for type readers                      */
-/*              Private header - should not be used                    */
+/* Internal header for all stock type readers                          */
 /***********************************************************************/
 
 #ifndef TYPE_READER_PRIV_H

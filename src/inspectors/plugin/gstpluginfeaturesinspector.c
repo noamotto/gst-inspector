@@ -1,9 +1,13 @@
-/**
- *  @file gstpluginfeaturesinspector.c
- *  @brief Plugin features inspector implementation
+/*
+ *  Plugin features inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup plugin-inspectors 
+ *  @{ 
+ */
 
 /**
  *  @brief Structure collecting parsed features. Passed to a plugin's 
@@ -180,3 +184,5 @@ void gst_inspector_inspect_plugin_features(GstPlugin *plugin, GValue *result)
     g_value_take_boxed(result, dictionary);
     g_free(inspected_features);
 }
+
+/** @}*/

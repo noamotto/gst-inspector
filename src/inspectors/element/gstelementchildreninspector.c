@@ -1,9 +1,13 @@
-/**
- *  @file gstelementchildreninspector.c
- *  @brief Element children inspector implementation
+/*
+ *  Element children inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 /**
  *  @brief Inspects element children
@@ -40,3 +44,5 @@ void gst_inspector_inspect_element_children(GstElement *element, GValue *result)
         }
     }
 }
+
+/** @}*/

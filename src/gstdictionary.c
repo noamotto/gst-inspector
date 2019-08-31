@@ -1,9 +1,22 @@
 /**
- *  @file gstdictionary.c
- *  @brief Utilities For GstInspector's dictionaries
+ *  @defgroup gstdictionary Parsed data structure
+ * 
+ *  GstInspector's inspectors output their inspection result as a JSON like
+ *  dictionary, consisting of string, arrays and dictionaries.
+ * 
+ *  Arrays can hold strings, dictionaries and other arrays. The only constraint
+ *  on the content of arrays is that they hold only one type of object. 
+ *  Dictionaries can hold any type, as pairs of type and value.
+ * 
+ *  Currently, arrays are implemented using GstValue's list (of type GST_TYPE_LIST),
+ *  and dictionaries as GstStructures, as well as functions for easier getting and 
+ *  setting of values.
+ *  @{ 
  */
+
 #include <string.h>
 #include "gstdictionary.h"
+
 
 /**
  *  @brief Appends a static string into an array
@@ -363,3 +376,5 @@ const GValue *gst_dictionary_get_value(const GstStructure *dictionary,
 {
     return gst_structure_get_value(dictionary, field_name);
 }
+
+/** @}*/

@@ -1,8 +1,5 @@
 /**
- *  @file gstinspectors.h
- *  
- *  @brief Header for all the stock inspectors. These can be used
- *  to re-register removed plugins, for custom inspection results
+ *  Header with all the stock inspectors, for removing and re-registering.
  */
 
 #include "gstinspector.h"

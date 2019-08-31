@@ -1,9 +1,13 @@
-/**
- *  @file gstelementhierarchyinspector.c
- *  @brief Element hierarchy inspector implementation
+/*
+ *  Element hierarchy inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 /**
  *  @brief Inspects element type hierarchy
@@ -26,3 +30,5 @@ void gst_inspector_inspect_element_hierarchy(GstElement *element, GValue *result
 
     parse_type_hierarchy(G_OBJECT_TYPE(element), result);
 }
+
+/** @}*/

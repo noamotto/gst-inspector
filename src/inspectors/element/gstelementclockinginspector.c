@@ -1,9 +1,13 @@
-/**
- *  @file gstelementclockinginspector.c
- *  @brief Element clocking capabilities inspector implementation
+/*
+ *  Element clocking capabilities inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 /**
  *  @brief Inspects element clocking capabilities
@@ -70,3 +74,5 @@ void gst_inspector_inspect_element_clocking(GstElement *element, GValue *result)
         }
     }
 }
+
+/** @}*/

@@ -1,9 +1,13 @@
-/**
- *  @file gstfactorydetailsinspector.c
- *  @brief Element factory details inspector implementation
+/*
+ *  Element factory details inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 /**
  *  @brief Inspects an element's factory details
@@ -58,3 +62,5 @@ void gst_inspector_inspect_factory_details(GstElement *element, GValue *result)
 
     g_value_take_boxed(result, dictionary);
 }
+
+/** @}*/

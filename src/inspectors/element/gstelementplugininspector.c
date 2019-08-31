@@ -1,9 +1,13 @@
-/**
- *  @file gstelementplugininspector.c
- *  @brief Element plugin inspector implementation
+/*
+ *  Element plugin inspector implementation
  */
 #include "gstinspectors.h"
 #include "gstinspector_priv.h"
+
+/** 
+ *  @addtogroup element-inspectors 
+ *  @{ 
+ */
 
 /**
  *  @brief Inspects element's plugin info
@@ -34,3 +38,5 @@ void gst_inspector_inspect_element_plugin(GstElement *element, GValue *result)
         gst_object_unref(plugin);
     }
 }
+
+/** @}*/
