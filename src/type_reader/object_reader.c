@@ -1,7 +1,26 @@
+/*
+ * Implementation of GObject type reader
+ */
 #include "type_reader/type_reader_priv.h"
 
 static GHashTable *object_map = NULL;
 
+/**
+ *  @addtogroup readers
+ *  @{
+ */
+
+/**
+ *  @brief Registers a new object content reader
+ *
+ *  Registers an object content reader, a function for parsing data about a 
+ *  specific type of GObject.
+ * 
+ *  @param object_type Type of GObject to register the content reader for
+ *  @param read_func Content reader function
+ * 
+ *  @returns TRUE if registering succeeded. Otherwise FALSE is returned.
+ */
 gboolean gst_object_content_reader_register(GType object_type,
                                             GstObjectContentReaderFunc read_func)
 {
@@ -26,6 +45,8 @@ gboolean gst_object_content_reader_register(GType object_type,
 
     return TRUE;
 }
+
+/** @}*/
 
 void gst_object_reader_parse_content(GObject *object,
                                      GstStructure *dictionary)

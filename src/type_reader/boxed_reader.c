@@ -1,7 +1,26 @@
+/*
+ * Implementation of GObject type reader
+ */
 #include "type_reader/type_reader_priv.h"
 
 static GHashTable *boxed_map = NULL;
 
+/**
+ *  @addtogroup readers
+ *  @{
+ */
+
+/**
+ *  @brief Registers a new boxed content reader
+ *
+ *  Registers a boxed content reader, a function for parsing data about a 
+ *  specific type of GBoxed.
+ * 
+ *  @param boxed_type Type of GBoxed to register the content reader for
+ *  @param read_func Content reader function
+ * 
+ *  @returns TRUE if registering succeeded. Otherwise FALSE is returned.
+ */
 gboolean gst_boxed_content_reader_register(GType boxed_type,
                                            GstBoxedContentReaderFunc read_func)
 {
@@ -26,6 +45,8 @@ gboolean gst_boxed_content_reader_register(GType boxed_type,
 
     return TRUE;
 }
+
+/** @}*/
 
 void gst_boxed_reader_parse_content(GValue *boxed,
                                     GstStructure *dictionary)

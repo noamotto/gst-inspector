@@ -1,6 +1,15 @@
 /**
- *  @file type_reader.c
- *  @brief Type reader core API implementation
+ *  @defgroup readers Type readers
+ * 
+ *  The type reader module is a secondary module, whose purpose is to allow one
+ *  to register readers, functions that extract property information from a 
+ *  property with given type. This module is used by inspectors to gather property
+ *  information.
+ * 
+ *  A new type reader can by registered using gst_type_reader_register(). A property
+ *  can be parsed using the registered type readers with gst_type_reader_fill_type()
+ * 
+ *  @{
  */
 
 #include "type_reader/type_reader_priv.h"
@@ -15,9 +24,9 @@
 static GHashTable *reader_map = NULL;
 
 /**
-    @brief Default param reader
-
-    This reader is called when no suitable reader is found for a given param type.
+ *  @brief Default param reader
+ *
+ *  This reader is called when no suitable reader is found for a given param type.
 */
 static void gst_default_reader_fill_type(GParamSpec *pspec,
                                          GValue *value,
@@ -195,3 +204,5 @@ void gst_type_reader_fill_type(GParamSpec *pspec,
         g_value_unset(&tmp_value);
     }
 }
+
+/** @}*/
