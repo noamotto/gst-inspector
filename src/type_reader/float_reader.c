@@ -1,9 +1,17 @@
 #include "type_reader/type_reader_priv.h"
 
-void gst_float_type_reader_fill_type(
-    GParamSpec *pspec,
-    GValue *value,
-    GstStructure *dictionary)
+/**
+ *  @addtogroup type-readers
+ *  @subsection float-reader Float type reader
+ *  The float type reader (for G_TYPE_FLOAT) parses the following 
+ *  additional fields:
+ *  - <b>Type</b> - Property type (Float)
+ *  - <b>Range</b> - Range of possible values for the property
+ *  - <b>Default Value</b> - Property's default value
+ */
+void gst_float_type_reader_fill_type(GParamSpec *pspec,
+                                     GValue *value,
+                                     GstStructure *dictionary)
 {
     gfloat float_val = 0;
     GParamSpecFloat *pspec_float = NULL;
@@ -18,8 +26,9 @@ void gst_float_type_reader_fill_type(
 
     gst_dictionary_set_string(dictionary, KEY_RANGE,
                               g_strdup_printf("%15.7g - %15.7g",
-                                              pspec_float->minimum, pspec_float->maximum));
+                                              pspec_float->minimum,
+                                              pspec_float->maximum));
 
-    gst_dictionary_set_string(dictionary, KEY_VALUE, g_strdup_printf("%15.7g",
-                                                                     g_value_get_float(value)));
+    gst_dictionary_set_string(dictionary, KEY_VALUE,
+                              g_strdup_printf("%15.7g", g_value_get_float(value)));
 }

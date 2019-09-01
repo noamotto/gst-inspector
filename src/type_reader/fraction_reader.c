@@ -1,9 +1,17 @@
 #include "type_reader/type_reader_priv.h"
 
-void gst_fraction_type_reader_fill_type(
-    GParamSpec *pspec,
-    GValue *value,
-    GstStructure *dictionary)
+/**
+ *  @addtogroup type-readers
+ *  @subsection fraction-reader Fraction type reader
+ *  The fraction type reader (for GST_TYPE_FRACTION) parses the following 
+ *  additional fields:
+ *  - <b>Type</b> - Property type (Fraction)
+ *  - <b>Range</b> - Range of possible values for the property
+ *  - <b>Default Value</b> - Property's default value
+ */
+void gst_fraction_type_reader_fill_type(GParamSpec *pspec,
+                                        GValue *value,
+                                        GstStructure *dictionary)
 {
     GstParamSpecFraction *pspec_fraction = NULL;
 

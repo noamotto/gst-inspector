@@ -1,9 +1,16 @@
 #include "type_reader/type_reader_priv.h"
 
-void gst_pointer_type_reader_fill_type(
-    GParamSpec *pspec,
-    GValue *value,
-    GstStructure *dictionary)
+/**
+ *  @addtogroup type-readers
+ *  @subsection pointer-reader Pointer type reader
+ *  The pointer type reader (for G_TYPE_POINTER) parses the following 
+ *  additional fields:
+ *  - <b>Type</b> - Property type. Includes the type the pointer refers to 
+ *      (the GParamSpec value type) if available.
+ */
+void gst_pointer_type_reader_fill_type(GParamSpec *pspec,
+                                       GValue *value,
+                                       GstStructure *dictionary)
 {
     g_return_if_fail(G_IS_PARAM_SPEC_POINTER(pspec));
     g_return_if_fail(G_IS_VALUE(value));

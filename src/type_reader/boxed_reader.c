@@ -68,10 +68,18 @@ void gst_boxed_reader_parse_content(GValue *boxed,
     }
 }
 
-void gst_boxed_type_reader_fill_type(
-    GParamSpec *pspec,
-    GValue *value,
-    GstStructure *dictionary)
+/**
+ *  @addtogroup type-readers
+ *  @subsection boxed-reader Boxed type reader
+ *  The boxed type reader (for G_TYPE_BOXED and subtypes) parses the following 
+ *  additional fields:
+ *  - <b>Type</b> - Property's boxed value type
+ * 
+ *  For additional parsed fields see the available boxed content readers
+ */
+void gst_boxed_type_reader_fill_type(GParamSpec *pspec,
+                                     GValue *value,
+                                     GstStructure *dictionary)
 {
     g_return_if_fail(G_IS_PARAM_SPEC_BOXED(pspec));
     g_return_if_fail(G_VALUE_HOLDS_BOXED(value));

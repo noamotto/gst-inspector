@@ -71,6 +71,15 @@ void gst_object_reader_parse_content(GObject *object,
     }
 }
 
+/**
+ *  @addtogroup type-readers
+ *  @subsection object-reader Object type reader
+ *  The object type reader (for G_TYPE_OBJECT and subtypes) parses the following 
+ *  additional fields:
+ *  - <b>Type</b> - Property's object value type
+ * 
+ *  For additional parsed fields see the available object content readers
+ */
 void gst_object_type_reader_fill_type(
     GParamSpec *pspec,
     GValue *value,

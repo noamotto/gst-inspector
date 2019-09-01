@@ -1,9 +1,17 @@
 #include "type_reader/type_reader_priv.h"
 
-void gst_int64_type_reader_fill_type(
-    GParamSpec *pspec,
-    GValue *value,
-    GstStructure *dictionary)
+/**
+ *  @addtogroup type-readers
+ *  @subsection int64-reader Integer64 type reader
+ *  The integer64 type reader (for G_TYPE_INT64) parses the following 
+ *  additional fields:
+ *  - <b>Type</b> - Property type (Integer64)
+ *  - <b>Range</b> - Range of possible values for the property
+ *  - <b>Default Value</b> - Property's default value
+ */
+void gst_int64_type_reader_fill_type(GParamSpec *pspec,
+                                     GValue *value,
+                                     GstStructure *dictionary)
 {
     GParamSpecInt64 *pspec_int64 = NULL;
 
@@ -19,6 +27,6 @@ void gst_int64_type_reader_fill_type(
                                               pspec_int64->minimum,
                                               pspec_int64->maximum));
 
-    gst_dictionary_set_string(dictionary, KEY_VALUE, g_strdup_printf("%" G_GINT64_FORMAT,
-                                                                     g_value_get_int64(value)));
+    gst_dictionary_set_string(dictionary, KEY_VALUE,
+                              g_strdup_printf("%" G_GINT64_FORMAT, g_value_get_int64(value)));
 }

@@ -1,8 +1,7 @@
 #include "type_reader/type_reader_priv.h"
 
-static gchar *gst_flags_type_reader_find_default(
-    const GFlagsClass *flags_class,
-    const GValue *value)
+static gchar *gst_flags_type_reader_find_default(const GFlagsClass *flags_class,
+                                                 const GValue *value)
 {
     GFlagsValue *values = flags_class->values;
     GString *flags_string = NULL;
@@ -57,10 +56,21 @@ static void gst_flags_type_reader_parse_options(const GFlagsClass *flags_class,
     }
 }
 
-void gst_flags_type_reader_fill_type(
-    GParamSpec *pspec,
-    GValue *value,
-    GstStructure *dictionary)
+/**
+ *  @addtogroup type-readers
+ *  @subsection flags-reader Flags type reader
+ *  The flags type reader (for G_TYPE_FLAGS and subtypes) parses the following 
+ *  additional fields:
+ *  - <b>Type</b> - Property type. Includes the specific flags type
+ *  - <b>Default Value</b> - Property's default value, as a hexadecimal 
+ *      representation of the value followed by the flags it turns on, or "(none)"
+ *      if no flag is turned on.
+ *  - <b>Options</b> - Flag options. An array of strings, each string contains one
+ *      flag option as value followed by the option's name and description.
+ */
+void gst_flags_type_reader_fill_type(GParamSpec *pspec,
+                                     GValue *value,
+                                     GstStructure *dictionary)
 {
     GParamSpecFlags *pspec_flags = NULL;
     gchar *value_string = NULL;
@@ -71,11 +81,17 @@ void gst_flags_type_reader_fill_type(
 
     pspec_flags = G_PARAM_SPEC_FLAGS(pspec);
 
-    value_string = gst_flags_type_reader_find_default(pspec_flags->flags_class, value);
+    value_string =
+        gst_flags_type_reader_find_default(pspec_flags->flags_class, value);
 
-    gst_dictionary_set_string(dictionary, KEY_TYPE, g_strdup_printf("Flags \"%s\"", G_VALUE_TYPE_NAME(value)));
+    gst_dictionary_set_string(dictionary, KEY_TYPE,
+                              g_strdup_printf("Flags \"%s\"",
+                                              G_VALUE_TYPE_NAME(value)));
 
-    gst_dictionary_set_string(dictionary, KEY_VALUE, g_strdup_printf("0x%08x, \"%s\"", g_value_get_flags(value), value_string));
+    gst_dictionary_set_string(dictionary, KEY_VALUE,
+                              g_strdup_printf("0x%08x, \"%s\"",
+                                              g_value_get_flags(value),
+                                              value_string));
 
     gst_flags_type_reader_parse_options(pspec_flags->flags_class, &options);
     gst_dictionary_set_array(dictionary, KEY_OPTIONS, &options);

@@ -1,9 +1,17 @@
 #include "type_reader/type_reader_priv.h"
 
-void gst_int_type_reader_fill_type(
-    GParamSpec *pspec,
-    GValue *value,
-    GstStructure *dictionary)
+/**
+ *  @addtogroup type-readers
+ *  @subsection int-reader Integer type reader
+ *  The integer type reader (for G_TYPE_INT) parses the following 
+ *  additional fields:
+ *  - <b>Type</b> - Property type (Integer)
+ *  - <b>Range</b> - Range of possible values for the property
+ *  - <b>Default Value</b> - Property's default value
+ */
+void gst_int_type_reader_fill_type(GParamSpec *pspec,
+                                   GValue *value,
+                                   GstStructure *dictionary)
 {
     GParamSpecInt *pspec_int = NULL;
 

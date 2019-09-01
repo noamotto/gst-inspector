@@ -1,9 +1,17 @@
 #include "type_reader/type_reader_priv.h"
 
-void gst_double_type_reader_fill_type(
-    GParamSpec *pspec,
-    GValue *value,
-    GstStructure *dictionary)
+/**
+ *  @addtogroup type-readers
+ *  @subsection double-reader Double type reader
+ *  The double type reader (for G_TYPE_DOUBLE) parses the following 
+ *  additional fields:
+ *  - <b>Type</b> - Property type (Double)
+ *  - <b>Range</b> - Range of possible values for the property
+ *  - <b>Default Value</b> - Property's default value
+ */
+void gst_double_type_reader_fill_type(GParamSpec *pspec,
+                                      GValue *value,
+                                      GstStructure *dictionary)
 {
     gdouble double_val = 0;
     GParamSpecDouble *pspec_double = NULL;
@@ -18,8 +26,9 @@ void gst_double_type_reader_fill_type(
 
     gst_dictionary_set_string(dictionary, KEY_RANGE,
                               g_strdup_printf("%15.7g - %15.7g",
-                                              pspec_double->minimum, pspec_double->maximum));
+                                              pspec_double->minimum,
+                                              pspec_double->maximum));
 
-    gst_dictionary_set_string(dictionary, KEY_VALUE, g_strdup_printf("%15.7g",
-                                                                     g_value_get_double(value)));
+    gst_dictionary_set_string(dictionary, KEY_VALUE,
+                              g_strdup_printf("%15.7g", g_value_get_double(value)));
 }
