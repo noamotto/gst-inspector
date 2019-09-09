@@ -30,8 +30,8 @@ static gint cmp_pspecs(GParamSpec **p1, GParamSpec **p2)
  *  - <b>Name</b> - The property name and blurb, in the format 
  *      <tt>[name]: [blurb]</tt>
  *  - <b>Flags</b> - Array of strings describing the property's flags
- *  - Additional fields depending on the property type. Refer to the respective type 
- *      reader for those fields
+ *  - Additional fields depending on the property type. Refer to the @ref type-readers
+ *      "respective type reader for those fields"
  *  @endparblock
  */
 void gst_inspector_inspect_element_properties(GstElement *element, GValue *result)

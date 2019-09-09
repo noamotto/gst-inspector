@@ -1,5 +1,13 @@
 #include "type_reader/type_reader_priv.h"
 
+/**
+ *  @addtogroup boxed-readers
+ *  @subsection struct-reader Structure boxed content reader
+ *  The structure boxed content reader (for GST_TYPE_STRUCTURE) parses the following 
+ *  additional fields:
+ *  - <b>Default Value</b> - Property's default value. It hold a dictonary of the 
+ *      structure's fields, as field name and value.
+ */
 void gst_structure_content_reader_parse(GValue *boxed,
                                         GstStructure *dictionary)
 {

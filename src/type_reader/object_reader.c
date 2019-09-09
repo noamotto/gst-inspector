@@ -78,7 +78,8 @@ void gst_object_reader_parse_content(GObject *object,
  *  additional fields:
  *  - <b>Type</b> - Property's object value type
  * 
- *  For additional parsed fields see the available object content readers
+ *  For additional parsed fields see the available @ref object-readers 
+ *      "object content readers"
  */
 void gst_object_type_reader_fill_type(
     GParamSpec *pspec,

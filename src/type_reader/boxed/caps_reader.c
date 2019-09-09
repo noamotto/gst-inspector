@@ -1,5 +1,19 @@
 #include "type_reader/type_reader_priv.h"
 
+/**
+ *  @addtogroup boxed-readers
+ *  @subsection caps-reader Caps boxed content reader
+ *  The caps boxed content reader (for GST_TYPE_CAPS) parses the following 
+ *  additional fields:
+ *  - <b>Default Value</b> - Property's default value. It can hold one of the 
+ *  following:
+ *      - If no caps were found, or NULL caps were found, it will hold the string
+ *          "Caps (NULL)"
+ *      - If ANY caps were found, it will hold the string "ANY"
+ *      - If EMPTY caps were found, it will hold the string "EMPTY"
+ *      - Otherwise, caps will be parsed as the Capabilities field in 
+ *          gst_inspector_inspect_pad_templates()
+ */
 void gst_caps_content_reader_parse(GValue *boxed,
                                    GstStructure *dictionary)
 {

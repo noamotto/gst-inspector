@@ -13,6 +13,18 @@
  *  @defgroup type-readers Registered type readers
  *  The following list is a list of registered stock type readers, and the additional
  *  fields they parse from a property.
+ * 
+ *  @{
+ *  @defgroup boxed-readers Registered boxed content readers
+ *  The following list is a list of registered stock boxed content readers, and the
+ *  additional fields they parse from a property.
+ * 
+ *  @defgroup object-readers Registered object content readers
+ *  The following list is a list of registered stock object content readers, and the
+ *  additional fields they parse from a property.
+ * 
+ *  This list is currently empty.
+ *  @}
  */
 
 #include "type_reader/type_reader_priv.h"

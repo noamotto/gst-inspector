@@ -75,7 +75,8 @@ void gst_boxed_reader_parse_content(GValue *boxed,
  *  additional fields:
  *  - <b>Type</b> - Property's boxed value type
  * 
- *  For additional parsed fields see the available boxed content readers
+ *  For additional parsed fields see the available @ref boxed-readers 
+ *      "boxed content readers"
  */
 void gst_boxed_type_reader_fill_type(GParamSpec *pspec,
                                      GValue *value,
